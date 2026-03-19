@@ -86,11 +86,19 @@ class ParticleRenderProgram {
   }
 
   // Dispatch a draw command to render particles on the canvas
-  dispatch(commandEncoder) {
+  dispatch(commandEncoder, clearBackground = false) {
     // Update the color attachment to use the current texture
     this.renderPassDescriptor.colorAttachments[0].view = context
       .getCurrentTexture()
       .createView();
+
+    // Set loadOp based on whether we need to clear background
+    if (clearBackground) {
+      this.renderPassDescriptor.colorAttachments[0].loadOp = "clear";
+      this.renderPassDescriptor.colorAttachments[0].clearValue = { r: 0.0, g: 0.0, b: 0.0, a: 1.0 };
+    } else {
+      this.renderPassDescriptor.colorAttachments[0].loadOp = "load";
+    }
 
     const renderPassEncoder = commandEncoder.beginRenderPass(
       this.renderPassDescriptor

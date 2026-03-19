@@ -707,6 +707,7 @@ ${ STRUCT_GRID_SIZE }
 @group(0) @binding(6) var<storage, read> velY : array<f32>;
 @group(0) @binding(7) var<uniform> uGrid : GridSize;
 @group(0) @binding(8) var<uniform> uDt : f32;
+@group(0) @binding(9) var<uniform> uSpeed : f32;
 
 fn ID(x: f32, y: f32) -> u32 { return u32(x + y * uGrid.w); }
 
@@ -751,9 +752,9 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
     let pos = vec2(posX_in[index], posY_in[index]);
     let vel = sampleVelocity(pos);
 
-    // 更新位置
-    var newX = pos.x + vel.x * uDt * uGrid.rdx;
-    var newY = pos.y + vel.y * uDt * uGrid.rdx;
+    // 更新位置（应用速度系数）
+    var newX = pos.x + vel.x * uDt * uGrid.rdx * uSpeed;
+    var newY = pos.y + vel.y * uDt * uGrid.rdx * uSpeed;
 
     // 边界处理
     newX = clamp(newX, 0.0, 1.0);

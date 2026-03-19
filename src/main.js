@@ -25,9 +25,10 @@ let settings = {
     light_intensity: 1,
     light_falloff: 1,
 
-    particle_radius: 0.05,
-    particle_max_life: 5.0,
-    particle_render_size: 0.01,
+    particle_radius: 0.06,
+    particle_max_life: 20.0,
+    particle_render_size: 0.001,
+    particle_speed: 0.01,
 }
 
 let gui, smokeFolder
@@ -110,6 +111,7 @@ function initUniforms() {
     particleMaxLife = new Uniform('particle_max_life', { min: 1, max: 20 })
     particleSeed = new Uniform('particle_seed', { addToGUI: false })
     particleRenderSize = new Uniform('particle_render_size', { displayName: "Particle Size", min: 0.001, max: 0.05, step: 0.001 })
+    particleSpeed = new Uniform('particle_speed', { displayName: "Particle Speed", min: 0.01, max: 2.0, step: 0.01 })
 }
 
 function initPrograms() {
@@ -219,7 +221,7 @@ function initPrograms() {
         particles_out: particles0,
         particleLife_in: particleLife,
         velocity: velocity,
-        uniforms: [ grid, dt ]
+        uniforms: [ grid, dt, particleSpeed ]
     })
 
     renderProgram = new RenderProgram()
@@ -332,17 +334,19 @@ async function main() {
 
         particles0.copyTo(particles, commandEncoder)
 
-        if      (settings.render_mode == 3) velocity.copyTo(renderProgram.buffer, commandEncoder)
-        else if (settings.render_mode == 4) divergence.copyTo(renderProgram.buffer, commandEncoder)
-        else if (settings.render_mode == 5) pressure.copyTo(renderProgram.buffer, commandEncoder)
-        else if (settings.render_mode == 6) vorticity.copyTo(renderProgram.buffer, commandEncoder)
-        else dye.copyTo(renderProgram.buffer, commandEncoder)
+        // Draw fluid background (skip for Particles Only mode)
+        if (settings.render_mode != 7) {
+            if      (settings.render_mode == 3) velocity.copyTo(renderProgram.buffer, commandEncoder)
+            else if (settings.render_mode == 4) divergence.copyTo(renderProgram.buffer, commandEncoder)
+            else if (settings.render_mode == 5) pressure.copyTo(renderProgram.buffer, commandEncoder)
+            else if (settings.render_mode == 6) vorticity.copyTo(renderProgram.buffer, commandEncoder)
+            else dye.copyTo(renderProgram.buffer, commandEncoder)
 
-        // Draw fluid
-        renderProgram.dispatch(commandEncoder)
+            renderProgram.dispatch(commandEncoder)
+        }
 
-        // Draw particles on top
-        particleRenderProgram.dispatch(commandEncoder)
+        // Draw particles on top (clear background for Particles Only mode)
+        particleRenderProgram.dispatch(commandEncoder, settings.render_mode == 7)
 
         // Send commands to the GPU
         const gpuCommands = commandEncoder.finish()

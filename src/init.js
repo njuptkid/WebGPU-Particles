@@ -137,13 +137,14 @@ function initSizes() {
 }
 
 const RENDER_MODES = {
-    "Classic": 0, 
-    "Smoke 2D": 1, 
+    "Classic": 0,
+    "Smoke 2D": 1,
     "Smoke 3D + Shadows": 2,
     "Debug - Velocity": 3,
     "Debug - Divergence": 4,
     "Debug - Pressure": 5,
     "Debug - Vorticity": 6,
+    "Particles Only": 7,
 }
 const SIMULATION_GRID_SIZES = [32, 64, 128, 256, 512, 1024]
 const DYE_GRID_SIZES  = [128, 256, 512, 1024, 2048]
