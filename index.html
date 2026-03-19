@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGPU Fluid Simulation</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      /* canvas {
+        image-rendering: pixelated;
+      } */
+
+      .webgpu-not-supported {
+        visibility: hidden;
+        width: 50%;
+        height: 50%;
+        padding: 1em;
+        margin: auto;
+        border: 4px solid black;
+        border-radius: 4px;
+        background-color: #ffdaba;
+        font-family: monospace;
+        font-size: large;
+        text-align: center;
+      }
+    </style>
+    <script src="libraries/dat.gui.min.js"></script>
+    <script src="libraries/ccapture.all.min.js"></script>
+  </head>
+
+  <body>
+    <canvas id="canvas-container"></canvas>
+
+    <div class="webgpu-not-supported">
+      <span>
+        WebGPU doesn't appear to be enabled / supported on this browser. <br>
+        Check if your browser has any update available!
+      </span>
+      <br/><br/>
+      <a href="https://developer.chrome.com/en/docs/web-platform/webgpu/#use">
+        https://developer.chrome.com/en/docs/web-platform/webgpu/#use
+      </a>
+    </div>
+
+    <script src="src/init.js"></script>
+    <script src="src/shaders.js"></script>
+    <script src="src/render.js"></script>
+    <script src="src/utils.js"></script>
+    <script src="src/main.js"></script>
+  </body>
+</html>
