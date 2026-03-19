@@ -35,8 +35,13 @@ async function initContext() {
     canvas.addEventListener('mousemove', onMouseMove)
     canvas.addEventListener('mousedown', (e) => {
         mouseInfos.isPressed = true
+        // 确保鼠标位置已更新（用户可能直接点击而没有移动鼠标）
+        const {width, height} = canvas.getBoundingClientRect()
+        if (!mouseInfos.current) mouseInfos.current = []
+        mouseInfos.current[0] = e.offsetX / width
+        mouseInfos.current[1] = 1 - e.offsetY / height
         // 更新 particleSpawnPos
-        if (mouseInfos.current && globalUniforms.particle_spawn_pos) {
+        if (globalUniforms.particle_spawn_pos) {
             globalUniforms.particle_spawn_pos.needsUpdate = [...mouseInfos.current]
         }
     })

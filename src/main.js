@@ -291,6 +291,8 @@ async function main() {
         // 粒子初始化（只在鼠标刚按下时）
         if (mouseInfos.isPressed && !mouseInfos.wasPressed) {
             particleSeed.setValue(Math.random() * 1000)
+            particleSpawnPos.update(device.queue)
+            particleSeed.update(device.queue)
             particleInitProgram.dispatch(passEncoder)
         }
 
