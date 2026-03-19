@@ -258,3 +258,48 @@ class VorticityConfinmentProgram extends Program {
         super({buffers: [in_velocity, in_vorticity, out_velocity], uniforms, shader, ...props})
     }
 }
+
+class ParticleInitProgram extends Program {
+    constructor({ particles, particleLife, uniforms, shader = particleInitShader }) {
+        // particles is a 2D buffer (x, y), particleLife is 1D
+        // Pass DynamicBuffer objects, Program class will extract .buffers and flatten
+        // Result: [posX, posY, life] - matches shader bindings
+        super({
+            buffers: [particles, particleLife],
+            uniforms,
+            shader,
+            dispatchX: 100,
+            dispatchY: 100
+        })
+    }
+}
+
+class ParticleUpdateProgram extends Program {
+    constructor({ particles_in, particles_out, particleLife_in, velocity, uniforms, shader = particleUpdateShader }) {
+        // Shader expects 7 storage buffer bindings:
+        // binding(0): posX_in (read)
+        // binding(1): posY_in (read)
+        // binding(2): life_in (read_write) - single buffer, updated in place
+        // binding(3): posX_out (read_write)
+        // binding(4): posY_out (read_write)
+        // binding(5): velX (read)
+        // binding(6): velY (read)
+
+        // Create wrapper objects with .buffers property for each binding
+        super({
+            buffers: [
+                { buffers: [particles_in.buffers[0]] },     // posX_in
+                { buffers: [particles_in.buffers[1]] },     // posY_in
+                { buffers: [particleLife_in.buffers[0]] },  // life_in (read_write)
+                { buffers: [particles_out.buffers[0]] },    // posX_out
+                { buffers: [particles_out.buffers[1]] },    // posY_out
+                { buffers: [velocity.buffers[0]] },         // velX
+                { buffers: [velocity.buffers[1]] },         // velY
+            ],
+            uniforms,
+            shader,
+            dispatchX: 100,
+            dispatchY: 100
+        })
+    }
+}

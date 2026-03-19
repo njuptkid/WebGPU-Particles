@@ -33,6 +33,16 @@ async function initContext() {
     canvas.style.width = '100%'
     canvas.style.height = '100%'
     canvas.addEventListener('mousemove', onMouseMove)
+    canvas.addEventListener('mousedown', (e) => {
+        mouseInfos.isPressed = true
+        // 更新 particleSpawnPos
+        if (mouseInfos.current && globalUniforms.particle_spawn_pos) {
+            globalUniforms.particle_spawn_pos.needsUpdate = [...mouseInfos.current]
+        }
+    })
+    canvas.addEventListener('mouseup', () => {
+        mouseInfos.isPressed = false
+    })
 
     // Init GUI
     gui = new dat.GUI()

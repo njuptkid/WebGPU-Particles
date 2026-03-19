@@ -657,3 +657,110 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
   y_out[index] += noise * col.y;
   z_out[index] += noise * col.z;
 }`
+
+/// PARTICLE INIT SHADER ///
+
+const particleInitShader = /* wgsl */`
+${ STRUCT_GRID_SIZE }
+
+@group(0) @binding(0) var<storage, read_write> posX : array<f32>;
+@group(0) @binding(1) var<storage, read_write> posY : array<f32>;
+@group(0) @binding(2) var<storage, read_write> life : array<f32>;
+@group(0) @binding(3) var<uniform> uSpawnPos : vec2<f32>;
+@group(0) @binding(4) var<uniform> uRadius : f32;
+@group(0) @binding(5) var<uniform> uMaxLife : f32;
+@group(0) @binding(6) var<uniform> uSeed : f32;
+
+// 哈希函数用于随机数生成
+fn hash(p: vec2<f32>) -> f32 {
+    var p3 = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+@compute @workgroup_size(8, 8)
+fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
+    let index = global_id.x + global_id.y * 100u;
+
+    // 生成随机偏移
+    let randX = hash(vec2(f32(global_id.x) + uSeed, f32(global_id.y)));
+    let randY = hash(vec2(f32(global_id.x), f32(global_id.y) + uSeed));
+
+    // 在鼠标位置附近随机分布
+    posX[index] = uSpawnPos.x + (randX - 0.5) * uRadius * 2.0;
+    posY[index] = uSpawnPos.y + (randY - 0.5) * uRadius * 2.0;
+    life[index] = uMaxLife;
+}
+`
+
+/// PARTICLE UPDATE SHADER ///
+
+const particleUpdateShader = /* wgsl */`
+${ STRUCT_GRID_SIZE }
+
+@group(0) @binding(0) var<storage, read> posX_in : array<f32>;
+@group(0) @binding(1) var<storage, read> posY_in : array<f32>;
+@group(0) @binding(2) var<storage, read_write> life_in : array<f32>;
+@group(0) @binding(3) var<storage, read_write> posX_out : array<f32>;
+@group(0) @binding(4) var<storage, read_write> posY_out : array<f32>;
+@group(0) @binding(5) var<storage, read> velX : array<f32>;
+@group(0) @binding(6) var<storage, read> velY : array<f32>;
+@group(0) @binding(7) var<uniform> uGrid : GridSize;
+@group(0) @binding(8) var<uniform> uDt : f32;
+
+fn ID(x: f32, y: f32) -> u32 { return u32(x + y * uGrid.w); }
+
+// 双线性插值采样速度场
+fn sampleVelocity(pos: vec2<f32>) -> vec2<f32> {
+    var x = pos.x * uGrid.w;
+    var y = pos.y * uGrid.h;
+
+    x = clamp(x, 0.0, uGrid.w - 1.0);
+    y = clamp(y, 0.0, uGrid.h - 1.0);
+
+    let x1 = floor(x);
+    let y1 = floor(y);
+    let x2 = x1 + 1.0;
+    let y2 = y1 + 1.0;
+
+    let TL = vec2(velX[ID(x1, y2)], velY[ID(x1, y2)]);
+    let TR = vec2(velX[ID(x2, y2)], velY[ID(x2, y2)]);
+    let BL = vec2(velX[ID(x1, y1)], velY[ID(x1, y1)]);
+    let BR = vec2(velX[ID(x2, y1)], velY[ID(x2, y1)]);
+
+    let xMod = fract(x);
+    let yMod = fract(y);
+
+    return mix(mix(BL, BR, xMod), mix(TL, TR, xMod), yMod);
+}
+
+@compute @workgroup_size(8, 8)
+fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
+    let index = global_id.x + global_id.y * 100u;
+
+    let currentLife = life_in[index];
+
+    // 生命周期结束，保持原位或隐藏
+    if (currentLife <= 0.0) {
+        posX_out[index] = posX_in[index];
+        posY_out[index] = posY_in[index];
+        life_in[index] = -1.0; // 标记为死亡
+        return;
+    }
+
+    let pos = vec2(posX_in[index], posY_in[index]);
+    let vel = sampleVelocity(pos);
+
+    // 更新位置
+    var newX = pos.x + vel.x * uDt * uGrid.rdx;
+    var newY = pos.y + vel.y * uDt * uGrid.rdx;
+
+    // 边界处理
+    newX = clamp(newX, 0.0, 1.0);
+    newY = clamp(newY, 0.0, 1.0);
+
+    posX_out[index] = newX;
+    posY_out[index] = newY;
+    life_in[index] = currentLife - uDt;
+}
+`

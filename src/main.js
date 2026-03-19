@@ -24,6 +24,9 @@ let settings = {
     light_height: 1,
     light_intensity: 1,
     light_falloff: 1,
+
+    particle_radius: 0.05,
+    particle_max_life: 5.0,
 }
 
 let gui, smokeFolder
@@ -32,21 +35,25 @@ let device, presentationFormat
 const mouseInfos = {
     current: null,
     last: null,
-    velocity: null
+    velocity: null,
+    isPressed: false
 }
 
 // Buffers
 let velocity, velocity0, dye, dye0, divergence, divergence0, pressure, pressure0, vorticity
+let particles, particles0, particleLife
 
 // Uniforms
 const globalUniforms = {}
 let uRenderMode, time, dt, mouse, grid, uSimSpeed, vel_force, vel_radius, vel_diff, dye_force, dye_radius, dye_diff
 let viscosity, uVorticity, containFluid, uSymmetry, uSmokeParameters, uRenderIntensity
+let particleSpawnPos, particleRadius, particleMaxLife, particleSeed
 
 // Programs
 let checkerProgram, updateDyeProgram, updateProgram, advectProgram, boundaryProgram, divergenceProgram
 let boundaryDivProgram, pressureProgram, boundaryPressureProgram, gradientSubtractProgram, advectDyeProgram
 let clearPressureProgram, vorticityProgram, vorticityConfinmentProgram, renderProgram
+let particleInitProgram, particleUpdateProgram
 
 function initBuffers() {
     velocity = new DynamicBuffer({ dims: 2 })
@@ -57,11 +64,16 @@ function initBuffers() {
 
     divergence = new DynamicBuffer()
     divergence0 = new DynamicBuffer()
-    
+
     pressure = new DynamicBuffer()
     pressure0 = new DynamicBuffer()
 
     vorticity = new DynamicBuffer()
+
+    // 粒子缓冲区 (100x100 = 10000 个粒子)
+    particles = new DynamicBuffer({ dims: 2, w: 100, h: 100 })
+    particles0 = new DynamicBuffer({ dims: 2, w: 100, h: 100 })
+    particleLife = new DynamicBuffer({ dims: 1, w: 100, h: 100 })
 }
 
 function initUniforms() {
@@ -91,6 +103,11 @@ function initUniforms() {
     uSymmetry = new Uniform('mouse_type', {value: 0})
     uSmokeParameters = new Uniform('smoke_parameters', {value: [settings.raymarch_steps, settings.smoke_density, settings.enable_shadows, settings.shadow_intensity, settings.smoke_height, settings.light_height, settings.light_intensity, settings.light_falloff]})
     uRenderIntensity = new Uniform('render_intensity_multiplier', {value: 1})
+
+    particleSpawnPos = new Uniform('particle_spawn_pos', { size: 2, value: [0.5, 0.5] })
+    particleRadius = new Uniform('particle_radius', { min: 0.01, max: 0.2 })
+    particleMaxLife = new Uniform('particle_max_life', { min: 1, max: 20 })
+    particleSeed = new Uniform('particle_seed', { addToGUI: false })
 }
 
 function initPrograms() {
@@ -189,6 +206,20 @@ function initPrograms() {
         uniforms: [ grid, dt, uVorticity ]
     })
 
+    particleInitProgram = new ParticleInitProgram({
+        particles: particles,
+        particleLife: particleLife,
+        uniforms: [ particleSpawnPos, particleRadius, particleMaxLife, particleSeed ]
+    })
+
+    particleUpdateProgram = new ParticleUpdateProgram({
+        particles_in: particles,
+        particles_out: particles0,
+        particleLife_in: particleLife,
+        velocity: velocity,
+        uniforms: [ grid, dt ]
+    })
+
     renderProgram = new RenderProgram()
 }
 
@@ -250,6 +281,15 @@ async function main() {
 
         // Advect the dye through the velocity field
         advectDyeProgram.dispatch(passEncoder)
+
+        // 粒子初始化（鼠标按下时）
+        if (mouseInfos.isPressed) {
+            particleSeed.setValue(Math.random() * 1000)
+            particleInitProgram.dispatch(passEncoder)
+        }
+
+        // 粒子更新
+        particleUpdateProgram.dispatch(passEncoder)
     }
 
     let loop = 0
@@ -286,6 +326,8 @@ async function main() {
         
         velocity0.copyTo(velocity, commandEncoder)
         pressure0.copyTo(pressure, commandEncoder)
+
+        particles0.copyTo(particles, commandEncoder)
 
         if      (settings.render_mode == 3) velocity.copyTo(renderProgram.buffer, commandEncoder)
         else if (settings.render_mode == 4) divergence.copyTo(renderProgram.buffer, commandEncoder)
