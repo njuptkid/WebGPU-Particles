@@ -764,3 +764,72 @@ fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
     life_in[index] = currentLife - uDt;
 }
 `
+/// PARTICLE RENDER SHADER ///
+
+const particleRenderShader = /* wgsl */`
+struct ParticleVertexOut {
+  @builtin(position) position : vec4<f32>,
+  @location(0) color : vec4<f32>,
+  @location(1) uv : vec2<f32>,  // 归一化坐标 (-1 到 1)，用于圆形裁剪
+}
+
+@group(0) @binding(0) var<storage, read> posX : array<f32>;
+@group(0) @binding(1) var<storage, read> posY : array<f32>;
+@group(0) @binding(2) var<storage, read> life : array<f32>;
+@group(0) @binding(3) var<uniform> uMaxLife : f32;
+@group(0) @binding(4) var<uniform> uParticleSize : f32;
+
+@vertex
+fn vertex_main(
+  @location(0) vertexOffset : vec2<f32>,
+  @builtin(instance_index) instanceIndex : u32
+) -> ParticleVertexOut {
+    let particleIndex = instanceIndex;
+    let x = posX[particleIndex];
+    let y = posY[particleIndex];
+    let l = life[particleIndex];
+
+    var out: ParticleVertexOut;
+
+    // 死亡粒子：移出屏幕
+    if (l <= 0.0) {
+        out.position = vec4<f32>(2.0, 2.0, 0.0, 1.0);
+        out.color = vec4<f32>(0.0);
+        out.uv = vec2<f32>(0.0);
+        return out;
+    }
+
+    // 屏幕中心坐标
+    let screenX = x * 2.0 - 1.0;
+    let screenY = y * 2.0 - 1.0;
+
+    // 应用顶点偏移（形成四边形）
+    let offset = vertexOffset * uParticleSize;
+    out.position = vec4<f32>(screenX + offset.x, screenY + offset.y, 0.0, 1.0);
+
+    // 生命周期 -> 颜色 (绿色 -> 红色)
+    let lifeRatio = l / uMaxLife;
+    out.color = vec4<f32>(1.0 - lifeRatio, lifeRatio, 0.0, lifeRatio);
+
+    // 传递归一化坐标用于圆形裁剪
+    out.uv = vertexOffset;
+
+    return out;
+}
+
+@fragment
+fn fragment_main(fragData : ParticleVertexOut) -> @location(0) vec4<f32> {
+    // 计算到圆心的距离
+    let dist = length(fragData.uv);
+
+    // 超出圆形范围则丢弃
+    if (dist > 1.0) {
+        discard;
+    }
+
+    // 使用 smoothstep 实现边缘平滑（抗锯齿）
+    let alpha = 1.0 - smoothstep(0.8, 1.0, dist);
+
+    return vec4<f32>(fragData.color.rgb, fragData.color.a * alpha);
+}
+`

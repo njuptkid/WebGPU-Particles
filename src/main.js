@@ -27,6 +27,7 @@ let settings = {
 
     particle_radius: 0.05,
     particle_max_life: 5.0,
+    particle_render_size: 0.01,
 }
 
 let gui, smokeFolder
@@ -53,7 +54,7 @@ let particleSpawnPos, particleRadius, particleMaxLife, particleSeed
 let checkerProgram, updateDyeProgram, updateProgram, advectProgram, boundaryProgram, divergenceProgram
 let boundaryDivProgram, pressureProgram, boundaryPressureProgram, gradientSubtractProgram, advectDyeProgram
 let clearPressureProgram, vorticityProgram, vorticityConfinmentProgram, renderProgram
-let particleInitProgram, particleUpdateProgram
+let particleInitProgram, particleUpdateProgram, particleRenderProgram
 
 function initBuffers() {
     velocity = new DynamicBuffer({ dims: 2 })
@@ -108,6 +109,7 @@ function initUniforms() {
     particleRadius = new Uniform('particle_radius', { min: 0.01, max: 0.2 })
     particleMaxLife = new Uniform('particle_max_life', { min: 1, max: 20 })
     particleSeed = new Uniform('particle_seed', { addToGUI: false })
+    particleRenderSize = new Uniform('particle_render_size', { displayName: "Particle Size", min: 0.001, max: 0.05, step: 0.001 })
 }
 
 function initPrograms() {
@@ -221,6 +223,7 @@ function initPrograms() {
     })
 
     renderProgram = new RenderProgram()
+    particleRenderProgram = new ParticleRenderProgram()
 }
 
 async function main() {
@@ -337,6 +340,9 @@ async function main() {
 
         // Draw fluid
         renderProgram.dispatch(commandEncoder)
+
+        // Draw particles on top
+        particleRenderProgram.dispatch(commandEncoder)
 
         // Send commands to the GPU
         const gpuCommands = commandEncoder.finish()
