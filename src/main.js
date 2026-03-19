@@ -38,7 +38,8 @@ const mouseInfos = {
     current: null,
     last: null,
     velocity: null,
-    isPressed: false
+    isPressed: false,
+    wasPressed: false
 }
 
 // Buffers
@@ -287,14 +288,17 @@ async function main() {
         // Advect the dye through the velocity field
         advectDyeProgram.dispatch(passEncoder)
 
-        // 粒子初始化（鼠标按下时）
-        if (mouseInfos.isPressed) {
+        // 粒子初始化（只在鼠标刚按下时）
+        if (mouseInfos.isPressed && !mouseInfos.wasPressed) {
             particleSeed.setValue(Math.random() * 1000)
             particleInitProgram.dispatch(passEncoder)
         }
 
         // 粒子更新
         particleUpdateProgram.dispatch(passEncoder)
+
+        // 更新鼠标状态
+        mouseInfos.wasPressed = mouseInfos.isPressed
     }
 
     let loop = 0
