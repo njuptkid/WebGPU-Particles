@@ -2,797 +2,594 @@ const STRUCT_GRID_SIZE = `
 struct GridSize {
   w : f32,
   h : f32,
-  dyeW: f32,
-  dyeH: f32,
+  d : f32,
   dx : f32,
   rdx : f32,
-  dyeRdx : f32
+  _pad1 : f32,
+  _pad2 : f32,
+  _pad3 : f32,
 }`
 
-const STRUCT_MOUSE = `
-struct Mouse {
-  pos: vec2<f32>,
-  vel: vec2<f32>,
-}`
-
-// This code initialize the pos and index variables and target only interior cells
+// Skip boundary cells (interior only)
 const COMPUTE_START = `
-var pos = vec2<f32>(global_id.xy);
+var pos = vec3<f32>(global_id.xyz);
 
-if (pos.x == 0 || pos.y == 0 || pos.x >= uGrid.w - 1 || pos.y >= uGrid.h - 1) {
+if (pos.x == 0 || pos.y == 0 || pos.z == 0 ||
+    pos.x >= uGrid.w - 1 || pos.y >= uGrid.h - 1 || pos.z >= uGrid.d - 1) {
     return;
-}      
+}
 
-let index = ID(pos.x, pos.y);`
+let index = ID(pos.x, pos.y, pos.z);`
 
-const COMPUTE_START_DYE = `
-var pos = vec2<f32>(global_id.xy);
+// Target all cells
+const COMPUTE_START_ALL = `
+var pos = vec3<f32>(global_id.xyz);
 
-if (pos.x == 0 || pos.y == 0 || pos.x >= uGrid.dyeW - 1 || pos.y >= uGrid.dyeH - 1) {
+if (pos.x >= uGrid.w || pos.y >= uGrid.h || pos.z >= uGrid.d) {
     return;
-}      
+}
 
-let index = ID(pos.x, pos.y);`
+let index = ID(pos.x, pos.y, pos.z);`
 
-// This code initialize the pos and index variables and target all cells
-const COMPUTE_START_ALL = `    
-var pos = vec2<f32>(global_id.xy);
+/// VELOCITY INJECT SHADER (stride-3) ///
 
-if (pos.x >= uGrid.w || pos.y >= uGrid.h) {
-    return;
-}      
-
-let index = ID(pos.x, pos.y);`
-
-const SPLAT_CODE = `
-var m = uMouse.pos;
-var v = uMouse.vel*2.;
-
-var splat = createSplat(p, m, v, uRadius);
-if (uSymmetry == 1. || uSymmetry == 3.) {splat += createSplat(p, vec2(1. - m.x, m.y), v * vec2(-1., 1.), uRadius);}
-if (uSymmetry == 2. || uSymmetry == 3.) {splat += createSplat(p, vec2(m.x, 1. - m.y), v * vec2(1., -1.), uRadius);}
-if (uSymmetry == 3. || uSymmetry == 4.) {splat += createSplat(p, vec2(1. - m.x, 1. - m.y), v * vec2(-1., -1.), uRadius);}
-`
-
-/// APPLY FORCE SHADER ///
-
-const updateVelocityShader = /* wgsl */`
-
-${ STRUCT_GRID_SIZE }
+const velocityInjectShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
 struct Mouse {
   pos: vec2<f32>,
   vel: vec2<f32>,
 }
-@group(0) @binding(0) var<storage, read> x_in : array<f32>;
-@group(0) @binding(1) var<storage, read> y_in : array<f32>;
-@group(0) @binding(2) var<storage, read_write> x_out : array<f32>;
-@group(0) @binding(3) var<storage, read_write> y_out : array<f32>;
-@group(0) @binding(4) var<uniform> uGrid: GridSize;
-@group(0) @binding(5) var<uniform> uMouse: Mouse;
-@group(0) @binding(6) var<uniform> uForce : f32;
-@group(0) @binding(7) var<uniform> uRadius : f32;
-@group(0) @binding(8) var<uniform> uDiffusion : f32;
-@group(0) @binding(9) var<uniform> uDt : f32;
-@group(0) @binding(10) var<uniform> uTime : f32;
-@group(0) @binding(11) var<uniform> uSymmetry : f32;
+@group(0) @binding(0) var<storage, read> vel_in : array<f32>;
+@group(0) @binding(1) var<storage, read_write> vel_out : array<f32>;
+@group(0) @binding(2) var<uniform> uGrid : GridSize;
+@group(0) @binding(3) var<uniform> uMouse : Mouse;
+@group(0) @binding(4) var<uniform> uForce : f32;
+@group(0) @binding(5) var<uniform> uRadius : f32;
+@group(0) @binding(6) var<uniform> uDiffusion : f32;
+@group(0) @binding(7) var<uniform> uDt : f32;
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-fn inBetween(x : f32, lower : f32, upper : f32) -> bool {
-  return x > lower && x < upper;
-}
-fn inBounds(pos : vec2<f32>, xMin : f32, xMax : f32, yMin: f32, yMax : f32) -> bool {
-  return inBetween(pos.x, xMin * uGrid.w, xMax * uGrid.w) && inBetween(pos.y, yMin * uGrid.h, yMax * uGrid.h);
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
 }
 
-fn createSplat(pos : vec2<f32>, splatPos : vec2<f32>, vel : vec2<f32>, radius : f32) -> vec2<f32> {
+fn createSplat3D(pos : vec3<f32>, splatPos : vec3<f32>, vel : vec3<f32>, radius : f32) -> vec3<f32> {
   var p = pos - splatPos;
   p.x *= uGrid.w / uGrid.h;
   var v = vel;
   v.x *= uGrid.w / uGrid.h;
-  var splat = exp(-dot(p, p) / radius) * v;
+  let splat = exp(-dot(p.xz, p.xz) / radius - dot(p.yz, p.yz) / radius * 0.1) * v;
   return splat;
 }
 
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
-    
-    ${ COMPUTE_START }
 
-    let tmpT = uTime;
-    var p = pos/vec2(uGrid.w, uGrid.h);
+    ${COMPUTE_START}
 
-    ${ SPLAT_CODE }
-    
+    var p = pos / vec3(uGrid.w, uGrid.h, uGrid.d);
+
+    var m = uMouse.pos;
+    var v = uMouse.vel * 2.;
+    let splatPos = vec3(m.x, m.y, 0.5);
+    let splatVel = vec3(v.x, v.y, 0.0);
+    var splat = createSplat3D(p, splatPos, splatVel, uRadius);
     splat *= uForce * uDt * 200.;
 
-    x_out[index] = x_in[index]*uDiffusion + splat.x;
-    y_out[index] = y_in[index]*uDiffusion + splat.y;
-    
-    // var distt = distance(pos/vec2(uGrid.w, uGrid.h), vec2(m.x, m.y));
-    // var influenceRadius = 0.06;
-    // if(distt < influenceRadius) {
-    //   var v = uMouse.vel * .25;
-    //   x_out[index] += v.x;
-    //   y_out[index] += v.y;
-    // }
+    let base = index * 3u;
+    vel_out[base]       = vel_in[base]       * uDiffusion + splat.x;
+    vel_out[base + 1u]  = vel_in[base + 1u]  * uDiffusion + splat.y;
+    vel_out[base + 2u]  = vel_in[base + 2u]  * uDiffusion + splat.z;
 }`
 
-const updateDyeShader = /* wgsl */`
-
-${ STRUCT_GRID_SIZE }
-
-struct Mouse {
-  pos: vec2<f32>,
-  vel: vec2<f32>,
-}
-@group(0) @binding(0) var<storage, read> x_in : array<f32>;
-@group(0) @binding(1) var<storage, read> y_in : array<f32>;
-@group(0) @binding(2) var<storage, read> z_in : array<f32>;
-@group(0) @binding(3) var<storage, read_write> x_out : array<f32>;
-@group(0) @binding(4) var<storage, read_write> y_out : array<f32>;
-@group(0) @binding(5) var<storage, read_write> z_out : array<f32>;
-@group(0) @binding(6) var<uniform> uGrid: GridSize;
-@group(0) @binding(7) var<uniform> uMouse: Mouse;
-@group(0) @binding(8) var<uniform> uForce : f32;
-@group(0) @binding(9) var<uniform> uRadius : f32;
-@group(0) @binding(10) var<uniform> uDiffusion : f32;
-@group(0) @binding(11) var<uniform> uTime : f32;
-@group(0) @binding(12) var<uniform> uDt : f32;
-@group(0) @binding(13) var<uniform> uSymmetry : f32;
-
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.dyeW); }
-fn inBetween(x : f32, lower : f32, upper : f32) -> bool {
-  return x > lower && x < upper;
-}
-fn inBounds(pos : vec2<f32>, xMin : f32, xMax : f32, yMin: f32, yMax : f32) -> bool {
-  return inBetween(pos.x, xMin * uGrid.dyeW, xMax * uGrid.dyeW) && inBetween(pos.y, yMin * uGrid.dyeH, yMax * uGrid.dyeH);
-}
-// cosine based palette, 4 vec3 params
-fn palette(t : f32, a : vec3<f32>, b : vec3<f32>, c : vec3<f32>, d : vec3<f32> ) -> vec3<f32> {
-    return a + b*cos( 6.28318*(c*t+d) );
-}
-
-fn createSplat(pos : vec2<f32>, splatPos : vec2<f32>, vel : vec2<f32>, radius : f32) -> vec3<f32> {
-  var p = pos - splatPos;
-  p.x *= uGrid.w / uGrid.h;
-  var v = vel;
-  v.x *= uGrid.w / uGrid.h;
-  var splat = exp(-dot(p, p) / radius) * length(v);
-  return vec3(splat);
-}
-
-@compute @workgroup_size(8, 8)
-fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
-
-    ${ COMPUTE_START_DYE }
-
-    // var col_start = palette(uTime/8., vec3(0.875, 0.516, 0.909), vec3(0.731, 0.232, 0.309), vec3(1.566, 0.088, 1.466), vec3(0.825, 5.786, 3.131));
-    // var col_start = palette(uTime/8., vec3(0.383, 0.659, 0.770), vec3(0.322, 0.366, 0.089), vec3(1.132, 1.321, 0.726), vec3(6.241, 4.902, 1.295));
-    // let col_start = palette(uTime/8., vec3(0.5), vec3(0.5), vec3(1), vec3(0.333, 0.667, 0.999));
-    let col_incr = 0.15;
-    let col_start = palette(uTime/8., vec3(1), vec3(0.5), vec3(1), vec3(0, col_incr, col_incr*2.));
-    // let col_start = vec3(1.+uTime*0.);
-    // let col_start = palette(uTime/8., vec3(${Math.random()}, ${Math.random()}, ${Math.random()}), vec3(${Math.random()}, ${Math.random()}, ${Math.random()}), vec3(${Math.random()}, ${Math.random()}, ${Math.random()}), vec3(${Math.random()}, ${Math.random()}, ${Math.random()}));
-
-    var p = pos/vec2(uGrid.dyeW, uGrid.dyeH);
-
-    ${ SPLAT_CODE }
-
-    splat *= col_start * uForce * uDt * 100.;
-
-    x_out[index] = max(0., x_in[index]*uDiffusion + splat.x);
-    y_out[index] = max(0., y_in[index]*uDiffusion + splat.y);
-    z_out[index] = max(0., z_in[index]*uDiffusion + splat.z);
-
-    // x_out[index]  = x_in[index]*uDiffusion;
-    // y_out[index]  = y_in[index]*uDiffusion;
-    // z_out[index]  = z_in[index]*uDiffusion;
-
-    // var distt = distance(pos/vec2(uGrid.dyeW, uGrid.dyeH), m);
-    // var influenceRadius = 0.06;
-    // if(distt < influenceRadius) {
-    //   var density = ((influenceRadius - distt) / influenceRadius) * 0.004 * length(uMouse.vel)*5000.;
-    //   x_out[index] -= density;
-    //   y_out[index] -= density;
-    //   z_out[index] -= density;
-    // }
-
-    // x_out[index] = max(0., x_out[index]);
-    // y_out[index] = max(0., y_out[index]);
-    // z_out[index] = max(0., z_out[index]);
-}`
-
-
-/// ADVECT SHADER ///
+/// ADVECT SHADER (self-advection, stride-3) ///
 
 const advectShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
-${ STRUCT_GRID_SIZE }
+@group(0) @binding(0) var<storage, read> vel_in : array<f32>;
+@group(0) @binding(1) var<storage, read_write> vel_out : array<f32>;
+@group(0) @binding(2) var<uniform> uGrid : GridSize;
+@group(0) @binding(3) var<uniform> uDt : f32;
 
-@group(0) @binding(0) var<storage, read> x_in : array<f32>;
-@group(0) @binding(1) var<storage, read> y_in : array<f32>;
-@group(0) @binding(2) var<storage, read> x_vel : array<f32>;
-@group(0) @binding(3) var<storage, read> y_vel : array<f32>;
-@group(0) @binding(4) var<storage, read_write> x_out : array<f32>;
-@group(0) @binding(5) var<storage, read_write> y_out : array<f32>;
-@group(0) @binding(6) var<uniform> uGrid : GridSize;
-@group(0) @binding(7) var<uniform> uDt : f32;
-
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-fn in(x : f32, y : f32) -> vec2<f32> { let id = ID(x, y); return vec2(x_in[id], y_in[id]); }
-
-@compute @workgroup_size(8, 8)
-fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
-  
-    ${ COMPUTE_START }
-    
-    var x = pos.x - uDt * uGrid.rdx * x_vel[index];
-    var y = pos.y - uDt * uGrid.rdx * y_vel[index];
-
-    if (x < 0) { x = 0; }
-    else if (x >= uGrid.w - 1) { x = uGrid.w - 1; }
-    if (y < 0) { y = 0; }
-    else if (y >= uGrid.h - 1) { y = uGrid.h - 1; }
-
-    let x1 = floor(x);
-    let y1 = floor(y);
-    let x2 = x1 + 1;
-    let y2 = y1 + 1;
-
-    let TL = in(x1, y2);
-    let TR = in(x2, y2);
-    let BL = in(x1, y1);
-    let BR = in(x2, y1);
-
-    let xMod = fract(x);
-    let yMod = fract(y);
-    
-    let bilerp = mix( mix(BL, BR, xMod), mix(TL, TR, xMod), yMod );
-
-    x_out[index] = bilerp.x;
-    y_out[index] = bilerp.y;
-}`
-
-const advectDyeShader = /* wgsl */`
-
-${ STRUCT_GRID_SIZE }
-
-@group(0) @binding(0) var<storage, read> x_in : array<f32>;
-@group(0) @binding(1) var<storage, read> y_in : array<f32>;
-@group(0) @binding(2) var<storage, read> z_in : array<f32>;
-@group(0) @binding(3) var<storage, read> x_vel : array<f32>;
-@group(0) @binding(4) var<storage, read> y_vel : array<f32>;
-@group(0) @binding(5) var<storage, read_write> x_out : array<f32>;
-@group(0) @binding(6) var<storage, read_write> y_out : array<f32>;
-@group(0) @binding(7) var<storage, read_write> z_out : array<f32>;
-@group(0) @binding(8) var<uniform> uGrid : GridSize;
-@group(0) @binding(9) var<uniform> uDt : f32;
-
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.dyeW); }
-fn in(x : f32, y : f32) -> vec3<f32> { let id = ID(x, y); return vec3(x_in[id], y_in[id], z_in[id]); }
-fn vel(x : f32, y : f32) -> vec2<f32> { 
-  let id = u32(i32(x) + i32(y) * i32(uGrid.w));
-  return vec2(x_vel[id], y_vel[id]);
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
 }
 
-fn vel_bilerp(x0 : f32, y0 : f32) -> vec2<f32> {
-    var x = x0 * uGrid.w / uGrid.dyeW;
-    var y = y0 * uGrid.h / uGrid.dyeH;
-
-    if (x < 0) { x = 0; }
-    else if (x >= uGrid.w - 1) { x = uGrid.w - 1; }
-    if (y < 0) { y = 0; }
-    else if (y >= uGrid.h - 1) { y = uGrid.h - 1; }
-
-    let x1 = floor(x);
-    let y1 = floor(y);
-    let x2 = x1 + 1;
-    let y2 = y1 + 1;
-
-    let TL = vel(x1, y2);
-    let TR = vel(x2, y2);
-    let BL = vel(x1, y1);
-    let BR = vel(x2, y1);
-
-    let xMod = fract(x);
-    let yMod = fract(y);
-
-    return mix( mix(BL, BR, xMod), mix(TL, TR, xMod), yMod );
+fn loadVel(idx : u32) -> vec3<f32> {
+  let b = idx * 3u;
+  return vec3(vel_in[b], vel_in[b + 1u], vel_in[b + 2u]);
 }
 
-@compute @workgroup_size(8, 8)
+fn trilerp(x0 : f32, y0 : f32, z0 : f32) -> vec3<f32> {
+  let x1 = floor(x0); let x2 = x1 + 1.0;
+  let y1 = floor(y0); let y2 = y1 + 1.0;
+  let z1 = floor(z0); let z2 = z1 + 1.0;
+
+  let c000 = loadVel(ID(x1, y1, z1));
+  let c100 = loadVel(ID(x2, y1, z1));
+  let c010 = loadVel(ID(x1, y2, z1));
+  let c110 = loadVel(ID(x2, y2, z1));
+  let c001 = loadVel(ID(x1, y1, z2));
+  let c101 = loadVel(ID(x2, y1, z2));
+  let c011 = loadVel(ID(x1, y2, z2));
+  let c111 = loadVel(ID(x2, y2, z2));
+
+  let tx = fract(x0); let ty = fract(y0); let tz = fract(z0);
+  let c00 = mix(c000, c100, tx);
+  let c01 = mix(c001, c101, tx);
+  let c10 = mix(c010, c110, tx);
+  let c11 = mix(c011, c111, tx);
+  let c0 = mix(c00, c10, ty);
+  let c1 = mix(c01, c11, ty);
+  return mix(c0, c1, tz);
+}
+
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-    ${ COMPUTE_START_DYE }
+    ${COMPUTE_START}
 
-    let V = vel_bilerp(pos.x, pos.y);
+    let vel = loadVel(index);
 
-    var x = pos.x - uDt * uGrid.dyeRdx * V.x;
-    var y = pos.y - uDt * uGrid.dyeRdx * V.y;
+    var bx = pos.x - uDt * uGrid.rdx * vel.x;
+    var by = pos.y - uDt * uGrid.rdx * vel.y;
+    var bz = pos.z - uDt * uGrid.rdx * vel.z;
 
-    if (x < 0) { x = 0; }
-    else if (x >= uGrid.dyeW - 1) { x = uGrid.dyeW - 1; }
-    if (y < 0) { y = 0; }
-    else if (y >= uGrid.dyeH - 1) { y = uGrid.dyeH - 1; }
+    bx = clamp(bx, 0.0, uGrid.w - 1.0);
+    by = clamp(by, 0.0, uGrid.h - 1.0);
+    bz = clamp(bz, 0.0, uGrid.d - 1.0);
 
-    let x1 = floor(x);
-    let y1 = floor(y);
-    let x2 = x1 + 1;
-    let y2 = y1 + 1;
+    let result = trilerp(bx, by, bz);
 
-    let TL = in(x1, y2);
-    let TR = in(x2, y2);
-    let BL = in(x1, y1);
-    let BR = in(x2, y1);
-
-    let xMod = fract(x);
-    let yMod = fract(y);
-
-    let bilerp = mix( mix(BL, BR, xMod), mix(TL, TR, xMod), yMod );
-
-    x_out[index] = bilerp.x;
-    y_out[index] = bilerp.y;
-    z_out[index] = bilerp.z;
+    let base = index * 3u;
+    vel_out[base]       = result.x;
+    vel_out[base + 1u]  = result.y;
+    vel_out[base + 2u]  = result.z;
 }`
 
-/// DIVERGENCE SHADER ///
+/// DIVERGENCE SHADER (stride-3 velocity) ///
 
-const divergenceShader = /* wgsl */`   
+const divergenceShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
-${ STRUCT_GRID_SIZE }
+@group(0) @binding(0) var<storage, read> vel : array<f32>;
+@group(0) @binding(1) var<storage, read_write> div : array<f32>;
+@group(0) @binding(2) var<uniform> uGrid : GridSize;
 
-@group(0) @binding(0) var<storage, read> x_vel : array<f32>;
-@group(0) @binding(1) var<storage, read> y_vel : array<f32>;
-@group(0) @binding(2) var<storage, read_write> div : array<f32>;
-@group(0) @binding(3) var<uniform> uGrid : GridSize;
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
+}
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-fn vel(x : f32, y : f32) -> vec2<f32> { let id = ID(x, y); return vec2(x_vel[id], y_vel[id]); }
+fn loadVel(idx : u32) -> vec3<f32> {
+  let b = idx * 3u;
+  return vec3(vel[b], vel[b + 1u], vel[b + 2u]);
+}
 
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-  ${ COMPUTE_START }
+  ${COMPUTE_START}
 
-  let L = vel(pos.x - 1, pos.y).x;
-  let R = vel(pos.x + 1, pos.y).x;
-  let B = vel(pos.x, pos.y - 1).y;
-  let T = vel(pos.x, pos.y + 1).y;
+  let L = loadVel(ID(pos.x - 1, pos.y, pos.z));
+  let R = loadVel(ID(pos.x + 1, pos.y, pos.z));
+  let B = loadVel(ID(pos.x, pos.y - 1, pos.z));
+  let T = loadVel(ID(pos.x, pos.y + 1, pos.z));
+  let F = loadVel(ID(pos.x, pos.y, pos.z - 1));
+  let Bk = loadVel(ID(pos.x, pos.y, pos.z + 1));
 
-  div[index] = 0.5 * uGrid.rdx * ((R - L) + (T - B));
+  div[index] = 0.5 * uGrid.rdx * ((R.x - L.x) + (T.y - B.y) + (Bk.z - F.z));
 }`
 
-/// PRESSURE SHADER ///
+/// PRESSURE SHADER (3D Jacobi) — scalar, unchanged ///
 
-const pressureShader = /* wgsl */`      
-
-${ STRUCT_GRID_SIZE }
+const pressureShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
 @group(0) @binding(0) var<storage, read> pres_in : array<f32>;
 @group(0) @binding(1) var<storage, read> div : array<f32>;
 @group(0) @binding(2) var<storage, read_write> pres_out : array<f32>;
 @group(0) @binding(3) var<uniform> uGrid : GridSize;
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-fn in(x : f32, y : f32) -> f32 { let id = ID(x, y); return pres_in[id]; }
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
+}
 
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-  ${ COMPUTE_START }
-        
-  let L = pos - vec2(1, 0);
-  let R = pos + vec2(1, 0);
-  let B = pos - vec2(0, 1);
-  let T = pos + vec2(0, 1);
+  ${COMPUTE_START}
 
-  let Lx = in(L.x, L.y);
-  let Rx = in(R.x, R.y);
-  let Bx = in(B.x, B.y);
-  let Tx = in(T.x, T.y);
+  let Lx = pres_in[ID(pos.x - 1, pos.y, pos.z)];
+  let Rx = pres_in[ID(pos.x + 1, pos.y, pos.z)];
+  let Bx = pres_in[ID(pos.x, pos.y - 1, pos.z)];
+  let Tx = pres_in[ID(pos.x, pos.y + 1, pos.z)];
+  let Fx = pres_in[ID(pos.x, pos.y, pos.z - 1)];
+  let Bkx = pres_in[ID(pos.x, pos.y, pos.z + 1)];
 
   let bC = div[index];
-
   let alpha = -(uGrid.dx * uGrid.dx);
-  let rBeta = .25;
+  let rBeta = 1.0 / 6.0;
 
-  pres_out[index] = (Lx + Rx + Bx + Tx + alpha * bC) * rBeta;
+  pres_out[index] = (Lx + Rx + Bx + Tx + Fx + Bkx + alpha * bC) * rBeta;
 }`
 
-/// GRADIENT SUBTRACT SHADER ///
+/// GRADIENT SUBTRACT SHADER (stride-3 velocity) ///
 
-const gradientSubtractShader = /* wgsl */`      
-
-${ STRUCT_GRID_SIZE }
+const gradientSubtractShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
 @group(0) @binding(0) var<storage, read> pressure : array<f32>;
-@group(0) @binding(1) var<storage, read> x_vel : array<f32>;
-@group(0) @binding(2) var<storage, read> y_vel : array<f32>;
-@group(0) @binding(3) var<storage, read_write> x_out : array<f32>;
-@group(0) @binding(4) var<storage, read_write> y_out : array<f32>;
-@group(0) @binding(5) var<uniform> uGrid : GridSize;
-
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-fn pres(x : f32, y : f32) -> f32 { let id = ID(x, y); return pressure[id]; }
-
-@compute @workgroup_size(8, 8)
-fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
-
-  ${ COMPUTE_START }
-
-  let L = pos - vec2(1, 0);
-  let R = pos + vec2(1, 0);
-  let B = pos - vec2(0, 1);
-  let T = pos + vec2(0, 1);
-
-  let xL = pres(L.x, L.y);
-  let xR = pres(R.x, R.y);
-  let yB = pres(B.x, B.y);
-  let yT = pres(T.x, T.y);
-  
-  let finalX = x_vel[index] - .5 * uGrid.rdx * (xR - xL);
-  let finalY = y_vel[index] - .5 * uGrid.rdx * (yT - yB);
-
-  x_out[index] = finalX;
-  y_out[index] = finalY;
-}`
-
-/// VORTICITY SHADER ///
-
-const vorticityShader = /* wgsl */`      
-
-${ STRUCT_GRID_SIZE }
-
-@group(0) @binding(0) var<storage, read> x_vel : array<f32>;
-@group(0) @binding(1) var<storage, read> y_vel : array<f32>;
-@group(0) @binding(2) var<storage, read_write> vorticity : array<f32>;
+@group(0) @binding(1) var<storage, read> vel_in : array<f32>;
+@group(0) @binding(2) var<storage, read_write> vel_out : array<f32>;
 @group(0) @binding(3) var<uniform> uGrid : GridSize;
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-fn vel(x : f32, y : f32) -> vec2<f32> { let id = ID(x, y); return vec2(x_vel[id], y_vel[id]); }
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
+}
+fn pres(x : f32, y : f32, z : f32) -> f32 {
+  return pressure[ID(x, y, z)];
+}
 
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-  ${ COMPUTE_START }
+  ${COMPUTE_START}
 
-  let Ly = vel(pos.x - 1, pos.y).y;
-  let Ry = vel(pos.x + 1, pos.y).y;
-  let Bx = vel(pos.x, pos.y - 1).x;
-  let Tx = vel(pos.x, pos.y + 1).x;
+  let xL = pres(pos.x - 1, pos.y, pos.z);
+  let xR = pres(pos.x + 1, pos.y, pos.z);
+  let yB = pres(pos.x, pos.y - 1, pos.z);
+  let yT = pres(pos.x, pos.y + 1, pos.z);
+  let zF = pres(pos.x, pos.y, pos.z - 1);
+  let zBk = pres(pos.x, pos.y, pos.z + 1);
 
-  vorticity[index] = 0.5 * uGrid.rdx * ((Ry - Ly) - (Tx - Bx));
+  let halfRdx = 0.5 * uGrid.rdx;
+  let base = index * 3u;
+  vel_out[base]       = vel_in[base]       - halfRdx * (xR - xL);
+  vel_out[base + 1u]  = vel_in[base + 1u]  - halfRdx * (yT - yB);
+  vel_out[base + 2u]  = vel_in[base + 2u]  - halfRdx * (zBk - zF);
 }`
 
-/// VORTICITY CONFINMENT SHADER ///
+/// BOUNDARY SHADER (stride-3 velocity) ///
 
-const vorticityConfinmentShader = /* wgsl */`      
+const boundaryShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
-${ STRUCT_GRID_SIZE }
+@group(0) @binding(0) var<storage, read> vel_in : array<f32>;
+@group(0) @binding(1) var<storage, read_write> vel_out : array<f32>;
+@group(0) @binding(2) var<uniform> uGrid : GridSize;
+@group(0) @binding(3) var<uniform> containFluid : f32;
 
-@group(0) @binding(0) var<storage, read> x_vel_in : array<f32>;
-@group(0) @binding(1) var<storage, read> y_vel_in : array<f32>;
-@group(0) @binding(2) var<storage, read> vorticity : array<f32>;
-@group(0) @binding(3) var<storage, read_write> x_vel_out : array<f32>;
-@group(0) @binding(4) var<storage, read_write> y_vel_out : array<f32>;
-@group(0) @binding(5) var<uniform> uGrid : GridSize;
-@group(0) @binding(6) var<uniform> uDt : f32;
-@group(0) @binding(7) var<uniform> uVorticity : f32;
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
+}
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-fn vort(x : f32, y : f32) -> f32 { let id = ID(x, y); return vorticity[id]; }
-
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-  ${ COMPUTE_START }
+  ${COMPUTE_START_ALL}
 
-  let L = vort(pos.x - 1, pos.y);
-  let R = vort(pos.x + 1, pos.y);
-  let B = vort(pos.x, pos.y - 1);
-  let T = vort(pos.x, pos.y + 1);
-  let C = vorticity[index];
+  var srcPos = pos;
+  var scaleX = 1.0;
+  var scaleY = 1.0;
+  var scaleZ = 1.0;
 
-  var force = 0.5 * uGrid.rdx * vec2(abs(T) - abs(B), abs(R) - abs(L));
+  if (pos.x == 0) { srcPos.x += 1; scaleX = -1; }
+  else if (pos.x == uGrid.w - 1) { srcPos.x -= 1; scaleX = -1; }
+  if (pos.y == 0) { srcPos.y += 1; scaleY = -1; }
+  else if (pos.y == uGrid.h - 1) { srcPos.y -= 1; scaleY = -1; }
+  if (pos.z == 0) { srcPos.z += 1; scaleZ = -1; }
+  else if (pos.z == uGrid.d - 1) { srcPos.z -= 1; scaleZ = -1; }
 
-  let epsilon = 2.4414e-4;
-  let magSqr = max(epsilon, dot(force, force));
+  if (containFluid == 0.) {
+    scaleX = 1; scaleY = 1; scaleZ = 1;
+  }
 
-  force = force / sqrt(magSqr);
-  force *= uGrid.dx * uVorticity * uDt * C * vec2(1, -1);
-
-  x_vel_out[index] = x_vel_in[index] + force.x;
-  y_vel_out[index] = y_vel_in[index] + force.y;
+  let srcBase = ID(srcPos.x, srcPos.y, srcPos.z) * 3u;
+  let dstBase = index * 3u;
+  vel_out[dstBase]       = vel_in[srcBase]       * scaleX;
+  vel_out[dstBase + 1u]  = vel_in[srcBase + 1u]  * scaleY;
+  vel_out[dstBase + 2u]  = vel_in[srcBase + 2u]  * scaleZ;
 }`
 
-/// CLEAR PRESSURE SHADER ///
+/// BOUNDARY PRESSURE SHADER — scalar, unchanged ///
 
-const clearPressureShader = /* wgsl */`  
+const boundaryPressureShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
-${ STRUCT_GRID_SIZE }
+@group(0) @binding(0) var<storage, read> x_in : array<f32>;
+@group(0) @binding(1) var<storage, read_write> x_out : array<f32>;
+@group(0) @binding(2) var<uniform> uGrid : GridSize;
+
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
+}
+
+@compute @workgroup_size(8, 8, 4)
+fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
+
+  ${COMPUTE_START_ALL}
+
+  if (pos.x == 0) { pos.x += 1; }
+  else if (pos.x == uGrid.w - 1) { pos.x -= 1; }
+  if (pos.y == 0) { pos.y += 1; }
+  else if (pos.y == uGrid.h - 1) { pos.y -= 1; }
+  if (pos.z == 0) { pos.z += 1; }
+  else if (pos.z == uGrid.d - 1) { pos.z -= 1; }
+
+  x_out[index] = x_in[ID(pos.x, pos.y, pos.z)];
+}`
+
+/// CLEAR PRESSURE SHADER — scalar, unchanged ///
+
+const clearPressureShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
 @group(0) @binding(0) var<storage, read> x_in : array<f32>;
 @group(0) @binding(1) var<storage, read_write> x_out : array<f32>;
 @group(0) @binding(2) var<uniform> uGrid : GridSize;
 @group(0) @binding(3) var<uniform> uVisc : f32;
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
+}
 
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-  ${ COMPUTE_START_ALL }
+  ${COMPUTE_START_ALL}
 
-  x_out[index] = x_in[index]*uVisc;
+  x_out[index] = x_in[index] * uVisc;
 }`
 
-/// BOUNDARY SHADER ///
+/// VORTICITY SHADER (stride-3) ///
 
-const boundaryShader = /* wgsl */`
+const vorticityShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
-${ STRUCT_GRID_SIZE }
-
-@group(0) @binding(0) var<storage, read> x_in : array<f32>;
-@group(0) @binding(1) var<storage, read> y_in : array<f32>;
-@group(0) @binding(2) var<storage, read_write> x_out : array<f32>;
-@group(0) @binding(3) var<storage, read_write> y_out : array<f32>;
-@group(0) @binding(4) var<uniform> uGrid : GridSize;
-@group(0) @binding(5) var<uniform> containFluid : f32;
-
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
-
-@compute @workgroup_size(8, 8)
-fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
-
-  ${ COMPUTE_START_ALL }
-
-  // disable scale to disable contained bounds
-  var scaleX = 1.;
-  var scaleY = 1.;
-
-  if (pos.x == 0) { pos.x += 1; scaleX = -1.; }
-  else if (pos.x == uGrid.w - 1) { pos.x -= 1; scaleX = -1.; }
-  if (pos.y == 0) { pos.y += 1; scaleY = -1.; }
-  else if (pos.y == uGrid.h - 1) { pos.y -= 1; scaleY = -1.; }
-
-  if (containFluid == 0.) {
-    scaleX = 1.;
-    scaleY = 1.;
-  }
-
-  x_out[index] = x_in[ID(pos.x, pos.y)] * scaleX;
-  y_out[index] = y_in[ID(pos.x, pos.y)] * scaleY;
-}`
-
-/// BOUNDARY PRESSURE SHADER ///
-
-const boundaryPressureShader = /* wgsl */`    
-
-${ STRUCT_GRID_SIZE }
-
-@group(0) @binding(0) var<storage, read> x_in : array<f32>;
-@group(0) @binding(1) var<storage, read_write> x_out : array<f32>;
+@group(0) @binding(0) var<storage, read> vel : array<f32>;
+@group(0) @binding(1) var<storage, read_write> vort : array<f32>;
 @group(0) @binding(2) var<uniform> uGrid : GridSize;
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.w); }
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
+}
 
-@compute @workgroup_size(8, 8)
+fn loadVel(idx : u32) -> vec3<f32> {
+  let b = idx * 3u;
+  return vec3(vel[b], vel[b + 1u], vel[b + 2u]);
+}
+
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-  ${ COMPUTE_START_ALL }
+  ${COMPUTE_START}
 
-  if (pos.x == 0) { pos.x += 1; }
-  else if (pos.x == uGrid.w - 1) { pos.x -= 1; }
-  if (pos.y == 0) { pos.y += 1; }
-  else if (pos.y == uGrid.h - 1) { pos.y -= 1; }
+  let halfRdx = 0.5 * uGrid.rdx;
 
-  x_out[index] = x_in[ID(pos.x, pos.y)];
+  let dVy_dz = (loadVel(ID(pos.x, pos.y, pos.z + 1)).y - loadVel(ID(pos.x, pos.y, pos.z - 1)).y) * halfRdx;
+  let dVz_dy = (loadVel(ID(pos.x, pos.y + 1, pos.z)).z - loadVel(ID(pos.x, pos.y - 1, pos.z)).z) * halfRdx;
+  let dVx_dz = (loadVel(ID(pos.x, pos.y, pos.z + 1)).x - loadVel(ID(pos.x, pos.y, pos.z - 1)).x) * halfRdx;
+  let dVz_dx = (loadVel(ID(pos.x + 1, pos.y, pos.z)).z - loadVel(ID(pos.x - 1, pos.y, pos.z)).z) * halfRdx;
+  let dVy_dx = (loadVel(ID(pos.x + 1, pos.y, pos.z)).y - loadVel(ID(pos.x - 1, pos.y, pos.z)).y) * halfRdx;
+  let dVx_dy = (loadVel(ID(pos.x, pos.y + 1, pos.z)).x - loadVel(ID(pos.x, pos.y - 1, pos.z)).x) * halfRdx;
+
+  let base = index * 3u;
+  vort[base]       = dVz_dy - dVy_dz;
+  vort[base + 1u]  = dVx_dz - dVz_dx;
+  vort[base + 2u]  = dVy_dx - dVx_dy;
 }`
 
-const checkerboardShader = /* wgsl */`    
+/// VORTICITY CONFINEMENT SHADER (stride-3) ///
 
-${ STRUCT_GRID_SIZE }
+const vorticityConfinementShader = /* wgsl */`
+${STRUCT_GRID_SIZE}
 
-@group(0) @binding(0) var<storage, read_write> x_out : array<f32>;
-@group(0) @binding(1) var<storage, read_write> y_out : array<f32>;
-@group(0) @binding(2) var<storage, read_write> z_out : array<f32>;
+@group(0) @binding(0) var<storage, read> vel_in : array<f32>;
+@group(0) @binding(1) var<storage, read> vort : array<f32>;
+@group(0) @binding(2) var<storage, read_write> vel_out : array<f32>;
 @group(0) @binding(3) var<uniform> uGrid : GridSize;
-@group(0) @binding(4) var<uniform> uTime : f32;
+@group(0) @binding(4) var<uniform> uDt : f32;
+@group(0) @binding(5) var<uniform> uVorticity : f32;
 
-fn ID(x : f32, y : f32) -> u32 { return u32(x + y * uGrid.dyeW); }
-
-fn noise(p_ : vec3<f32>) -> f32 {
-  var p = p_;
-	var ip=floor(p);
-  p-=ip; 
-  var s=vec3(7.,157.,113.);
-  var h=vec4(0.,s.y, s.z,s.y+s.z)+dot(ip,s);
-  p=p*p*(3. - 2.*p); 
-  h=mix(fract(sin(h)*43758.5),fract(sin(h+s.x)*43758.5),p.x);
-  var r=mix(h.xz,h.yw,p.y);
-  h.x = r.x;
-  h.y = r.y;
-  return mix(h.x,h.y,p.z); 
+fn ID(x : f32, y : f32, z : f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
 }
 
-fn fbm(p_ : vec3<f32>, octaveNum : i32) -> vec2<f32> {
-  var p=p_;
-	var acc = vec2(0.);	
-	var freq = 1.0;
-	var amp = 0.5;
-  var shift = vec3(100.);
-	for (var i = 0; i < octaveNum; i++) {
-		acc += vec2(noise(p), noise(p + vec3(0.,0.,10.))) * amp;
-    p = p * 2.0 + shift;
-    amp *= 0.5;
-	}
-	return acc;
+fn loadVort(idx : u32) -> vec3<f32> {
+  let b = idx * 3u;
+  return vec3(vort[b], vort[b + 1u], vort[b + 2u]);
 }
 
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 4)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
 
-  ${ COMPUTE_START_DYE }
+  ${COMPUTE_START}
 
-  var uv = pos/vec2(uGrid.dyeW, uGrid.dyeH);
-  var zoom = 4.;
+  let L = length(loadVort(ID(pos.x - 1, pos.y, pos.z)));
+  let R = length(loadVort(ID(pos.x + 1, pos.y, pos.z)));
+  let B = length(loadVort(ID(pos.x, pos.y - 1, pos.z)));
+  let T = length(loadVort(ID(pos.x, pos.y + 1, pos.z)));
+  let F = length(loadVort(ID(pos.x, pos.y, pos.z - 1)));
+  let Bk = length(loadVort(ID(pos.x, pos.y, pos.z + 1)));
 
-  var smallNoise = fbm(vec3(uv.x*zoom*2., uv.y*zoom*2., uTime+2.145), 7) - .5;
-  var bigNoise = fbm(vec3(uv.x*zoom, uv.y*zoom, uTime*.1+30.), 7) - .5;
+  let halfRdx = 0.5 * uGrid.rdx;
+  var eta = vec3((R - L) * halfRdx, (T - B) * halfRdx, (Bk - F) * halfRdx);
 
-  var noise = max(length(bigNoise) * 0.035, 0.);
-  var noise2 = max(length(smallNoise) * 0.035, 0.);
+  let epsilon = 2.4414e-4;
+  let magSqr = max(epsilon, dot(eta, eta));
+  eta = eta / sqrt(magSqr);
 
-  noise = noise + noise2 * .05;
+  let curl = loadVort(index);
+  let force = uGrid.dx * uVorticity * uDt * cross(eta, curl);
 
-  var czoom = 4.;
-  var n = fbm(vec3(uv.x*czoom, uv.y*czoom, uTime*.1+63.1), 7)*.75+.25;
-  var n2 = fbm(vec3(uv.x*czoom, uv.y*czoom, uTime*.1+23.4), 7)*.75+.25;
-  // var col = 6.*vec3(n.x, n.y, n2.x);
-  
-  var col = vec3(1.);
-
-  x_out[index] += noise * col.x;
-  y_out[index] += noise * col.y;
-  z_out[index] += noise * col.z;
+  let base = index * 3u;
+  vel_out[base]       = vel_in[base]       + force.x;
+  vel_out[base + 1u]  = vel_in[base + 1u]  + force.y;
+  vel_out[base + 2u]  = vel_in[base + 2u]  + force.z;
 }`
 
-/// PARTICLE INIT SHADER ///
+/// PARTICLE INIT SHADER (stride-3 positions) ///
 
 const particleInitShader = /* wgsl */`
-${ STRUCT_GRID_SIZE }
+${STRUCT_GRID_SIZE}
 
-@group(0) @binding(0) var<storage, read_write> posX : array<f32>;
-@group(0) @binding(1) var<storage, read_write> posY : array<f32>;
-@group(0) @binding(2) var<storage, read_write> life : array<f32>;
-@group(0) @binding(3) var<uniform> uSpawnPos : vec2<f32>;
-@group(0) @binding(4) var<uniform> uRadius : f32;
-@group(0) @binding(5) var<uniform> uMaxLife : f32;
-@group(0) @binding(6) var<uniform> uSeed : f32;
+@group(0) @binding(0) var<storage, read_write> pos_out : array<f32>;
+@group(0) @binding(1) var<storage, read_write> life : array<f32>;
+@group(0) @binding(2) var<uniform> uSpawnPos : vec2<f32>;
+@group(0) @binding(3) var<uniform> uRadius : f32;
+@group(0) @binding(4) var<uniform> uMaxLife : f32;
+@group(0) @binding(5) var<uniform> uSeed : f32;
 
-// 哈希函数用于随机数生成
 fn hash(p: vec2<f32>) -> f32 {
     var p3 = fract(vec3(p.xyx) * .1031);
     p3 += dot(p3, p3.yzx + 33.33);
     return fract((p3.x + p3.y) * p3.z);
 }
 
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(8, 8, 1)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
     let index = global_id.x + global_id.y * 100u;
+    if (index >= 10000u) { return; }
 
-    // 生成随机偏移
     let randX = hash(vec2(f32(global_id.x) + uSeed, f32(global_id.y)));
     let randY = hash(vec2(f32(global_id.x), f32(global_id.y) + uSeed));
+    let randZ = hash(vec2(f32(global_id.x) + uSeed * 0.7, f32(global_id.y) + uSeed * 1.3));
 
-    // 在鼠标位置附近随机分布
-    posX[index] = uSpawnPos.x + (randX - 0.5) * uRadius * 2.0;
-    posY[index] = uSpawnPos.y + (randY - 0.5) * uRadius * 2.0;
+    let base = index * 3u;
+    pos_out[base]       = uSpawnPos.x + (randX - 0.5) * uRadius * 2.0;
+    pos_out[base + 1u]  = uSpawnPos.y + (randY - 0.5) * uRadius * 2.0;
+    pos_out[base + 2u]  = 0.5 + (randZ - 0.5) * uRadius * 2.0;
     life[index] = uMaxLife;
 }
 `
 
-/// PARTICLE UPDATE SHADER ///
+/// PARTICLE UPDATE SHADER (stride-3) ///
 
 const particleUpdateShader = /* wgsl */`
-${ STRUCT_GRID_SIZE }
+${STRUCT_GRID_SIZE}
 
-@group(0) @binding(0) var<storage, read> posX_in : array<f32>;
-@group(0) @binding(1) var<storage, read> posY_in : array<f32>;
-@group(0) @binding(2) var<storage, read_write> life_in : array<f32>;
-@group(0) @binding(3) var<storage, read_write> posX_out : array<f32>;
-@group(0) @binding(4) var<storage, read_write> posY_out : array<f32>;
-@group(0) @binding(5) var<storage, read> velX : array<f32>;
-@group(0) @binding(6) var<storage, read> velY : array<f32>;
-@group(0) @binding(7) var<uniform> uGrid : GridSize;
-@group(0) @binding(8) var<uniform> uDt : f32;
-@group(0) @binding(9) var<uniform> uSpeed : f32;
+@group(0) @binding(0) var<storage, read> pos_in : array<f32>;
+@group(0) @binding(1) var<storage, read_write> pos_out : array<f32>;
+@group(0) @binding(2) var<storage, read_write> life : array<f32>;
+@group(0) @binding(3) var<storage, read> vel : array<f32>;
+@group(0) @binding(4) var<uniform> uGrid : GridSize;
+@group(0) @binding(5) var<uniform> uDt : f32;
+@group(0) @binding(6) var<uniform> uSpeed : f32;
 
-fn ID(x: f32, y: f32) -> u32 { return u32(x + y * uGrid.w); }
-
-// 双线性插值采样速度场
-fn sampleVelocity(pos: vec2<f32>) -> vec2<f32> {
-    var x = pos.x * uGrid.w;
-    var y = pos.y * uGrid.h;
-
-    x = clamp(x, 0.0, uGrid.w - 1.0);
-    y = clamp(y, 0.0, uGrid.h - 1.0);
-
-    let x1 = floor(x);
-    let y1 = floor(y);
-    let x2 = x1 + 1.0;
-    let y2 = y1 + 1.0;
-
-    let TL = vec2(velX[ID(x1, y2)], velY[ID(x1, y2)]);
-    let TR = vec2(velX[ID(x2, y2)], velY[ID(x2, y2)]);
-    let BL = vec2(velX[ID(x1, y1)], velY[ID(x1, y1)]);
-    let BR = vec2(velX[ID(x2, y1)], velY[ID(x2, y1)]);
-
-    let xMod = fract(x);
-    let yMod = fract(y);
-
-    return mix(mix(BL, BR, xMod), mix(TL, TR, xMod), yMod);
+fn ID(x: f32, y: f32, z: f32) -> u32 {
+  return u32(x + y * uGrid.w + z * uGrid.w * uGrid.h);
 }
 
-@compute @workgroup_size(8, 8)
+fn loadVel(idx: u32) -> vec3<f32> {
+  let b = idx * 3u;
+  return vec3(vel[b], vel[b + 1u], vel[b + 2u]);
+}
+
+fn trilerpVel(px: f32, py: f32, pz: f32) -> vec3<f32> {
+  var x = px * uGrid.w;
+  var y = py * uGrid.h;
+  var z = pz * uGrid.d;
+
+  x = clamp(x, 0.0, uGrid.w - 1.001);
+  y = clamp(y, 0.0, uGrid.h - 1.001);
+  z = clamp(z, 0.0, uGrid.d - 1.001);
+
+  let x1 = floor(x); let x2 = x1 + 1.0;
+  let y1 = floor(y); let y2 = y1 + 1.0;
+  let z1 = floor(z); let z2 = z1 + 1.0;
+
+  let tx = fract(x); let ty = fract(y); let tz = fract(z);
+
+  let c000 = loadVel(ID(x1, y1, z1));
+  let c100 = loadVel(ID(x2, y1, z1));
+  let c010 = loadVel(ID(x1, y2, z1));
+  let c110 = loadVel(ID(x2, y2, z1));
+  let c001 = loadVel(ID(x1, y1, z2));
+  let c101 = loadVel(ID(x2, y1, z2));
+  let c011 = loadVel(ID(x1, y2, z2));
+  let c111 = loadVel(ID(x2, y2, z2));
+
+  let c00 = mix(c000, c100, tx);
+  let c01 = mix(c001, c101, tx);
+  let c10 = mix(c010, c110, tx);
+  let c11 = mix(c011, c111, tx);
+  let c0 = mix(c00, c10, ty);
+  let c1 = mix(c01, c11, ty);
+
+  return mix(c0, c1, tz);
+}
+
+@compute @workgroup_size(8, 8, 1)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
     let index = global_id.x + global_id.y * 100u;
+    if (index >= 10000u) { return; }
 
-    let currentLife = life_in[index];
+    let currentLife = life[index];
+    let base = index * 3u;
 
-    // 生命周期结束，保持原位或隐藏
     if (currentLife <= 0.0) {
-        posX_out[index] = posX_in[index];
-        posY_out[index] = posY_in[index];
-        life_in[index] = -1.0; // 标记为死亡
+        pos_out[base]      = pos_in[base];
+        pos_out[base + 1u] = pos_in[base + 1u];
+        pos_out[base + 2u] = pos_in[base + 2u];
+        life[index] = -1.0;
         return;
     }
 
-    let pos = vec2(posX_in[index], posY_in[index]);
-    let vel = sampleVelocity(pos);
+    let px = pos_in[base];
+    let py = pos_in[base + 1u];
+    let pz = pos_in[base + 2u];
+    let v = trilerpVel(px, py, pz);
 
-    // 更新位置（应用速度系数）
-    var newX = pos.x + vel.x * uDt * uGrid.rdx * uSpeed;
-    var newY = pos.y + vel.y * uDt * uGrid.rdx * uSpeed;
+    var newX = px + v.x * uDt * uGrid.rdx * uSpeed;
+    var newY = py + v.y * uDt * uGrid.rdx * uSpeed;
+    var newZ = pz + v.z * uDt * uGrid.rdx * uSpeed;
 
-    // 边界处理
     newX = clamp(newX, 0.0, 1.0);
     newY = clamp(newY, 0.0, 1.0);
+    newZ = clamp(newZ, 0.0, 1.0);
 
-    posX_out[index] = newX;
-    posY_out[index] = newY;
-    life_in[index] = currentLife - uDt;
+    pos_out[base]      = newX;
+    pos_out[base + 1u] = newY;
+    pos_out[base + 2u] = newZ;
+    life[index] = currentLife - uDt;
 }
 `
-/// PARTICLE RENDER SHADER ///
+
+/// PARTICLE RENDER SHADER (stride-3 positions) ///
 
 const particleRenderShader = /* wgsl */`
 struct ParticleVertexOut {
   @builtin(position) position : vec4<f32>,
   @location(0) color : vec4<f32>,
-  @location(1) uv : vec2<f32>,  // 归一化坐标 (-1 到 1)，用于圆形裁剪
+  @location(1) uv : vec2<f32>,
 }
 
-@group(0) @binding(0) var<storage, read> posX : array<f32>;
-@group(0) @binding(1) var<storage, read> posY : array<f32>;
-@group(0) @binding(2) var<storage, read> life : array<f32>;
-@group(0) @binding(3) var<uniform> uMaxLife : f32;
-@group(0) @binding(4) var<uniform> uParticleSize : f32;
+struct Uniforms {
+  mvp : mat4x4<f32>,
+  particleSize : f32,
+  maxLife : f32,
+  screenWidth : f32,
+  screenHeight : f32,
+}
+
+@group(0) @binding(0) var<storage, read> positions : array<f32>;
+@group(0) @binding(1) var<storage, read> life : array<f32>;
+@group(0) @binding(2) var<uniform> uUniforms : Uniforms;
 
 @vertex
 fn vertex_main(
   @location(0) vertexOffset : vec2<f32>,
   @builtin(instance_index) instanceIndex : u32
 ) -> ParticleVertexOut {
-    let particleIndex = instanceIndex;
-    let x = posX[particleIndex];
-    let y = posY[particleIndex];
-    let l = life[particleIndex];
+    let base = instanceIndex * 3u;
+    let x = positions[base];
+    let y = positions[base + 1u];
+    let z = positions[base + 2u];
+    let l = life[instanceIndex];
 
     var out: ParticleVertexOut;
 
-    // 死亡粒子：移出屏幕
     if (l <= 0.0) {
         out.position = vec4<f32>(2.0, 2.0, 0.0, 1.0);
         out.color = vec4<f32>(0.0);
@@ -800,19 +597,15 @@ fn vertex_main(
         return out;
     }
 
-    // 屏幕中心坐标
-    let screenX = x * 2.0 - 1.0;
-    let screenY = y * 2.0 - 1.0;
+    let worldPos = vec4<f32>(x - 0.5, y - 0.5, z - 0.5, 1.0);
+    let clipPos = uUniforms.mvp * worldPos;
+    let w = clipPos.w;
+    let screenSize = uUniforms.particleSize * 200.0 / max(w, 0.001);
+    let offset = vertexOffset * screenSize / vec2(uUniforms.screenWidth, uUniforms.screenHeight) * 2.0;
+    out.position = vec4<f32>(clipPos.x / w + offset.x, clipPos.y / w + offset.y, clipPos.z / w, 1.0);
 
-    // 应用顶点偏移（形成四边形）
-    let offset = vertexOffset * uParticleSize;
-    out.position = vec4<f32>(screenX + offset.x, screenY + offset.y, 0.0, 1.0);
-
-    // 生命周期 -> 颜色 (绿色 -> 红色)
-    let lifeRatio = l / uMaxLife;
-    out.color = vec4<f32>(1.0 - lifeRatio, lifeRatio, 0.0, lifeRatio);
-
-    // 传递归一化坐标用于圆形裁剪
+    let lifeRatio = l / uUniforms.maxLife;
+    out.color = vec4<f32>(1.0 - lifeRatio, lifeRatio, 0.0, lifeRatio * 0.8);
     out.uv = vertexOffset;
 
     return out;
@@ -820,17 +613,13 @@ fn vertex_main(
 
 @fragment
 fn fragment_main(fragData : ParticleVertexOut) -> @location(0) vec4<f32> {
-    // 计算到圆心的距离
     let dist = length(fragData.uv);
 
-    // 超出圆形范围则丢弃
     if (dist > 1.0) {
         discard;
     }
 
-    // 使用 smoothstep 实现边缘平滑（抗锯齿）
-    let alpha = 1.0 - smoothstep(0.8, 1.0, dist);
-
+    let alpha = 1.0 - smoothstep(0.7, 1.0, dist);
     return vec4<f32>(fragData.color.rgb, fragData.color.a * alpha);
 }
 `
