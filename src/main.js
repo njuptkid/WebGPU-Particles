@@ -14,12 +14,14 @@ let settings = {
 
     particle_radius: 0.06,
     particle_max_life: 20.0,
-    particle_render_size: 0.005,
+    particle_render_size: 0.02,
     particle_speed: 0.01,
 }
 
 let gui
 let device, presentationFormat, canvas, context
+let postProcessChain
+
 
 const mouseInfos = {
     current: null,
@@ -31,7 +33,7 @@ const mouseInfos = {
 
 // Buffers
 let velocity, velocity0, divergence, divergence0, pressure, pressure0, vorticity
-let particles, particles0, particleLife
+let particles, particles0, particleLife, particleColor
 
 // Uniforms
 const globalUniforms = {}
@@ -57,9 +59,10 @@ function initBuffers() {
 
     vorticity = new DynamicBuffer({ components: 3 })
 
-    particles = new DynamicBuffer({ components: 3, w: 100, h: 100, d: 1 })
-    particles0 = new DynamicBuffer({ components: 3, w: 100, h: 100, d: 1 })
-    particleLife = new DynamicBuffer({ w: 100, h: 100, d: 1 })
+    particles = new DynamicBuffer({ components: 3, w: 100, h: 300, d: 1 })
+    particles0 = new DynamicBuffer({ components: 3, w: 100, h: 300, d: 1 })
+    particleLife = new DynamicBuffer({ w: 100, h: 300, d: 1 })
+    particleColor = new DynamicBuffer({ components: 3, w: 100, h: 300, d: 1 })
 }
 
 function initUniforms() {
@@ -151,11 +154,11 @@ function initPrograms() {
     })
 
     particleInitProgram = new Program({
-        buffers: [particles, particleLife],
+        buffers: [particles, particleLife, particleColor],
         uniforms: [particleSpawnPos, particleRadius, particleMaxLife, particleSeed],
         shader: particleInitShader,
         dispatchX: 100,
-        dispatchY: 100,
+        dispatchY: 300,
         dispatchZ: 1,
     })
 
@@ -164,7 +167,7 @@ function initPrograms() {
         uniforms: [grid, dt, particleSpeed],
         shader: particleUpdateShader,
         dispatchX: 100,
-        dispatchY: 100,
+        dispatchY: 300,
         dispatchZ: 1,
     })
 
@@ -179,9 +182,17 @@ async function main() {
     initUniforms()
     initPrograms()
 
+    postProcessChain = new PostProcessChain(device, presentationFormat)
+    postProcessChain.addEffect(new BloomEffect())
+    postProcessChain.addEffect(new VectorBlurEffect('vBlur1'))
+    postProcessChain.addEffect(new VectorBlurEffect('vBlur2'))
+
+
+
     function reset() {
         velocity.clear(device.queue)
         pressure.clear(device.queue)
+        particleLife.clear(device.queue)
         settings.time = 0
         loop = 0
     }
@@ -249,13 +260,37 @@ async function main() {
         pressure0.copyTo(pressure, commandEncoder)
         particles0.copyTo(particles, commandEncoder)
 
-        particleRenderProgram.dispatch(commandEncoder)
+        particleRenderProgram.dispatch(commandEncoder, postProcessChain.mainRT.view)
+
+        postProcessChain.render(commandEncoder, context.getCurrentTexture().createView())
 
         const gpuCommands = commandEncoder.finish()
         device.queue.submit([gpuCommands])
     }
 
+
     initGUI()
+
+    let postFolder = gui.addFolder('Post Processing')
+
+    let bloomFolder = postFolder.addFolder('1. Bloom')
+    bloomFolder.add(settings, 'bloomThreshold', 0.0, 2.0).name("Threshold")
+    bloomFolder.add(settings, 'bloomIntensity', 0.0, 5.0).name("Intensity")
+    bloomFolder.open()
+
+    let blurAFolder = postFolder.addFolder('2. Vector Blur A (Detail)')
+    blurAFolder.add(settings, 'vBlur1_MapRadius', 0.0, 20.0).step(1).name("Map Blur Radius")
+    blurAFolder.add(settings, 'vBlur1_Amount', 0.0, 100.0).step(1).name("LIC Amount")
+    blurAFolder.add(settings, 'vBlur1_Revolution', 0.0, 5.0).step(0.1).name("Revolution")
+    blurAFolder.open()
+
+    let blurBFolder = postFolder.addFolder('3. Vector Blur B (Macro)')
+    blurBFolder.add(settings, 'vBlur2_MapRadius', 0.0, 50.0).step(1).name("Map Blur Radius")
+    blurBFolder.add(settings, 'vBlur2_Amount', 0.0, 100.0).step(1).name("LIC Amount")
+    blurBFolder.add(settings, 'vBlur2_Revolution', 0.0, 5.0).step(0.1).name("Revolution")
+    blurBFolder.open()
+
+    postFolder.open()
     step()
 }
 

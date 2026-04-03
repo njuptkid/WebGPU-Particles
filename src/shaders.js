@@ -436,10 +436,11 @@ ${STRUCT_GRID_SIZE}
 
 @group(0) @binding(0) var<storage, read_write> pos_out : array<f32>;
 @group(0) @binding(1) var<storage, read_write> life : array<f32>;
-@group(0) @binding(2) var<uniform> uSpawnPos : vec2<f32>;
-@group(0) @binding(3) var<uniform> uRadius : f32;
-@group(0) @binding(4) var<uniform> uMaxLife : f32;
-@group(0) @binding(5) var<uniform> uSeed : f32;
+@group(0) @binding(2) var<storage, read_write> color_out : array<f32>;
+@group(0) @binding(3) var<uniform> uSpawnPos : vec2<f32>;
+@group(0) @binding(4) var<uniform> uRadius : f32;
+@group(0) @binding(5) var<uniform> uMaxLife : f32;
+@group(0) @binding(6) var<uniform> uSeed : f32;
 
 fn hash(p: vec2<f32>) -> f32 {
     var p3 = fract(vec3(p.xyx) * .1031);
@@ -450,17 +451,44 @@ fn hash(p: vec2<f32>) -> f32 {
 @compute @workgroup_size(8, 8, 1)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
     let index = global_id.x + global_id.y * 100u;
-    if (index >= 10000u) { return; }
+    if (index >= 30000u) { return; }
 
     let randX = hash(vec2(f32(global_id.x) + uSeed, f32(global_id.y)));
     let randY = hash(vec2(f32(global_id.x), f32(global_id.y) + uSeed));
     let randZ = hash(vec2(f32(global_id.x) + uSeed * 0.7, f32(global_id.y) + uSeed * 1.3));
 
+    let layer = index / 10000u; // 分为 0, 1, 2 三层
+    let layerZ = 0.48 + f32(layer) * 0.02; // 保持紧凑的受力层
+    
+    // 为不同层提供 X, Y 方向的初始位置偏移量，模拟“重影”般的层级感
+    var layerOffset = vec2<f32>(0.0);
+    if (layer == 0u) {
+        layerOffset = vec2<f32>(-0.005, -0.005); // 底层偏左下
+    } else if (layer == 2u) {
+        layerOffset = vec2<f32>(0.005, 0.005);   // 顶层偏右上
+    }
+
     let base = index * 3u;
-    pos_out[base]       = uSpawnPos.x + (randX - 0.5) * uRadius * 2.0;
-    pos_out[base + 1u]  = uSpawnPos.y + (randY - 0.5) * uRadius * 2.0;
-    pos_out[base + 2u]  = 0.5 + (randZ - 0.5) * uRadius * 2.0;
+    pos_out[base]       = uSpawnPos.x + (randX - 0.5) * uRadius * 2.0 + layerOffset.x;
+    pos_out[base + 1u]  = uSpawnPos.y + (randY - 0.5) * uRadius * 2.0 + layerOffset.y;
+    pos_out[base + 2u]  = layerZ + (randZ - 0.5) * 0.02;
     life[index] = uMaxLife;
+
+    // 基础渐变色计算
+    let colorLeft = vec3<f32>(1.0, 0.5, 0.0); // 橙色
+    let colorRight = vec3<f32>(0.1, 0.5, 1.0); // 蓝色
+    var birthColor = mix(colorLeft, colorRight, randX);
+
+    // 强化基于 Z 轴层的色散偏移 (Chromatic Aberration Effect)
+    if (layer == 0u) {
+        birthColor += vec3<f32>(-0.12, 0.0, 0.2); // 底层更明显的冷色偏移
+    } else if (layer == 2u) {
+        birthColor += vec3<f32>(0.2, 0.0, -0.12); // 顶层更明显的暖色偏移
+    }
+    
+    color_out[base]      = birthColor.r;
+    color_out[base + 1u] = birthColor.g;
+    color_out[base + 2u] = birthColor.b;
 }
 `
 
@@ -523,7 +551,7 @@ fn trilerpVel(px: f32, py: f32, pz: f32) -> vec3<f32> {
 @compute @workgroup_size(8, 8, 1)
 fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
     let index = global_id.x + global_id.y * 100u;
-    if (index >= 10000u) { return; }
+    if (index >= 30000u) { return; }
 
     let currentLife = life[index];
     let base = index * 3u;
@@ -575,7 +603,8 @@ struct Uniforms {
 
 @group(0) @binding(0) var<storage, read> positions : array<f32>;
 @group(0) @binding(1) var<storage, read> life : array<f32>;
-@group(0) @binding(2) var<uniform> uUniforms : Uniforms;
+@group(0) @binding(2) var<storage, read> colors : array<f32>;
+@group(0) @binding(3) var<uniform> uUniforms : Uniforms;
 
 @vertex
 fn vertex_main(
@@ -597,15 +626,17 @@ fn vertex_main(
         return out;
     }
 
-    let worldPos = vec4<f32>(x - 0.5, y - 0.5, z - 0.5, 1.0);
-    let clipPos = uUniforms.mvp * worldPos;
-    let w = clipPos.w;
-    let screenSize = uUniforms.particleSize * 200.0 / max(w, 0.001);
-    let offset = vertexOffset * screenSize / vec2(uUniforms.screenWidth, uUniforms.screenHeight) * 2.0;
-    out.position = vec4<f32>(clipPos.x / w + offset.x, clipPos.y / w + offset.y, clipPos.z / w, 1.0);
+    let pos = vec3<f32>(x, y, z);
+    let mvp_pos = uUniforms.mvp * vec4<f32>(pos, 1.0);
+    // 真正的透视缩放：远处的粒子在 Clip Space 占用的像素更少
+    let perspectiveScale = 1.0 / max(mvp_pos.w, 0.001);
+    out.position = mvp_pos + vec4<f32>(vertexOffset * uUniforms.particleSize * perspectiveScale, 0.0, 0.0);
 
     let lifeRatio = l / uUniforms.maxLife;
-    out.color = vec4<f32>(1.0 - lifeRatio, lifeRatio, 0.0, lifeRatio * 0.8);
+    let alpha = pow(lifeRatio, 2.0) * 0.8;
+    // 从持久化颜色缓冲区读取出生颜色
+    let birthColor = vec3<f32>(colors[base], colors[base + 1u], colors[base + 2u]);
+    out.color = vec4<f32>(birthColor, alpha);
     out.uv = vertexOffset;
 
     return out;
@@ -619,7 +650,8 @@ fn fragment_main(fragData : ParticleVertexOut) -> @location(0) vec4<f32> {
         discard;
     }
 
-    let alpha = 1.0 - smoothstep(0.7, 1.0, dist);
-    return vec4<f32>(fragData.color.rgb, fragData.color.a * alpha);
+    let distAlpha = 1.0 - smoothstep(0.7, 1.0, dist);
+    let finalAlpha = fragData.color.a * distAlpha;
+    return vec4<f32>(fragData.color.rgb * finalAlpha, finalAlpha);
 }
 `

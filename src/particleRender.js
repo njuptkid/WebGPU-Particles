@@ -70,8 +70,8 @@ class ParticleRenderProgram {
                         format: presentationFormat,
                         blend: {
                             color: {
-                                srcFactor: "src-alpha",
-                                dstFactor: "one",
+                                srcFactor: "one", // 着色器已经执行了 premultiplied alpha (color * alpha)
+                                dstFactor: "one-minus-src-alpha",
                                 operation: "add"
                             },
                             alpha: {
@@ -121,13 +121,13 @@ class ParticleRenderProgram {
     }
 
     computeMVP() {
-        // Fixed perspective camera looking at center of the volume
+        // 重构相机：聚焦于 [0.5, 0.5, 0.5] 体积中心
         const fov = 45 * Math.PI / 180;
         const aspect = canvas.width / canvas.height;
         const near = 0.1;
         const far = 10.0;
 
-        // Perspective matrix
+        // 透视投影矩阵 (Column-major)
         const f = 1.0 / Math.tan(fov / 2);
         const nf = 1 / (near - far);
         const proj = [
@@ -137,9 +137,10 @@ class ParticleRenderProgram {
             0, 0, 2 * far * near * nf, 0,
         ];
 
-        // View matrix: lookAt(eye, target, up)
-        const eye = [0.0, 0.0, 2.2];
-        const target = [0, 0, 0];
+        // 俯冲视角相机：lookAt(eye, target, up)
+        // 从中心稍微靠上靠后的地方看向中心，产生深度视差
+        const eye = [0.5, 1.2, 2.0];
+        const target = [0.5, 0.5, 0.5];
         const up = [0, 1, 0];
 
         const zAxis = normalize(subtract(eye, target));
@@ -153,11 +154,10 @@ class ParticleRenderProgram {
             -dot(xAxis, eye), -dot(yAxis, eye), -dot(zAxis, eye), 1,
         ];
 
-        // MVP = proj * view (column-major)
         return multiplyMat4(proj, view);
     }
 
-    dispatch(commandEncoder) {
+    dispatch(commandEncoder, dstView) {
         // Update uniforms each frame
         const uniformData = new Float32Array(20);
         uniformData.set(this.mvpMatrix, 0);
@@ -167,9 +167,7 @@ class ParticleRenderProgram {
         uniformData[19] = canvas.height;
         device.queue.writeBuffer(this.uniformBuffer, 0, uniformData);
 
-        this.renderPassDescriptor.colorAttachments[0].view = context
-            .getCurrentTexture()
-            .createView();
+        this.renderPassDescriptor.colorAttachments[0].view = dstView;
 
         const renderPassEncoder = commandEncoder.beginRenderPass(
             this.renderPassDescriptor
@@ -178,7 +176,7 @@ class ParticleRenderProgram {
         renderPassEncoder.setPipeline(this.renderPipeline);
         renderPassEncoder.setBindGroup(0, this._cachedBindGroup);
         renderPassEncoder.setVertexBuffer(0, this.vertexBuffer);
-        renderPassEncoder.draw(6, 10000);
+        renderPassEncoder.draw(6, 30000);
         renderPassEncoder.end();
     }
 
@@ -186,6 +184,7 @@ class ParticleRenderProgram {
         const entries = [
             particles.buffers[0],    // positions (stride-3: x,y,z interleaved)
             particleLife.buffers[0], // life
+            particleColor.buffers[0], // colors (stride-3: r,g,b)
             this.uniformBuffer,      // uniforms (mvp + params)
         ].map((b, i) => ({
             binding: i,

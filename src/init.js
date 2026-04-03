@@ -68,8 +68,12 @@ function refreshSizes() {
     initSizes()
     initBuffers()
     initPrograms()
+    if (typeof postProcessChain !== 'undefined') {
+        postProcessChain.resize(canvas.width, canvas.height)
+    }
     globalUniforms.gridSize.needsUpdate = [settings.grid_w, settings.grid_h, settings.grid_d, settings.dx, settings.rdx, 0, 0, 0]
 }
+
 
 function initSizes() {
     // Fixed 3D grid size
