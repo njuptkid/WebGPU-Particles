@@ -35,7 +35,7 @@ class DynamicBuffer {
 
 // Uniform buffer manager linked to GUI controls
 class Uniform {
-    constructor(name, { size, value, min, max, step, onChange, displayName, addToGUI = true } = {}) {
+    constructor(name, { size, value, min, max, step, onChange, displayName, addToGUI = true, guiFolder } = {}) {
         this.name = name
         this.size = size ?? (typeof (value) === "object" ? value.length : 1)
         this.needsUpdate = false
@@ -46,7 +46,8 @@ class Uniform {
                 this.alwaysUpdate = true
             }
             else if (addToGUI) {
-                gui.add(settings, name, min, max, step)
+                const targetGUI = guiFolder ?? gui;
+                targetGUI.add(settings, name, min, max, step)
                     .onChange((v) => {
                         if (onChange) onChange(v)
                         this.needsUpdate = true

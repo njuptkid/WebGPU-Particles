@@ -4,6 +4,7 @@ let settings = {
     grid_h: 64,
     grid_d: 64,
     sim_speed: 5,
+    simPaused: false,
     contain_fluid: true,
     velocity_add_intensity: 0.2,
     velocity_add_radius: 0.0005,
@@ -14,13 +15,28 @@ let settings = {
 
     particle_radius: 0.06,
     particle_max_life: 20.0,
-    particle_render_size: 0.02,
+    particle_render_size: 0.004,
     particle_speed: 0.01,
+    particle_opacity: 0.8,
+
+    dofEnabled: true,
+    dofFocalDepth: 0.15,
+    dofFocalRange: 0.05,
+    dofMaxBlurRadius: 15.0,
+
+    cameraFov: 45,
+    cameraEyeX: 0.5,
+    cameraEyeY: 1.2,
+    cameraEyeZ: 2.0,
+    cameraTargetX: 0.5,
+    cameraTargetY: 0.5,
+    cameraTargetZ: 0.5,
 }
 
 let gui
 let device, presentationFormat, canvas, context
 let postProcessChain
+let simFolder, renderFolder
 
 
 const mouseInfos = {
@@ -66,24 +82,29 @@ function initBuffers() {
 }
 
 function initUniforms() {
+    simFolder = gui.addFolder('1. Simulation Controls')
+    renderFolder = gui.addFolder('2. Rendering Settings')
+    simFolder.open()
+    renderFolder.open()
+
     time = new Uniform('time')
     dt = new Uniform('dt')
     mouse = new Uniform('mouseInfos', { size: 4 })
     grid = new Uniform('gridSize', { size: 8, value: [settings.grid_w, settings.grid_h, settings.grid_d, settings.dx, settings.rdx, 0, 0, 0] })
     uSimSpeed = new Uniform('sim_speed', { min: 0.1, max: 20, addToGUI: false })
-    vel_force = new Uniform('velocity_add_intensity', { displayName: "Velocity Force", min: 0, max: .5 })
-    vel_radius = new Uniform('velocity_add_radius', { displayName: "Velocity Radius", min: 0, max: 0.01, step: 0.00001 })
-    vel_diff = new Uniform('velocity_diffusion', { displayName: "Velocity Diffusion", min: 0.95, max: 1, step: 0.00001 })
-    viscosity = new Uniform('viscosity', { displayName: "Viscosity", min: 0, max: 1 })
-    uVorticity = new Uniform('vorticity', { displayName: "Vorticity", min: 0, max: 10, step: 0.00001 })
-    containFluid = new Uniform('contain_fluid', { displayName: "Solid boundaries" })
+    vel_force = new Uniform('velocity_add_intensity', { displayName: "Velocity Force", min: 0, max: .5, guiFolder: simFolder })
+    vel_radius = new Uniform('velocity_add_radius', { displayName: "Velocity Radius", min: 0, max: 0.01, step: 0.00001, guiFolder: simFolder })
+    vel_diff = new Uniform('velocity_diffusion', { displayName: "Velocity Diffusion", min: 0.95, max: 1, step: 0.00001, guiFolder: simFolder })
+    viscosity = new Uniform('viscosity', { displayName: "Viscosity", min: 0, max: 1, guiFolder: simFolder })
+    uVorticity = new Uniform('vorticity', { displayName: "Vorticity", min: 0, max: 10, step: 0.00001, guiFolder: simFolder })
+    containFluid = new Uniform('contain_fluid', { displayName: "Solid boundaries", guiFolder: simFolder })
 
     particleSpawnPos = new Uniform('particle_spawn_pos', { size: 2, value: [0.5, 0.5] })
-    particleRadius = new Uniform('particle_radius', { min: 0.01, max: 0.2 })
-    particleMaxLife = new Uniform('particle_max_life', { min: 1, max: 20 })
+    particleRadius = new Uniform('particle_radius', { displayName: "Emitter Radius", min: 0.01, max: 0.2, guiFolder: simFolder })
+    particleMaxLife = new Uniform('particle_max_life', { displayName: "Particle Max Life", min: 1, max: 20, guiFolder: simFolder })
     particleSeed = new Uniform('particle_seed', { addToGUI: false })
-    particleRenderSize = new Uniform('particle_render_size', { displayName: "Particle Size", min: 0.001, max: 0.05, step: 0.001 })
-    particleSpeed = new Uniform('particle_speed', { displayName: "Particle Speed", min: 0.01, max: 2.0, step: 0.01 })
+    particleRenderSize = new Uniform('particle_render_size', { addToGUI: false })
+    particleSpeed = new Uniform('particle_speed', { displayName: "Particle Speed", min: 0.01, max: 2.0, step: 0.01, guiFolder: simFolder })
 }
 
 function initPrograms() {
@@ -237,7 +258,7 @@ async function main() {
         requestAnimationFrame(step)
 
         const now = performance.now()
-        settings.dt = Math.min(1 / 60, (now - lastFrame) / 1000) * settings.sim_speed
+        settings.dt = settings.simPaused ? 0.0 : Math.min(1 / 60, (now - lastFrame) / 1000) * settings.sim_speed
         settings.time += settings.dt
         lastFrame = now
 
@@ -252,15 +273,18 @@ async function main() {
         }
 
         const commandEncoder = device.createCommandEncoder()
-        const passEncoder = commandEncoder.beginComputePass()
-        dispatchComputePipeline(passEncoder)
-        passEncoder.end()
+        
+        if (!settings.simPaused) {
+            const passEncoder = commandEncoder.beginComputePass()
+            dispatchComputePipeline(passEncoder)
+            passEncoder.end()
 
-        velocity0.copyTo(velocity, commandEncoder)
-        pressure0.copyTo(pressure, commandEncoder)
-        particles0.copyTo(particles, commandEncoder)
+            velocity0.copyTo(velocity, commandEncoder)
+            pressure0.copyTo(pressure, commandEncoder)
+            particles0.copyTo(particles, commandEncoder)
+        }
 
-        particleRenderProgram.dispatch(commandEncoder, postProcessChain.mainRT.view)
+        particleRenderProgram.dispatch(commandEncoder, postProcessChain.mainRT.view, postProcessChain.depthRT.view)
 
         postProcessChain.render(commandEncoder, context.getCurrentTexture().createView())
 
@@ -269,22 +293,55 @@ async function main() {
     }
 
 
+    function initGUI() {
+        simFolder.add(settings, 'simPaused').name("Pause Simulation")
+
+        simFolder.add(settings, 'pressure_iterations', 0, 50).name("Pressure Iterations")
+
+        simFolder.add(settings, 'grid_size', SIMULATION_GRID_SIZES).name("Grid Size").onChange(refreshSizes)
+
+        simFolder.add(settings, 'reset').name("Clear")
+    }
+
     initGUI()
 
-    let postFolder = gui.addFolder('Post Processing')
+    let camFolder = renderFolder.addFolder('Camera Settings')
+    camFolder.add(settings, 'cameraFov', 10, 120).step(1).name("FOV")
+    camFolder.add(settings, 'cameraEyeX', -2.0, 3.0).step(0.05).name("Camera X")
+    camFolder.add(settings, 'cameraEyeY', -2.0, 3.0).step(0.05).name("Camera Y")
+    camFolder.add(settings, 'cameraEyeZ', 0.1, 5.0).step(0.05).name("Camera Z")
+    camFolder.add(settings, 'cameraTargetX', -2.0, 3.0).step(0.05).name("Target X")
+    camFolder.add(settings, 'cameraTargetY', -2.0, 3.0).step(0.05).name("Target Y")
+    camFolder.add(settings, 'cameraTargetZ', -2.0, 3.0).step(0.05).name("Target Z")
+    camFolder.open()
+
+    renderFolder.add(settings, 'particle_opacity', 0.05, 2.0).step(0.01).name("Particle Opacity")
+    renderFolder.add(settings, 'particle_render_size', 0.001, 0.05).step(0.001).name("Particle Size")
+
+    let postFolder = renderFolder.addFolder('Post Processing')
+
+    let dofFolder = postFolder.addFolder('0. Depth of Field')
+    dofFolder.add(settings, 'dofEnabled').name("Enabled")
+    dofFolder.add(settings, 'dofFocalDepth', 0.0, 1.0).step(0.005).name("Focal Depth")
+    dofFolder.add(settings, 'dofFocalRange', 0.001, 0.5).step(0.001).name("Focal Range")
+    dofFolder.add(settings, 'dofMaxBlurRadius', 0.0, 30.0).step(0.5).name("Max Blur Radius")
+    dofFolder.open()
 
     let bloomFolder = postFolder.addFolder('1. Bloom')
+    bloomFolder.add(settings, 'bloomEnabled').name("Enabled")
     bloomFolder.add(settings, 'bloomThreshold', 0.0, 2.0).name("Threshold")
     bloomFolder.add(settings, 'bloomIntensity', 0.0, 5.0).name("Intensity")
     bloomFolder.open()
 
     let blurAFolder = postFolder.addFolder('2. Vector Blur A (Detail)')
+    blurAFolder.add(settings, 'vBlur1_Enabled').name("Enabled")
     blurAFolder.add(settings, 'vBlur1_MapRadius', 0.0, 20.0).step(1).name("Map Blur Radius")
     blurAFolder.add(settings, 'vBlur1_Amount', 0.0, 100.0).step(1).name("LIC Amount")
     blurAFolder.add(settings, 'vBlur1_Revolution', 0.0, 5.0).step(0.1).name("Revolution")
     blurAFolder.open()
 
     let blurBFolder = postFolder.addFolder('3. Vector Blur B (Macro)')
+    blurBFolder.add(settings, 'vBlur2_Enabled').name("Enabled")
     blurBFolder.add(settings, 'vBlur2_MapRadius', 0.0, 50.0).step(1).name("Map Blur Radius")
     blurBFolder.add(settings, 'vBlur2_Amount', 0.0, 100.0).step(1).name("LIC Amount")
     blurBFolder.add(settings, 'vBlur2_Revolution', 0.0, 5.0).step(0.1).name("Revolution")

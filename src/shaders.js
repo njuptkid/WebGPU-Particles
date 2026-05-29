@@ -591,6 +591,12 @@ struct ParticleVertexOut {
   @builtin(position) position : vec4<f32>,
   @location(0) color : vec4<f32>,
   @location(1) uv : vec2<f32>,
+  @location(2) depth : f32,
+}
+
+struct FragmentOutput {
+  @location(0) color : vec4<f32>,
+  @location(1) depth : f32,
 }
 
 struct Uniforms {
@@ -599,6 +605,14 @@ struct Uniforms {
   maxLife : f32,
   screenWidth : f32,
   screenHeight : f32,
+  baseAlpha : f32,
+  projectionScale : f32,
+  dofEnabled : f32,
+  dofFocalDepth : f32,
+  dofFocalRange : f32,
+  dofMaxBlurRadius : f32,
+  pad1 : f32,
+  pad2 : f32,
 }
 
 @group(0) @binding(0) var<storage, read> positions : array<f32>;
@@ -623,27 +637,61 @@ fn vertex_main(
         out.position = vec4<f32>(2.0, 2.0, 0.0, 1.0);
         out.color = vec4<f32>(0.0);
         out.uv = vec2<f32>(0.0);
+        out.depth = 1.0;
         return out;
     }
 
     let pos = vec3<f32>(x, y, z);
     let mvp_pos = uUniforms.mvp * vec4<f32>(pos, 1.0);
-    // 真正的透视缩放：远处的粒子在 Clip Space 占用的像素更少
-    let perspectiveScale = 1.0 / max(mvp_pos.w, 0.001);
-    out.position = mvp_pos + vec4<f32>(vertexOffset * uUniforms.particleSize * perspectiveScale, 0.0, 0.0);
 
+    // Calculate aspect ratio and projection scales
+    let aspect = uUniforms.screenWidth / uUniforms.screenHeight;
+    let proj_0_0 = uUniforms.projectionScale / aspect;
+    let proj_1_1 = uUniforms.projectionScale;
+    
+    // -- Vertex Scale DoF (Sprite-based DoF) --
+    let normDepth = mvp_pos.w / 10.0;
+    var coc = 0.0;
+    if (uUniforms.dofEnabled > 0.0 && uUniforms.dofMaxBlurRadius > 0.0) {
+        coc = clamp(abs(normDepth - uUniforms.dofFocalDepth) / uUniforms.dofFocalRange, 0.0, 1.0);
+    }
+    
+    // Calculate the physical screen size of the particle in NDC before blur
+    let ndc_size_y = (uUniforms.particleSize * proj_1_1) / max(mvp_pos.w, 0.0001);
+    // Convert blur radius (pixels) to NDC blur radius
+    let ndc_blur_radius_y = (coc * uUniforms.dofMaxBlurRadius * 2.0) / uUniforms.screenHeight;
+    // Scale factor to accommodate the blur radius
+    let blurScale = 1.0 + (ndc_blur_radius_y / max(ndc_size_y, 0.0001));
+
+    // Add billboard offset scaled by the projection parameters to respect FOV and aspect ratio.
+    // The GPU automatically divides out.position by out.position.w (mvp_pos.w) during perspective division.
+    out.position = mvp_pos + vec4<f32>(
+        vertexOffset.x * uUniforms.particleSize * proj_0_0 * blurScale,
+        vertexOffset.y * uUniforms.particleSize * proj_1_1 * blurScale,
+        0.0,
+        0.0
+    );
+
+    // 自动尺寸不透明度补偿
+    let sizeCompensation = min(0.02 / max(uUniforms.particleSize, 0.001), 1.0);
     let lifeRatio = l / uUniforms.maxLife;
-    let alpha = pow(lifeRatio, 2.0) * 0.8;
+    let baseAlpha = clamp(pow(lifeRatio, 2.0) * uUniforms.baseAlpha * sizeCompensation, 0.0, 1.0);
+    
+    // 能量守恒：防止过度衰减导致 8-bit 颜色缓冲区发生精度截断偏色
+    // 改为较温和的线性衰减，让散景既能保留颜色，又具备更强的发光感
+    let alpha = baseAlpha / max(blurScale * 0.8, 1.0);
+    
     // 从持久化颜色缓冲区读取出生颜色
     let birthColor = vec3<f32>(colors[base], colors[base + 1u], colors[base + 2u]);
     out.color = vec4<f32>(birthColor, alpha);
     out.uv = vertexOffset;
+    out.depth = mvp_pos.w / 10.0; // 归一化深度值
 
     return out;
 }
 
 @fragment
-fn fragment_main(fragData : ParticleVertexOut) -> @location(0) vec4<f32> {
+fn fragment_main(fragData : ParticleVertexOut) -> FragmentOutput {
     let dist = length(fragData.uv);
 
     if (dist > 1.0) {
@@ -652,6 +700,18 @@ fn fragment_main(fragData : ParticleVertexOut) -> @location(0) vec4<f32> {
 
     let distAlpha = 1.0 - smoothstep(0.7, 1.0, dist);
     let finalAlpha = fragData.color.a * distAlpha;
-    return vec4<f32>(fragData.color.rgb * finalAlpha, finalAlpha);
+    
+    var output : FragmentOutput;
+    output.color = vec4<f32>(fragData.color.rgb * finalAlpha, finalAlpha);
+    
+    // 将深度写入范围从 0.5 扩大到 0.9，使深度边缘与粒子的实际视觉边缘高度贴合，
+    // 从而彻底消除因边缘像素被误判为背景而产生的黑边（景深光晕空洞）。
+    if (dist <= 0.9) {
+        output.depth = fragData.depth;
+    } else {
+        output.depth = 1.0;
+    }
+    
+    return output;
 }
 `

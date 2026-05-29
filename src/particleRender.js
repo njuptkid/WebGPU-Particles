@@ -21,13 +21,23 @@ class ParticleRenderProgram {
         // Compute fixed perspective MVP matrix
         this.mvpMatrix = this.computeMVP();
 
-        // Uniform buffer: mat4x4 (16 floats) + particleSize + maxLife + screenWidth + screenHeight
-        const uniformData = new Float32Array(20);
+        // Calculate projectionScale = 1 / tan(fov / 2)
+        const fov = (settings.cameraFov ?? 45) * Math.PI / 180;
+        const projectionScale = 1.0 / Math.tan(fov / 2);
+
+        // Uniform buffer: mat4x4 (16 floats) + particleSize + maxLife + screenWidth + screenHeight + baseAlpha + projectionScale + dofEnabled + dofFocalDepth + dofFocalRange + dofMaxBlurRadius + 2 pads
+        const uniformData = new Float32Array(28);
         uniformData.set(this.mvpMatrix, 0);
         uniformData[16] = settings.particle_render_size;
         uniformData[17] = settings.particle_max_life;
         uniformData[18] = canvas.width;
         uniformData[19] = canvas.height;
+        uniformData[20] = settings.particle_opacity ?? 0.8;
+        uniformData[21] = projectionScale;
+        uniformData[22] = settings.dofEnabled ? 1.0 : 0.0;
+        uniformData[23] = settings.dofFocalDepth ?? 0.15;
+        uniformData[24] = settings.dofFocalRange ?? 0.05;
+        uniformData[25] = settings.dofMaxBlurRadius ?? 15.0;
 
         this.uniformBuffer = device.createBuffer({
             size: uniformData.byteLength,
@@ -67,7 +77,7 @@ class ParticleRenderProgram {
                 entryPoint: "fragment_main",
                 targets: [
                     {
-                        format: presentationFormat,
+                        format: 'rgba16float',
                         blend: {
                             color: {
                                 srcFactor: "one", // 着色器已经执行了 premultiplied alpha (color * alpha)
@@ -81,6 +91,21 @@ class ParticleRenderProgram {
                             }
                         }
                     },
+                    {
+                        format: "r16float",
+                        blend: {
+                            color: {
+                                srcFactor: "one",
+                                dstFactor: "one",
+                                operation: "min"
+                            },
+                            alpha: {
+                                srcFactor: "one",
+                                dstFactor: "one",
+                                operation: "min"
+                            }
+                        }
+                    }
                 ],
             },
             primitive: {
@@ -107,6 +132,11 @@ class ParticleRenderProgram {
                     storeOp: "store",
                     clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
                 },
+                {
+                    loadOp: "clear",
+                    storeOp: "store",
+                    clearValue: { r: 1.0, g: 1.0, b: 1.0, a: 1.0 }, // cleared to 1.0 (far plane)
+                }
             ],
             depthStencilAttachment: {
                 depthClearValue: 1.0,
@@ -121,8 +151,7 @@ class ParticleRenderProgram {
     }
 
     computeMVP() {
-        // 重构相机：聚焦于 [0.5, 0.5, 0.5] 体积中心
-        const fov = 45 * Math.PI / 180;
+        const fov = (settings.cameraFov ?? 45) * Math.PI / 180;
         const aspect = canvas.width / canvas.height;
         const near = 0.1;
         const far = 10.0;
@@ -138,9 +167,16 @@ class ParticleRenderProgram {
         ];
 
         // 俯冲视角相机：lookAt(eye, target, up)
-        // 从中心稍微靠上靠后的地方看向中心，产生深度视差
-        const eye = [0.5, 1.2, 2.0];
-        const target = [0.5, 0.5, 0.5];
+        const eye = [
+            settings.cameraEyeX ?? 0.5,
+            settings.cameraEyeY ?? 1.2,
+            settings.cameraEyeZ ?? 2.0
+        ];
+        const target = [
+            settings.cameraTargetX ?? 0.5,
+            settings.cameraTargetY ?? 0.5,
+            settings.cameraTargetZ ?? 0.5
+        ];
         const up = [0, 1, 0];
 
         const zAxis = normalize(subtract(eye, target));
@@ -157,17 +193,31 @@ class ParticleRenderProgram {
         return multiplyMat4(proj, view);
     }
 
-    dispatch(commandEncoder, dstView) {
+    dispatch(commandEncoder, dstView, depthView) {
+        // 动态计算相机投影 MVP 矩阵
+        this.mvpMatrix = this.computeMVP();
+
+        // Calculate projectionScale = 1 / tan(fov / 2)
+        const fov = (settings.cameraFov ?? 45) * Math.PI / 180;
+        const projectionScale = 1.0 / Math.tan(fov / 2);
+
         // Update uniforms each frame
-        const uniformData = new Float32Array(20);
+        const uniformData = new Float32Array(28);
         uniformData.set(this.mvpMatrix, 0);
         uniformData[16] = settings.particle_render_size;
         uniformData[17] = settings.particle_max_life;
         uniformData[18] = canvas.width;
         uniformData[19] = canvas.height;
+        uniformData[20] = settings.particle_opacity;
+        uniformData[21] = projectionScale;
+        uniformData[22] = settings.dofEnabled ? 1.0 : 0.0;
+        uniformData[23] = settings.dofFocalDepth;
+        uniformData[24] = settings.dofFocalRange;
+        uniformData[25] = settings.dofMaxBlurRadius;
         device.queue.writeBuffer(this.uniformBuffer, 0, uniformData);
 
         this.renderPassDescriptor.colorAttachments[0].view = dstView;
+        this.renderPassDescriptor.colorAttachments[1].view = depthView;
 
         const renderPassEncoder = commandEncoder.beginRenderPass(
             this.renderPassDescriptor
