@@ -29,8 +29,16 @@ static inline Rot MakeRot(float yaw, float pitch) {
 
 struct SpriteRenderer {
     float    atlasRsx[4 * MAX_CAPACITY];   // scos,ssin,tx,ty
-    float    atlasTex[4 * MAX_CAPACITY];   // LTRB
+    float    atlasTex[4 * MAX_CAPACITY];   // LTRB (CONSTANT — pre-filled once)
     uint32_t atlasCol[MAX_CAPACITY];        // ColorQuad
+
+    // atlasTex is constant (0,0,IMG,IMG) per sprite -> fill ONCE, never per frame.
+    void PrepareTex() {
+        for (uint32_t n = 0; n < MAX_CAPACITY; ++n) {
+            atlasTex[4*n+0] = 0.0f; atlasTex[4*n+1] = 0.0f;
+            atlasTex[4*n+2] = IMG;   atlasTex[4*n+3] = IMG;
+        }
+    }
 
     // scalar per-particle projection + writeback (tail / dead groups)
     inline void ProjectOne(const ParticleData& d, uint32_t k, uint32_t& out,
@@ -54,7 +62,6 @@ struct SpriteRenderer {
         float alpha = d.opacity[k] * da;
         atlasRsx[4*out]=sc; atlasRsx[4*out+1]=0.0f;
         atlasRsx[4*out+2]=sx-screenR; atlasRsx[4*out+3]=sy-screenR;
-        atlasTex[4*out]=0.0f; atlasTex[4*out+1]=0.0f; atlasTex[4*out+2]=IMG; atlasTex[4*out+3]=IMG;
         atlasCol[out] = applyOpacity(d.color[k], alpha);
         ++out;
     }
@@ -102,7 +109,6 @@ struct SpriteRenderer {
                     sy[lane] < -screenR-64.0f || sy[lane] > camH+screenR+64.0f) continue;
                 atlasRsx[4*out]=sc[lane]; atlasRsx[4*out+1]=0.0f;
                 atlasRsx[4*out+2]=sx[lane]-screenR; atlasRsx[4*out+3]=sy[lane]-screenR;
-                atlasTex[4*out]=0.0f; atlasTex[4*out+1]=0.0f; atlasTex[4*out+2]=IMG; atlasTex[4*out+3]=IMG;
                 atlasCol[out] = applyOpacity(d.color[k], d.opacity[k] * da[lane]);
                 ++out;
             }

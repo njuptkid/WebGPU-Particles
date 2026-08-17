@@ -76,6 +76,9 @@ async function main() {
     atlasTex: CanvasKit.Malloc(Float32Array, 4 * MAX),
     atlasCol: CanvasKit.Malloc(Uint32Array, MAX),
   };
+  // atlasTex is constant (C++ pre-fills it once via ck_init) -> copy into the
+  // Malloc buffer ONCE; never re-.set per frame.
+  M.atlasTex.toTypedArray().set(new Float32Array(pe.memory.buffer, pe.ck_atlas_tex_ptr(), 4 * MAX));
 
   // 7. UI
   $('b1').onclick = () => { mode = 'atlas';      $('m').textContent = 'drawAtlas'; };
@@ -139,8 +142,7 @@ function drawAtlas(c) {
   const k = pe.ck_build_atlas();
   if (!k) return;
   const mem = pe.memory.buffer;
-  // one real memcpy per buffer (.set) into CK's heap
-  M.atlasTex.toTypedArray().set(new Float32Array(mem, pe.ck_atlas_tex_ptr(), 4 * k));
+  // one real memcpy per buffer (.set) into CK's heap (atlasTex is constant, pre-filled once at init)
   M.atlasRsx.toTypedArray().set(new Float32Array(mem, pe.ck_atlas_rsx_ptr(), 4 * k));
   M.atlasCol.toTypedArray().set(new Uint32Array(mem, pe.ck_atlas_colors_ptr(), k));
   // zero-copy subarrays (binding sees CK-heap-resident, skips copy)

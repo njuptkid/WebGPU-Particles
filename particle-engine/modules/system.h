@@ -39,6 +39,7 @@ struct ParticleSystem {
         camera.yaw = 0.6f; camera.pitch = 0.5f; camera.dist = 600.0f;
         camera.focal = 600.0f; camera.S = 1.0f;
         SetupEmitters(w, h);
+        spriteRenderer.PrepareTex();   // atlasTex is constant — fill once
     }
     void Reset() {
         pool.Clear();

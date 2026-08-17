@@ -22,8 +22,7 @@ struct ParticleData {
     float colorSpeed[4 * MAX_CAPACITY];            // RGBA delta (end - start)
     float radius[MAX_CAPACITY], lifeT[MAX_CAPACITY], activeT[MAX_CAPACITY];
     // L3 cold
-    uint32_t emitterIdx[MAX_CAPACITY];
-    uint8_t visible[MAX_CAPACITY], alive[MAX_CAPACITY];
+    uint8_t alive[MAX_CAPACITY];
 };
 
 struct ParticlePool {
@@ -68,9 +67,11 @@ struct ParticlePool {
         x.velx[d]=x.velx[s]; x.vely[d]=x.vely[s]; x.velz[d]=x.velz[s];
         x.targetx[d]=x.targetx[s]; x.targety[d]=x.targety[s]; x.targetz[d]=x.targetz[s];
         x.scale[d]=x.scale[s]; x.opacity[d]=x.opacity[s]; x.color[d]=x.color[s];
-        for (int c=0;c<4;++c){ x.colorF[c+4*d]=x.colorF[c+4*s]; x.colorSpeed[c+4*d]=x.colorSpeed[c+4*s]; }
+        // colorF/colorSpeed are RGBA (4 contiguous floats/particle, 16-byte aligned) -> SIMD copy
+        wasm_v128_store(&x.colorF[4*d], wasm_v128_load(&x.colorF[4*s]));
+        wasm_v128_store(&x.colorSpeed[4*d], wasm_v128_load(&x.colorSpeed[4*s]));
         x.radius[d]=x.radius[s]; x.lifeT[d]=x.lifeT[s]; x.activeT[d]=x.activeT[s];
-        x.emitterIdx[d]=x.emitterIdx[s]; x.visible[d]=x.visible[s]; x.alive[d]=x.alive[s];
+        x.alive[d]=x.alive[s];
     }
 };
 

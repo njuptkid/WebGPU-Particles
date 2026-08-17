@@ -31,13 +31,13 @@ struct Emitter {
             if (countSoFar + 1.0f >= (float)pool.capacity) { spawnNum = 0.0f; finished = true; break; }
             uint32_t i = pool.Acquire();
             if (i == ParticlePool::INVALID) { spawnNum = 0.0f; break; }
-            InitParticleInPool(pool, i, cfg, idx, rng);
+            InitParticleInPool(pool, i, cfg, rng);
             spawnNum -= 1.0f;
             countSoFar += 1.0f;
         }
     }
     static void InitParticleInPool(ParticlePool& pool, uint32_t i,
-                                   const EmitterConfig& c, uint32_t emIdx, RNG& rng) {
+                                   const EmitterConfig& c, RNG& rng) {
         ParticleData& d = pool.data;
         // torus target: P(u,v) = ((R + r cos v) cos u, (R + r cos v) sin u, r sin v)
         float u  = rng.range(0.0f, TAU_F);
@@ -61,8 +61,6 @@ struct Emitter {
         d.radius[i]  = c.particleRadius;
         d.lifeT[i]   = rng.range(c.lifeMin, c.lifeMax);
         d.activeT[i] = 0.0f;
-        d.emitterIdx[i] = emIdx;
-        d.visible[i] = 1;
         d.alive[i]   = 1;
         // lifecycle color: colorF = start channel, colorSpeed = end - start
         int R0=clamp255(c.colR0), G0=clamp255(c.colG0), B0=clamp255(c.colB0), A0=clamp255(c.colA0);
