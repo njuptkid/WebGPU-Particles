@@ -17,7 +17,7 @@ let M = null;                  // persistent Malloc buffers (drawAtlas path)
 let mode = 'atlas';
 let last = 0, acc = 0, n = 0;
 // 3D camera state (orbit): auto-orbit when not dragging, mouse-drag to look around.
-let camYaw = 0.6, camPitch = 0.5, camDist = 600, camFocal = 400;
+let camYaw = 0.6, camPitch = 0.5, camDist = 600, camFocal = 600;
 let dragging = false, dragX = 0, dragY = 0;
 
 const $ = (id) => document.getElementById(id);
@@ -146,7 +146,7 @@ function drawAtlas(c) {
   // zero-copy subarrays (binding sees CK-heap-resident, skips copy)
   c.drawAtlas(atlas,
     M.atlasTex.subarray(0, 4 * k), M.atlasRsx.subarray(0, 4 * k),
-    paintAtlas, CanvasKit.BlendMode.Plus, M.atlasCol.subarray(0, k),   // additive glow
+    paintAtlas, CanvasKit.BlendMode.Modulate, M.atlasCol.subarray(0, k),   // atlas×color = colored disc (no white, no square)
     { filter: CanvasKit.FilterMode.Linear });
 }
 

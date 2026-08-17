@@ -46,6 +46,7 @@ struct SpriteRenderer {
         float sx = scx + rx * inv * S;
         float sy = scy - ry * inv * S;
         float screenR = d.radius[k] * d.scale[k] * inv * S;
+        if (screenR < 4.0f) screenR = 4.0f;          // min size: stay a circle when zoomed out
         if (sx < -screenR-64.0f || sx > camW+screenR+64.0f ||
             sy < -screenR-64.0f || sy > camH+screenR+64.0f) return;   // screen cull
         float sc = screenR / DEF;
@@ -71,6 +72,7 @@ struct SpriteRenderer {
         v128_t vDist=wasm_f32x4_splat(dist), vFocal=wasm_f32x4_splat(focal), vS=wasm_f32x4_splat(S);
         v128_t vscx=wasm_f32x4_splat(scx), vscy=wasm_f32x4_splat(scy);
         v128_t vDEF=wasm_f32x4_splat(DEF), vEPS=wasm_f32x4_splat(1.0f), vONE=wasm_f32x4_splat(1.0f);
+        v128_t vMIN=wasm_f32x4_splat(4.0f);   // min screen radius (stay a circle when zoomed out)
         uint32_t i = 0, simdEnd = n & ~3u;
         for (; i < simdEnd; i += 4) {
             if (!d.alive[i] || !d.alive[i+1] || !d.alive[i+2] || !d.alive[i+3]) {
@@ -87,6 +89,7 @@ struct SpriteRenderer {
             v128_t vsx = wasm_f32x4_add(vscx, wasm_f32x4_mul(rx, wasm_f32x4_mul(inv, vS)));
             v128_t vsy = wasm_f32x4_sub(vscy, wasm_f32x4_mul(ry, wasm_f32x4_mul(inv, vS)));
             v128_t vrad = wasm_f32x4_mul(wasm_f32x4_mul(wasm_f32x4_mul(rad, scl), inv), vS);
+            vrad = wasm_f32x4_max(vrad, vMIN);                  // min screen radius clamp
             v128_t vsc  = wasm_f32x4_div(vrad, vDEF);
             v128_t vda  = wasm_f32x4_min(wasm_f32x4_div(vDist, depth), vONE);
             alignas(16) float sx[4], sy[4], sc[4], da[4];

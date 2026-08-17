@@ -37,7 +37,7 @@ struct ParticleSystem {
         camera.cx = w * 0.5f; camera.cy = h * 0.5f;
         camera.camW = w; camera.camH = h;
         camera.yaw = 0.6f; camera.pitch = 0.5f; camera.dist = 600.0f;
-        camera.focal = 400.0f; camera.S = 1.0f;
+        camera.focal = 600.0f; camera.S = 1.0f;
         SetupEmitters(w, h);
     }
     void Reset() {
@@ -60,16 +60,16 @@ struct ParticleSystem {
         auto base = [&](EmitterConfig& e, int r0,int g0,int b0, int r1,int g1,int b1, float rate) {
             e.R=180.0f; e.r=60.0f; e.spawnRadius=700.0f;
             e.k=12.0f; e.c=7.0f; e.driftRate=0.0f;        // ~critical (2√12≈6.9) + snap
-            e.scaleMin=0.5f; e.scaleMax=1.0f; e.lifeMin=4.0f; e.lifeMax=8.0f; e.particleRadius=2.0f;
+            e.scaleMin=1.0f; e.scaleMax=1.5f; e.lifeMin=4.0f; e.lifeMax=8.0f; e.particleRadius=2.0f;
             e.colR0=r0; e.colG0=g0; e.colB0=b0; e.colA0=255;  // start
             e.colR1=r1; e.colG1=g1; e.colB1=b1; e.colA1=255;  // end
             e.emitRate=rate;
         };
-        EmitterConfig e0; base(e0, 255,40,200,  40,200,255, 220.0f);  // magenta -> cyan
+        EmitterConfig e0; base(e0, 255,40,200,  40,200,255, 300.0f);  // magenta -> cyan
         emitters[0] = {e0, 0.0f, 0u, false, 0.0f};
-        EmitterConfig e1; base(e1, 255,220,40, 180,40,255, 220.0f);  // yellow -> purple
+        EmitterConfig e1; base(e1, 255,220,40, 180,40,255, 300.0f);  // yellow -> purple
         emitters[1] = {e1, 0.0f, 1u, false, 0.0f};
-        EmitterConfig e2; base(e2, 80,255,120, 255,140,40, 220.0f);  // green -> orange
+        EmitterConfig e2; base(e2, 80,255,120, 255,140,40, 300.0f);  // green -> orange
         emitters[2] = {e2, 0.0f, 2u, false, 0.0f};
         emitterCount = 3;
         updater.k = 12.0f; updater.c = 7.0f;
