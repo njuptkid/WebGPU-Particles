@@ -1,0 +1,8 @@
+# extracted clang/lld toolchain (243MB, re-extractable via build.sh deps)
+.wasm-toolchain/
+# logs / temp
+*.log
+__pycache__/
+*.pyc
+# OS
+.DS_Store

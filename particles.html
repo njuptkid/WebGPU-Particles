@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CanvasKit Particle Engine (C++ &rarr; WASM)</title>
+<style>
+  html, body { margin: 0; background: #05060a; color: #ddd; font-family: sans-serif; }
+  #c { display: block; }
+  .hud { position: fixed; top: 8px; left: 8px; font-size: 13px; line-height: 1.5;
+         background: rgba(0,0,0,.45); padding: 6px 10px; border-radius: 6px;
+         backdrop-filter: blur(2px); }
+  button { margin-right: 6px; padding: 2px 8px; }
+  #err { position: fixed; bottom: 8px; left: 8px; right: 8px; color: #f66; white-space: pre-wrap;
+         background: rgba(0,0,0,.6); padding: 6px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<canvas id="c" width="960" height="660"></canvas>
+<div class="hud">
+  <div>backend: <b id="be">?</b> &nbsp; mode: <b id="m">drawAtlas</b>
+       &nbsp; active: <b id="a">0</b> &nbsp; fps: <b id="f">-</b></div>
+  <div style="margin-top:4px">
+    <button id="b1">drawAtlas</button>
+    <button id="b2">drawVertices</button>
+    <button id="b4">verts-flat</button>
+    <button id="b3">reset</button>
+  </div>
+</div>
+<div id="err"></div>
+
+<!-- CanvasKit (classic script, sets global CanvasKitInit) -->
+<script src="/build/canvaskit.js"></script>
+<!-- Particle engine bridge (ES module) -->
+<script type="module" src="/particle-engine/particle-bridge.js"></script>
+</body>
+</html>

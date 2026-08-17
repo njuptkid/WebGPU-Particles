@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>CanvasKit Backend Probe</title>
+<script src="/build/canvaskit.js"></script>
+<style>
+  body { font-family: sans-serif; padding: 20px; }
+  pre { background: #f4f4f4; padding: 12px; white-space: pre-wrap; }
+  .ok { color: #080; font-weight: bold; }
+  .no { color: #c00; }
+</style>
+</head>
+<body>
+<h1>CanvasKit 渲染后端探测</h1>
+<pre id="out">检测中...</pre>
+<canvas id="sw" width="2" height="2" style="display:none"></canvas>
+<canvas id="gl" width="2" height="2" style="display:none"></canvas>
+<canvas id="auto" width="2" height="2" style="display:none"></canvas>
+<script>
+const out = document.getElementById('out');
+const log = [];
+const push = (s) => log.push(s);
+const render = () => out.textContent = log.join('\n');
+
+push('=== 浏览器能力 ===');
+push('userAgent: ' + navigator.userAgent);
+push('WebGPU (navigator.gpu): ' + (navigator.gpu ? '支持' : '不支持'));
+
+const tc = document.createElement('canvas');
+const gl2 = tc.getContext('webgl2');
+push('WebGL2: ' + (gl2 ? '支持 (' + gl2.getParameter(gl2.VERSION) + ')' : '不支持'));
+if (gl2) {
+  const dbg = gl2.getExtension('WEBGL_debug_renderer_info');
+  if (dbg) {
+    push('GPU 渲染器: ' + gl2.getParameter(dbg.UNMASKED_RENDERER_WEBGL));
+    push('GPU 厂商:   ' + gl2.getParameter(dbg.UNMASKED_VENDOR_WEBGL));
+  }
+}
+render();
+
+push('');
+push('=== CanvasKit 实际后端可用性 ===');
+CanvasKitInit({ locateFile: (f) => '/build/' + f }).then((CK) => {
+  let swOk, glOk, autoOk;
+  try { const s = CK.MakeSWCanvasSurface('sw'); swOk = !!s; if (s) s.delete(); } catch(e){ swOk = 'err:'+e; }
+  push('MakeSWCanvasSurface (CPU/软件): ' + (swOk ? '可用' : '不可用'));
+
+  try { const g = CK.MakeWebGLCanvasSurface('gl'); glOk = !!g; if (g) g.delete(); } catch(e){ glOk = 'err:'+e; }
+  push('MakeWebGLCanvasSurface (GPU/WebGL2): ' + (glOk ? '可用' : '不可用'));
+
+  try { const a = CK.MakeCanvasSurface('auto'); autoOk = !!a; if (a) a.delete(); } catch(e){ autoOk = 'err:'+e; }
+  push('MakeCanvasSurface (自动, 示例用): ' + (autoOk ? '可用' : '不可用'));
+
+  let conclusion;
+  if (navigator.gpu && CK.webgpu) {
+    conclusion = 'GPU (WebGPU) — 示例会优先用 WebGPU';
+  } else if (glOk) {
+    conclusion = 'GPU (WebGL2) — 示例自动路径使用 WebGL2';
+  } else if (swOk) {
+    conclusion = 'CPU (软件渲染) — 无 WebGL，回退到软件';
+  } else {
+    conclusion = '无法确定';
+  }
+  push('');
+  push('>>> 结论: ' + conclusion);
+  render();
+  fetch('/log', { method: 'POST', body: log.join('\n') }).catch(() => {});
+}).catch((e) => {
+  push('CanvasKit 加载失败: ' + e);
+  render();
+});
+</script>
+</body>
+</html>
