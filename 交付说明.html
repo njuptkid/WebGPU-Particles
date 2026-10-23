@@ -1,0 +1,319 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>折叠机细粒子 · 开发交付说明</title><style>
+*{box-sizing:border-box}body{margin:0;background:#fff;color:#17212d;font:16px "Microsoft YaHei",sans-serif;line-height:1.8}header,main{max-width:1100px;margin:auto;padding:26px}h1{font-size:30px}h2{font-size:23px;border-bottom:1px solid #bbb;padding-bottom:12px;margin-top:38px}h3{font-size:19px;margin-top:28px}a{color:#135e91}nav a{display:inline-block;margin:0 22px 8px 0}button,.button{display:inline-block;background:#edf4f8;padding:10px 15px;border:1px solid #aac2d0;text-decoration:none;margin-right:12px}section{border-top:2px solid #555;padding-top:20px;margin-top:50px}code{font-family:Consolas,monospace;font-size:.9em;background:#f0f2f4;padding:2px 4px}pre{background:#f3f5f7;padding:18px;overflow:auto;line-height:1.5}table{width:100%;border-collapse:collapse;font-size:14px}td,th{border:1px solid #cbd0d5;padding:10px;text-align:left}th{background:#f1f3f5}.table{overflow:auto}.figures{display:flex;gap:25px}.figures>div{width:50%}img,video{max-width:100%}small{color:#59636b}@media(max-width:700px){.figures{display:block}.figures>div{width:100%}}</style>
+<header><h1>折叠机细粒子动效 · 开发交付包</h1><p>主设计文档为 31 页图文 PPT：实际阶段图、方向矩阵、架构图和嵌入视频。本文用于补充参数、接口与开发细节。</p>
+<p><a class="button" href="粒子动效_设计规格与实现方案_v1.0.pptx">打开 / 下载设计 PPT</a><a class="button" href="demo/index.html">运行独立细粒子演示</a><a class="button" href="tests/browser.html">运行浏览器验收</a></p>
+<p>范围：桌面上层碎化；应用识别完整块后原位碎化。背景独立。无整图标 / 整卡飞行。</p><nav><a href="#doc0">01_设计规则</a><a href="#doc1">02_详细示例</a><a href="#doc2">03_手机端实现</a><a href="#doc3">04_验收与性能</a><a href="#doc4">05_代码与基准说明</a></nav></header>
+<main><div class="figures"><div><h3>应用内确认视频</h3><video controls preload="metadata" poster="examples/approved-video-poster.jpg" src="references/应用内_确认版_闭合展开闭合.mp4"></video></div><div><h3>独立桌面算法示例</h3><video controls preload="metadata" poster="examples/desktop-video-poster.jpg" src="references/桌面_算法双屏演示.mp4"></video></div></div>
+<p><a href="PPT总览.jpg">查看 PPT 全部页面总览</a> · <a href="tests/browser-report.json">36 项实际浏览器测试结果</a> · <a href="examples/app-blocks.json">应用块坐标示例</a> · <a href="README.md">README</a></p>
+<section id="doc0"><h1>01 · 设计规则与参数基准</h1>
+<h2>1. 最终范围与优先级</h2>
+<p>本包唯一的运动基本单元是<b>细粒子</b>。桌面对象和应用内容块是粒子来源，不是大粒子。</p>
+<p>规则优先级：</p>
+<ul>
+<li>背景与内容分离；应用底色全程覆盖，不能出现透明窟窿。</li>
+<li>内容在原位从一侧逐渐转成粒子，反向逐渐凝聚；不能整屏或整块同步切换。</li>
+<li>粒子运动有明确下游方向，扰动在整个屏幕连续，涡流形状持续变化。</li>
+<li>粒子保留来源色彩，细颗粒与大颗粒混合，密度足够承接原内容。</li>
+<li>调整性能时先减少采样和离屏开销，保留以上视觉结构。</li>
+</ul>
+<h2>2. 背景与粒子内容</h2>
+<div class="table"><table>
+<tr><th>场景</th><th>永久底层</th><th>进入粒子的内容</th><th>不进入粒子的内容</th></tr>
+<tr><td>桌面</td><td>独立壁纸</td><td>icons / widgets / dock / status 等可见上层，包含标题、文字、文件夹图标与底框、卡片</td><td>壁纸；机框与控制面板</td></tr>
+<tr><td>应用内</td><td>识别或宿主提供的应用底色</td><td>完整卡片、封面、控件、文字等内容掩码</td><td>被识别为背景的像素；机框；界面下方的桌面壁纸</td></tr>
+</table></div>
+<p>桌面标题、图标不需要按“大粒子模式”的字 / 图标对象数划分。最终以图层中可见像素采样。壁纸可由产品另行管理为静态或动态，但不能混入内容粒子纹理；本包静态壁纸用于隔离核对粒子。</p>
+<p>应用内先分块只是获得稳定的内容掩码、排除背景并标识采样归属。<b>不对大卡片追加中心保护拆分 / 网格细分；不对块做平移、缩放或三维自旋。</b></p>
+<h2>3. 坐标与开合控制</h2>
+<p>以各自屏幕正视、屏幕内容正常可读的坐标定义左右，原点左上，x 向右、y 向下。机模三维视角、背面观察造成的视觉左右反转不改变算法坐标。</p>
+<p>基准逻辑分辨率：内屏 1292×914，外屏 632×924。演示纹理及离屏渲染为逻辑尺寸的 2 倍。手机按实际纹理映射；不要把这两组尺寸理解成硬件限制。</p>
+<p>设开合角度 a∈[0°,180°]，0 为闭合，180 为展平：</p>
+<pre><code>qOuter = clamp(a / 180)
+qInner = 1 - clamp(a / 180)
+tau(q) = 1.65 * pow(q, 0.78)</code></pre>
+<p>q=0 为完整内容，q=1 为仅背景。tau 是由开合进度算出的动效时钟，不是必须播放 1.65 秒。状态每帧从进度重算，不能为每个卡片另起一个独立计时器。</p>
+<p>完整内容与粒子位置通过同一个 tau / birth 过渡。开合刚发生便进入连续计算；局部释放前沿仍由自身位置决定。禁止另加“先等 200 ms 才播放”的启动延迟。</p>
+<h2>4. 方向矩阵</h2>
+<p>默认交付配置：<b>外屏从左向右凝聚</b>（开关勾选）。direction 是“q 增大、内容消散”时的粒子位移方向，不是当前实际开合方向。反向播放自然表现为相反的汇聚方向。</p>
+<div class="table"><table>
+<tr><th>实际操作</th><th>外屏</th><th>内屏</th></tr>
+<tr><td>闭合 → 展开</td><td>从完整界面逐渐粒化，粒子向左散去</td><td>粒子从左侧向右流入，逐渐恢复界面</td></tr>
+<tr><td>展开 → 闭合</td><td>粒子从左侧向右流入，逐渐恢复界面</td><td>从完整界面逐渐粒化，粒子向左散去</td></tr>
+</table></div>
+<p>默认内外屏 shader direction=-1。若外屏开关取消：外屏消散向右、汇聚从右向左，shader direction=+1；内屏不变。详见 <code>src/fold-clock.js</code>。</p>
+<p>注意：不同阶段看到的“粒化前沿推进”与“粒子已经产生后的运动”是两件事。direction=-1 时，右侧的释放阈值更低，界面从右向左逐渐碎化，生成粒子同时向左走；反向时从左向右逐渐恢复。不得只镜像粒子位置而不镜像释放阈值。</p>
+<h2>5. 渐进粒化 / 凝聚</h2>
+<p>源像素位置 p，u=p.x/W，方向 d，使用原版共同函数：</p>
+<pre><code>b = 0.045
+  + mix(1.0-u, u, step(0.0,d))*0.50
+  + noise(p*0.009)*0.18
+  + hash(floor(p*0.65))*0.20;
+age = max(0, tau - b);
+remain = 1 - smoothstep(b, b+0.26, tau);
+particleIn = smoothstep(0, 0.14, age);</code></pre>
+<p>重要约束：remain 在<b>片元级源坐标</b>计算，不能用卡片中心计算一次后让整张卡同透明度消失。粒子的 age 使用同一个源像素 birth。分块边界处共享同一个屏幕流场，不在每个块内重复从 x=0 开始计算。</p>
+<p>噪声只打破笔直扫描线，方向梯度必须看得出来。粒子出现与原内容减少存在交叠，避免先看到空白、再看到粒子。极端端点直接显示原界面 / 稳定背景，避免残余尘点。</p>
+<h2>6. 粒子运动与扭曲</h2>
+<p><code>transport.glsl</code> 是共同轨迹基准：粒子拥有独立的速度、横向扩散、尺寸与寿命种子。主要位移沿 d 单调下游推进；大尺度涡流与带状弯曲只修改纵向，避免一半粒子向上游打转。</p>
+<p>共同流场包含两组随进度向下游推进的涡区、随 fieldTime 演化的半径与相位、横向压缩形成的疏密变化。既不能每颗纯随机抖动，也不能每个图标保留一个固定团簇。</p>
+<p>应用内在共同 transport 上使用确认版参数：x 位移倍率 1.45；叠加连续域扭曲，尺度 q=(d*x−tau*210)*0.0035、y*0.004；低频幅度 180、高频幅度 58；相位 fieldTime*0.93。扰动从源像素坐标计算，跨卡片连续。无卡片整体搬运，无粒子绕卡片中心的公转。</p>
+<p>fieldTime 是秒单位的相位时间。演示在固定角度也能看到扭曲形状演变。手机应在一次开合会话内连续计时；反转时不要重置。固定 fieldTime + 相同开合角度 + 相同快照必须产生确定性结果。完全静止 / 后台时可按产品策略停止渲染。</p>
+<h2>7. 密度、尺寸、颜色</h2>
+<div class="table"><table>
+<tr><th>参数</th><th>当前基准</th><th>含义 / 不可误读事项</th></tr>
+<tr><td>sampleStep</td><td>1.5 逻辑 px</td><td>原型高密度基准，手机必须调预算；不是物理像素</td></tr>
+<tr><td>粒子最小直径</td><td>1.15 逻辑 px</td><td>最小值保持</td></tr>
+<tr><td>粒子最大初始直径</td><td>6.0 逻辑 px</td><td>旧 2.4 的 2.5 倍；随寿命后期略缩小</td></tr>
+<tr><td>尺寸分布</td><td>mix(1.15,6,pow(rand,2.6))</td><td>多数细颗粒，少量明显较大颗粒，不做均匀尺寸分布</td></tr>
+<tr><td>圆点轮廓</td><td>1−smoothstep(.13,.5,radius)</td><td>柔边；不能不透明方块点</td></tr>
+<tr><td>寿命</td><td>1.60 + rand*0.55</td><td>动效时钟单位；独立于尺寸 / 速度种子</td></tr>
+<tr><td>源 alpha 截断</td><td>桌面 &gt;16/255；应用 ≥32/255</td><td>应用只在块掩码内取点</td></tr>
+<tr><td>应用颜色</td><td>源 RGB 为主，后期最多混入 12% 冷白</td><td>不允许整屏发白或黑边</td></tr>
+<tr><td>桌面颜色</td><td>原版 14%→34% 冷白混合、alpha 增益</td><td>保留原版，不将应用配色直接覆盖桌面</td></tr>
+</table></div>
+<p>GLSL 点尺寸的 <code>*2</code> 对应本包离屏渲染倍率 2。移植时改为输出渲染尺寸 / 逻辑尺寸的统一倍率；不能再额外乘一次屏幕 DPR。</p>
+<h2>8. 背景与透明度</h2>
+<p>应用底色取本地截图中主要中性色颜色簇平均值；宿主能提供主题 / Surface 色时优先传入宿主底色。样例内屏 RGB(25,25,27)，外屏 RGB(24,24,26)，这是识别结果，不能硬编码到所有应用。</p>
+<p>原型背景中未识别的残余细节会在原位淡出，但底色始终存在。真机应尽量通过内容树补全遗漏；复杂多色 / 渐变背景要传背景层，不应强行全局取一色。当前全局中性色识别属于单底色界面的近似实现。</p>
+<p>纹理、shader 输出、混合必须统一预乘 alpha。基准 blend=ONE / ONE_MINUS_SRC_ALPHA。源色需要时先除 alpha 得到直色，再在 fragment 输出中乘回一次 alpha。不要用黑底 JPEG 代替透明桌面图层，不要再次相乘导致转化边缘发黑。</p></section><section id="doc1"><h1>02 · 详细示例与失败对照</h1>
+<h2>A. 桌面：图标、标题、卡片同时属于可见内容</h2>
+<p>输入样例见 <code>demo/assets/desktop-{inner,outer}-content.png</code>（透明底）和对应 wallpaper.png。content 包含 widgets、icons、dock、status 四类上层的合成；壁纸不在 alpha 掩码内。</p>
+<p>假设外屏一个图标包围框 x=80..150，标题 x=70..160。不要把两者各变成一个大的纹理平面飞走。对透明合成图按 1.5 逻辑像素间距采样，只有 alpha&gt;16/255 的源像素产生点。图标的形状与文字笔画会自然保留在释放初期，随后被统一流场拉散。</p>
+<p>同一图标左右笔画的 birth 不同，因此边缘能看到逐渐碎化。大时钟“10:08”也按笔画像素碎化，不拆成五张整体飞行的纹理。文件夹内部所有可见像素均可采样；不要把文件夹底框整体当作一个粒子。</p>
+<p>内屏出现阶段 q 从 1 减小到 0：源纹理从左往右逐渐恢复，粒子沿从左往右的实际动势收敛。端点 q=0 必须像素级恢复输入内容＋壁纸，不能剩下最后一层漂浮的尘。</p>
+<h2>B. 应用外屏：完整主视觉原位碎化</h2>
+<p>原始截图见 <code>demo/assets/app-outer.jpg</code>。识别叠图见 <code>examples/app-outer-识别预览.jpg</code>；精确逻辑坐标以 <code>examples/app-blocks.json</code> 为准，不能把本文近似尺寸作为固定模板。</p>
+<p>典型结果：</p>
+<div class="table"><table>
+<tr><th>内容</th><th>示例识别结构</th><th>运动规则</th></tr>
+<tr><td>顶部主视觉</td><td>一张约 632×510 的大卡片，含图中标题、人物和覆盖在主视觉内的内容</td><td>整卡不追加切线、不平移；卡片内像素按全屏横坐标逐渐碎化</td></tr>
+<tr><td>底部封面</td><td>三个独立封面，约 190×195</td><td>分别保留掩码归属，进入同一流场</td></tr>
+<tr><td>分类胶囊</td><td>识别成完整闭合控件</td><td>按掩码采样，不把底色间隙做成粒子</td></tr>
+<tr><td>浮动导航栏</td><td>独立控件；覆盖关系保留，不能与封面重复拥有同一像素</td><td>与其他内容共享前沿；不要重复采样造成导航区域发亮</td></tr>
+<tr><td>未组成闭合块的文字</td><td>文字连通组</td><td>作为小内容单元逐像素释放</td></tr>
+</table></div>
+<p>样例外屏总计 10 个卡片 / 控件块＋2 组文字，即 12 个采样内容单元。主视觉中“人物”没有被语义抠图，是完整主视觉卡片的一部分。</p>
+<p>默认外屏从左向右凝聚：展开时，右侧先碎化、粒子向左走；闭合时反播，左侧先建立界面、右侧稍后完成。宏观扰动跨越主视觉、封面和控件，使粒子不像多个独立方形云团。</p>
+<h2>C. 应用内屏：横幅保持完整</h2>
+<p>内屏原图与识别图分别见 <code>demo/assets/app-inner.jpg</code>、<code>examples/app-inner-识别预览.jpg</code>。典型识别为两张完整横幅、六张封面和多个搜索 / 分类 / 导航控件。</p>
+<p>样例内屏为 20 个卡片 / 控件块＋6 组文字，共 26 个采样内容单元。较大横幅约 592×335；它仍是一张卡片，不能沿中心拆为三块。全部未被别的块覆盖的可见像素由同一块拥有，圆角与遮挡由 alpha 掩码保留。</p>
+<p>需要关注的中间态：右侧横幅可已经大量变成粒子，左侧横幅仍保留大部分内容；同一横幅自身也有渐进碎化，而不是两张横幅依次整张淡掉。识别是局部的，释放前沿与运动场是全屏连续的。</p>
+<h2>D. 用角度理解双屏过程</h2>
+<div class="table"><table>
+<tr><th>角度</th><th>外屏 q</th><th>内屏 q</th><th>理想观察</th></tr>
+<tr><td>0°</td><td>0</td><td>1</td><td>外屏完整，内屏仅底层</td></tr>
+<tr><td>30°</td><td>.167</td><td>.833</td><td>外屏一侧开始粒化；内屏粒子已经可见，无长时间全空</td></tr>
+<tr><td>60°</td><td>.333</td><td>.667</td><td>外屏存在明显方向性过渡带；内屏正在从粒子恢复</td></tr>
+<tr><td>90°</td><td>.5</td><td>.5</td><td>双屏均处于连续中间态；不能在系统折叠阈值上突变</td></tr>
+<tr><td>120°</td><td>.667</td><td>.333</td><td>外屏主体粒子化，内屏大部分内容恢复但仍有方向性边界</td></tr>
+<tr><td>150°</td><td>.833</td><td>.167</td><td>内屏趋近完整，外屏仍有残余流动并接近背景</td></tr>
+<tr><td>180°</td><td>1</td><td>0</td><td>内屏完整，外屏仅底层</td></tr>
+</table></div>
+<p>实际完整率受源图、噪声和 tau 非线性映射影响；表格不是硬切状态或新加时间段。4 秒机模视频包括先开后合两段，是展示节奏，不是要求手机每次动作都固定 4 秒。</p>
+<h2>E. 输入新界面的示例流程</h2>
+<pre><code>收到 fold 开始事件
+→ 固定本次出屏快照 revision=R17
+→ 后台对低分辨率副本检测块 / 背景色
+→ 掩码与 sourceTexture 必须同属 R17
+→ 生成本次静态粒子 buffer，只更新进度和相位
+→ 新屏幕布局已就绪时，使用其独立快照 R18 建立入屏内容
+→ 整次会话冻结各自资源，不在中间把 R17 的图替换为 R19
+→ 进度到端点后，交回真实 UI；后台释放不再需要的纹理</code></pre>
+<p>两块屏幕的布局可以不同，粒子不需要一一对应。颜色和运动让视觉连贯，但不能为了“一一对应”强行把外屏卡片拉伸成内屏卡片。</p>
+<h2>F. 必须纠正的失败示例</h2>
+<div class="table"><table>
+<tr><th>现象</th><th>原因</th><th>正确实现</th></tr>
+<tr><td>整屏突然从界面跳成尘</td><td>一次切换截图和粒子开关</td><td>保留同一源图，片元级 birth 连续退场，粒子 age 同源</td></tr>
+<tr><td>每张卡整张同时淡出</td><td>使用块中心 age 控制所有像素</td><td>每个源像素按全屏横坐标算 birth</td></tr>
+<tr><td>卡片先飘走再碎</td><td>复用整块位移 / 自旋</td><td>图块 quad 的位置、比例和朝向始终固定；只有粒子移动</td></tr>
+<tr><td>出现方形 / 长条云团</td><td>每块局部坐标重复计算涡流，或父块位移一直叠加</td><td>所有粒子按屏幕全局坐标进入共同流场</td></tr>
+<tr><td>流动均匀像一阵喷雾</td><td>只有独立随机散开</td><td>叠加大尺度、持续变化的涡区和域扭曲，形成疏密变化</td></tr>
+<tr><td>涡流倒着拽一部分粒子</td><td>对称圆形旋转场</td><td>主方向保持下游，扭曲主要作用于横截面</td></tr>
+<tr><td>挖出的卡片下面出现壁纸窟窿</td><td>底图仍有透明掩码</td><td>最底层先完整填应用底色，再画剩余细节与粒子</td></tr>
+<tr><td>粒子少、转化时画面变薄</td><td>采样过稀、尺寸全都太小或 alpha 过低</td><td>细粒子＋少量大粒子；按覆盖感验收，而非只看个数</td></tr>
+<tr><td>转化有黑边</td><td>重复预乘 / 非预乘混合不一致</td><td>全链路预乘；需要直色时只临时除 alpha，最终只乘一次</td></tr>
+<tr><td>长时间空白壁纸 / 底色</td><td>入屏动画启动阈值晚，或准备结果阻塞</td><td>共享连续进度、提前准备；超时走定义好的降级</td></tr>
+</table></div>
+<h2>G. 示例素材使用边界</h2>
+<p>本包截图、壁纸、图标与视频来自用户提供工程，仅用于当前动效开发和内部复核。没有重新授予其中品牌、影视、图标或壁纸素材的商业发布授权。上线时应替换为业务拥有使用权的真实界面与素材。</p></section><section id="doc2"><h1>03 · 手机端实现方案</h1>
+<h2>1. 推荐分工</h2>
+<p>以系统 / 桌面 / 窗口合成层能够控制内外屏 Surface 为前提，分成四个独立模块：快照输入、内容分离、粒子渲染、折展进度协调。不要依赖浏览器机模、截图视频或 JS 页面来驱动手机产品。</p>
+<pre><code>Fold / VSync / Window lifecycle
+             ↓
+FoldController → FrameUniforms → NativeParticlePass → Screen Surface
+       ↓                             ↑
+SnapshotProvider → Worker extraction → PreparedSnapshot (revision + fence)
+       └──── wallpaper / app base color (separate background pass)</code></pre>
+<p><code>src/contracts.d.ts</code> 描述数据契约。<code>src/native/fold_clock.hpp</code> 只有可移植数学，不包含 SDK 桥接。GLSL 用 WebGL1 / GLES2 风格，可移到 GLES；Vulkan / 其他着色语言需转换接口与资源布局，不是直接改后缀。</p>
+<h2>2. 从真实 UI 获取输入</h2>
+<p>桌面优先从自有渲染树或已知图层取得“壁纸”和“上层内容”。这比从壁纸合成后的整屏截图重新识别图标可靠。桌面 source 必须是透明底，壁纸单独传给 background pass。</p>
+<p>应用内只有截图时，运行本包 ContentRegions 检测。若宿主能提供可见卡片边界、圆角、裁剪和实际背景色，则优先由宿主提供，图像识别作为兜底。宿主元数据与截图必须在同一内容版本，且按照视觉遮挡确定所有权。</p>
+<p>普通 App 不应假设有权限截取其他 App、锁屏或系统保护 Surface。系统 / 桌面集成方提供允许的快照 / 图层句柄；受保护内容用产品定义的占位或普通过渡，不绕过系统限制。Android 的 HardwareBuffer 仅是共享缓冲资源能力示例，不自动获得任意应用截图权限。<a href="https://developer.android.com/reference/android/hardware/HardwareBuffer">官方 HardwareBuffer 文档</a></p>
+<p>本包演示图片导入与真实手机跨应用取图不是同一个问题；接口必须由目标团队实现并验证。</p>
+<h2>3. 应用分块步骤</h2>
+<ul>
+<li>将截图分析副本缩放到短边 320，保留宽高比；原始高分辨率纹理用于最终显示。</li>
+<li>在中性色 RGB 量化直方图中找主簇，平均得到背景色；按颜色差建立前景掩码。</li>
+<li>形态学闭运算连接抗锯齿断边，连通域找到卡片与控件候选。</li>
+<li>对被底部浮层连接的封面行，分析上部持续竖向间隙拆出封面；对胶囊控件校验闭合边缘。</li>
+<li>大卡片优先，压制内嵌纹理误检；保留浮层遮挡；对未占有的文字做连通组。</li>
+<li>为每个源像素给出唯一 owner ID；小断边根据邻域归属附着。每块保留真实 alpha 掩码，不能只输出矩形裁切。</li>
+<li>对全部卡片 / 控件 / 文字块分别采样，跳过背景；<b>不做大卡片二次切分</b>。</li>
+<li>不属于内容块的残余区域单独绘制，其细节可原位淡出；应用底色永久画满。</li>
+</ul>
+<p>详见 <code>src/content-regions.js</code> 与 <code>src/app-block-extractor.js</code>。检测是启发式图像处理，不是 OCR / 语义 AI，不保证任意截图都完整正确。深色、浅色、复杂摄影背景、透明控件和渐变都应加入真实测试集。</p>
+<h2>4. 避免准备时间吃掉动画</h2>
+<p>本包 build() 为便于读懂仍是同步 CPU + Canvas 参考实现，<b>生产禁止在 UI / 渲染线程临时照搬这段全流程</b>。</p>
+<p>推荐：低分辨率分析放工作线程；原截图留在 GPU；把 owner / mask 作为低分辨率纹理或稀疏区域索引上传。用 source UV + mask 取样，不逐块复制高分辨率截图。粒子顶点 / 实例缓冲只在快照变更时创建。</p>
+<p>后台缓存键至少包括屏幕、实际尺寸、contentRevision、主题、适配方式和识别参数。现有原型只按屏幕与参数缓存，是固定示例素材的简化，不能直接用于“每次都是新界面”的手机。</p>
+<p>开始折展时的次序：</p>
+<pre><code>若有匹配本次 revision 的 PreparedSnapshot：立即使用
+否则保持当前真实界面，同时后台准备低分辨率分析
+若准备在约定首帧截止前完成：原位接入细粒子
+否则：本次使用快速内容掩码 / 宿主布局，或产品批准的普通过渡</code></pre>
+<p>建议准备截止目标 1–2 个显示帧，仅为工程目标，不是已达到指标。不能阻塞合页输入，不能等 100 ms 再从头重播；也不能用上一张应用界面的切片假装已准备。复杂界面超时应记录原因，具体降级需设计 / 开发共同确认。</p>
+<h2>5. GPU 数据与绘制</h2>
+<p>原生建议数据：源纹理、owner / alpha 纹理、可选 block bounds、静态样本缓冲、背景纹理 / 底色。每个样本至少含全局源位置与随机种子；block ID 可用于调试、采样配额和失效重建，不作为整块位移矩阵。</p>
+<p>每帧仅更新 resolution、tau、direction、fieldTime 与输出倍率。顺序：</p>
+<ul>
+<li>画桌面壁纸或不透明应用底色。</li>
+<li>应用残余细节在原位淡出，始终有底色填充。</li>
+<li>画内容纹理：对源像素算 birth / remain，几何位置固定。</li>
+<li>画柔边点精灵：相同 birth 计算 age，从源像素起点进入全屏流场。</li>
+<li>q=0 交给真实完整界面；q=1 只保留底层。静止时不重复积累或清空后漏画。</li>
+</ul>
+<p>粒子位置用源坐标 + 解析轨迹，不在 CPU 每帧更新几十万个点。GPU 并行计算；不需要先上 compute 才能实现。平台点精灵尺寸范围、精度和驱动行为不满足时，用实例化小四边形替代 GL_POINTS，并保持相同柔边和尺寸分布。</p>
+<p>WebGL <code>UNPACK_PREMULTIPLY_ALPHA_WEBGL</code> 是浏览器特有设置，原生上传时要查清 PixelMap / Buffer 的实际像素格式和 alpha 约定，不能假设原生会自动做相同转换。HDR / 广色域必须明确采样与混合色域，不把 sRGB 参考值直接套在线性空间。</p>
+<h2>6. VSync 与时间</h2>
+<p>foldAngle 决定转化进度，VSync 决定提交节奏，fieldTime 决定持续的涡流形状。反转开合时不重置 seed、源图或 fieldTime，相位连续；从当前角度反向计算。若重置，会出现一次明显的粒子跳跃。</p>
+<p>Android 原生渲染可用 Choreographer 协调显示帧；API 33 提供帧时间线与预期呈现时间。选择具体回调需按项目最低 API 版本处理，不能固定假设新 API 全部可用。<a href="https://developer.android.com/ndk/reference/group/choreographer">Android NDK 官方文档</a></p>
+<p>OpenHarmony 可从 NativeVSync 的 RequestFrame 接口建立渲染节拍，具体 API 版本及目标 HarmonyOS SDK 可用性必须由目标工程核对。OpenHarmony API 不是所有商用 HarmonyOS 版本能力的保证。<a href="https://gitee.com/openharmony/interface_sdk_c/blob/8161da22f6dd46ecf79dec8bcb745d3b9a06d5aa/graphic/graphic_2d/native_vsync/native_vsync.h">OpenHarmony 官方接口头文件</a></p>
+<p>4 秒机模导出的镜头轨迹只是展示，手机内容渲染不需要虚拟相机旋转。需要在锁角度、快速反转、系统中断与后台恢复时测试同一套进度规则。</p>
+<h2>7. 资源与中断状态机</h2>
+<pre><code>Idle → Preparing → Active → Settling → Idle
+                   ↓
+               Cancelled / SurfaceLost → release after GPU completion</code></pre>
+<p>Active 时禁止替换已绑定的截图与 owner 纹理。窗口尺寸 / 布局 revision 改变，建立另一套资源，端点或明确的无跳变交接时机再替换。旧快照须等 GPU fence / 正常资源完成机制后释放。没有这样的同步不能声称零拷贝已完成。</p>
+<p>后台、灭屏、Surface 销毁、来电打断时停止帧请求并释放资源；新会话重建。反向折展是同一会话的正常输入，不是 Cancelled。</p>
+<h2>8. 分阶段落地</h2>
+<div class="table"><table>
+<tr><th>阶段</th><th>内容</th><th>退出条件</th></tr>
+<tr><td>P0 视觉对齐</td><td>两屏静态输入、两方向、同 GLSL、同粒子尺寸与背景</td><td>基准帧与视频评审通过</td></tr>
+<tr><td>P1 自有桌面</td><td>真图层接入，壁纸分离，折展连续输入</td><td>无提前空屏、无背景粒化、反转连续</td></tr>
+<tr><td>P2 应用快照</td><td>内容版本、后台识别、掩码上传和缓存</td><td>每次新界面无错图 / 陈旧掩码</td></tr>
+<tr><td>P3 真机优化</td><td>粒子预算、分辨率、VSync、功耗、失败降级</td><td>目标设备矩阵实测通过</td></tr>
+<tr><td>P4 系统集成</td><td>Surface 生命周期、受保护内容、端点交真实 UI</td><td>中断 / 旋转 / 多任务回归通过</td></tr>
+</table></div>
+<p>目前本包完成的是算法参考、示例输入与浏览器验证。P1–P4 不是已实现的手机代码。</p></section><section id="doc3"><h1>04 · 验收与性能</h1>
+<h2>1. 已有证据与边界</h2>
+<p>本包可重跑 <code>node tests/clock.test.cjs</code> 和浏览器 <code>/tests/browser.html</code>。实际运行结果保存 <code>tests/browser-report.json</code>，场景阶段图位于 examples。GLSL 编译、逻辑与图像测试通过不等于手机端帧率达标。</p>
+<p>此前在设计电脑 Chrome 中，当前素材轮廓识别的中位耗时约内屏 23 ms / 外屏 24 ms；包含高分辨率透明切片准备约 98 ms / 50 ms；首次约 168 ms / 60 ms。该组是旧原型测量：固定截图、CPU / Canvas 路径，不含截图采集与 GPU 上传，不能当成手机“100 ms 内”的承诺。本包附上原始测量 JSON（如版本来源中存在）。本包独立实现另测数据见 browser-report，二者不直接当成同一性能测试。</p>
+<p>原型默认两屏应用内容约 35 万 / 21 万细粒子，粒子数取决于掩码、分辨率、采样阈值与步长。它是桌面显卡视觉基准，<b>不是手机上线预算</b>。</p>
+<h2>2. 真机预算建议（需实测校准）</h2>
+<div class="table"><table>
+<tr><th>档位</th><th>同时可见粒子总数起点</th><th>分析尺寸起点</th><th>使用方式</th></tr>
+<tr><td>视觉基准</td><td>不限到手机预算；本包 1.5 步长</td><td>短边 320</td><td>对齐形态、尺寸和方向，不能直接上线</td></tr>
+<tr><td>常规试验</td><td>3–9 万</td><td>短边 240–320</td><td>两屏合计，优先真正可见 Surface</td></tr>
+<tr><td>低档试验</td><td>1.5–3.5 万</td><td>短边 160–240</td><td>降采样，保留少量大颗粒与释放前沿</td></tr>
+<tr><td>高档试验</td><td>8–15 万</td><td>短边 320</td><td>仍须测功耗、带宽与持续发热</td></tr>
+</table></div>
+<p>以上是开发起点而非认证上限。避免所有图块同间距硬采样后无限增加点。可按 alpha 面积分配配额、按块做分层抽样、屏外剔除；随机种子固定。减少数量时补偿覆盖感，但不要把所有点放大成大圆斑。</p>
+<p>60 Hz 的显示帧周期约 16.67 ms，120 Hz 约 8.33 ms；这是整个系统帧的时间，不是本效果独占预算。给粒子 pass 多少 ms 由系统团队与真实场景共同分配。记录 P50 / P95 / P99、掉帧、GPU / CPU、峰值内存与 30 次连续折展后的热状态。</p>
+<h2>3. 视觉验收矩阵</h2>
+<p>每项至少测桌面内屏 / 外屏、应用内内屏 / 外屏，开与合两向，外屏方向开关两种配置。</p>
+<div class="table"><table>
+<tr><th>编号</th><th>验收项</th><th>通过标准</th></tr>
+<tr><td>V01</td><td>完整端点</td><td>q=0 与输入完整图一致；q=1 只剩独立底层，无残尘</td></tr>
+<tr><td>V02</td><td>背景隔离</td><td>桌面壁纸没有粒子；应用底色全画面不透明，卡片离开不漏壁纸</td></tr>
+<tr><td>V03</td><td>大卡片完整</td><td>应用主视觉、横幅无二次切线；内容 owner 不重复</td></tr>
+<tr><td>V04</td><td>原位转化</td><td>未碎化的内容没有整体平移、旋转或透视缩放</td></tr>
+<tr><td>V05</td><td>水平方向</td><td>同一中间帧一侧界面保留更多；翻转开关只翻转外屏方向</td></tr>
+<tr><td>V06</td><td>局部前沿</td><td>单张大卡内部也有“完整 → 碎化 → 粒子”的连续区域</td></tr>
+<tr><td>V07</td><td>无整屏突变</td><td>逐帧前后内容覆盖量连续，不能在阈值突然全变 / 全消失</td></tr>
+<tr><td>V08</td><td>无过长空白</td><td>入屏粒子在折展早期可见，不等出屏全部结束才开始</td></tr>
+<tr><td>V09</td><td>扰动自然</td><td>场连续、形状随时间变化、有疏密，不固定为卡片形状或匀速直线</td></tr>
+<tr><td>V10</td><td>主动势正确</td><td>涡流不把显著部分粒子拉回上游，无随机抖动方向错乱</td></tr>
+<tr><td>V11</td><td>粒子覆盖</td><td>过渡时不明显变薄；最小颗粒保留，少量大粒子可辨</td></tr>
+<tr><td>V12</td><td>颜色与接缝</td><td>无发黑、黑边、异常白色闪光；圆角与遮挡边缘干净</td></tr>
+<tr><td>V13</td><td>快速反转</td><td>相同会话不换种子 / 快照，不从初始状态重新播放</td></tr>
+<tr><td>V14</td><td>新界面</td><td>每次内容版本匹配；不能重用上一应用的图或掩码</td></tr>
+<tr><td>V15</td><td>生命周期</td><td>后台、锁屏、灭屏、来电、中断、Surface 丢失后资源正确回收</td></tr>
+</table></div>
+<p>方向量化示例：隔离未粒化的原内容，在 tau≈0.73 时测左右三分之一区域保留 alpha。现有确认版本默认负方向左侧明显大于右侧，正方向相反。实际数值因内容和噪声不同，不使用某一截图的比例作为通用硬阈值。</p>
+<h2>4. 输入测试集</h2>
+<ul>
+<li>两套样例深色应用截图、浅色列表页、搜索页与键盘打开页。</li>
+<li>带透明导航栏、浮动播放器、圆形头像、边到边主视觉、密集文字页。</li>
+<li>暗色、亮色、渐变、多色背景；视频 / 直播等受限或动态 Surface。</li>
+<li>外屏与内屏布局不同、横竖屏改变、字号与无障碍大字体、内容滚动中折展。</li>
+<li>快速折返、角度静止、90° 阈值抖动、较慢手动开合、系统动画被暂停。</li>
+</ul>
+<p>识别错误允许有明确降级，但必须能解释、记录并复现；不能用视觉上明显错误的粗网格静默冒充精细识别。</p>
+<h2>5. 性能记录模板</h2>
+<div class="table"><table>
+<tr><th>字段</th><th>实测填写</th></tr>
+<tr><td>设备 / 芯片 / GPU / OS / SDK</td><td>待填</td></tr>
+<tr><td>刷新率与显示分辨率</td><td>待填</td></tr>
+<tr><td>场景、源图 revision、预期粒子数</td><td>待填</td></tr>
+<tr><td>快照获取 P50/P95/P99</td><td>待填</td></tr>
+<tr><td>分析 / 掩码 / 采样 / 纹理上传分别耗时</td><td>待填</td></tr>
+<tr><td>准备超时比例与降级原因</td><td>待填</td></tr>
+<tr><td>CPU / GPU 单帧与掉帧统计</td><td>待填</td></tr>
+<tr><td>峰值 RAM / GPU 内存 / 资源释放后基线</td><td>待填</td></tr>
+<tr><td>冷机、热机、低电量模式结果</td><td>待填</td></tr>
+<tr><td>V01–V15 视觉评审结果</td><td>待填</td></tr>
+</table></div>
+<p>正式发布前须明确目标设备矩阵、最低可接受档位、超时策略、是否支持跨应用内容、主题底色来源以及原生接口责任人。本包未替开发团队作出这些产品 / 系统决定。</p></section><section id="doc4"><h1>05 · 代码与基准说明</h1>
+<h2>1. 源码职责</h2>
+<div class="table"><table>
+<tr><th>文件</th><th>职责</th></tr>
+<tr><td>src/fold-clock.js</td><td>角度 → 双屏 dissolve / time / direction，可独立测试</td></tr>
+<tr><td>src/content-regions.js</td><td>从现有项目原样提取的本地轮廓与连通区域分析</td></tr>
+<tr><td>src/app-block-extractor.js</td><td>只保留完整内容块和透明掩码；无二次细分；从截图构建 content / background</td></tr>
+<tr><td>src/particle-renderer.js</td><td>透明内容取样、静态 buffer、基础纹理退场与粒子 GPU pass</td></tr>
+<tr><td>src/shaders/common.glsl</td><td>hash / noise / birth，统一方向性前沿</td></tr>
+<tr><td>src/shaders/transport.glsl</td><td>原版屏幕连续输运与动态涡流</td></tr>
+<tr><td>src/shaders/baseVertex.glsl</td><td>全屏源图固定不动的 quad</td></tr>
+<tr><td>src/shaders/baseFragment.glsl</td><td>按源像素 birth 逐渐退场，无整块透明度</td></tr>
+<tr><td>src/shaders/desktopVertex.glsl</td><td>桌面原版点位、颜色、尺寸与寿命</td></tr>
+<tr><td>src/shaders/appVertex.glsl</td><td>应用内原位细粒子、全局流场与额外域扭曲</td></tr>
+<tr><td>src/shaders/pointFragment.glsl</td><td>柔边圆点和预乘 alpha 输出</td></tr>
+<tr><td>src/shader-sources.js</td><td>上述 shader 的浏览器打包副本，不需要构建工具</td></tr>
+<tr><td>src/native/fold_clock.hpp</td><td>C++17 数学片段；不含系统 / GPU API，不声称已编译原生工程</td></tr>
+<tr><td>src/contracts.d.ts</td><td>生产模块接入契约示例，句柄由目标平台定义</td></tr>
+</table></div>
+<p>独立核心不存在整图标 / 整卡飞行、三维自旋、融合碎片状态或光照 pass；也不引用原工程的 whole-icon-scene.js / progressive-hybrid.js。原工程这些文件只作为提取时的比对来源，在 provenance 中记录 SHA-256，不直接交付这些多模式实现。</p>
+<h2>2. 最小调用示例</h2>
+<pre><code>// screenshotCanvas 已由业务读取，本例以外屏逻辑尺寸构建。
+const model = AppBlockExtractor.build(screenshotCanvas, 632, 924,
+  { size:100, variation:60, edge:75 });
+const fx = new ParticleRenderer({
+  ...model, fullSource:model.source, source:model.content, scene:&#x27;app&#x27;, sampleStep:1.5
+});
+const state = FoldClock.pose(foldAngle, &#x27;outer&#x27;, true);
+fx.draw(ctx, outputWidth, outputHeight,
+  { ...state, fieldTime:sessionElapsedSeconds });
+// 会话结束且不再使用时：fx.dispose()</code></pre>
+<p>桌面传透明 contentCanvas 和单独 wallpaperCanvas：</p>
+<pre><code>const fx = new ParticleRenderer({ w:1292, h:914,
+  source:contentCanvas, background:wallpaperCanvas, scene:&#x27;desktop&#x27; });</code></pre>
+<p>输入截图适配 / 裁切在 build 前完成；本包 demo 与原工程 contain 样例几乎同宽高比。实际应用不得拉伸导致坐标与截图对不上。</p>
+<h2>3. 与确认原型的关系</h2>
+<p>桌面 common、transport、base 和 desktop shader 从当前工程直接抽出；应用 shader 只保留确认版 fragments 分支，使用同一 birth 与自然流场参数，删去父块位移与整块模式控制。</p>
+<p>为降低移植阅读成本，独立核心把应用块的可见内容合并为一张透明 source 纹理，样本仍逐块生成并保留 block ID。原机模使用每块纹理图集。两者的采样、UV 边缘过滤和随机序列可能存在微小差异；<b>不声称独立示例与原机模视频逐像素一致</b>。方向前沿、原位碎化、尺寸分布、底色和流场形态是共同基准。</p>
+<p>原机模确认视频 <code>references/应用内_确认版_闭合展开闭合.mp4</code> 是用户最后指定覆盖的文件快照，不是之后导出的融合模式视频。它包括三维手机机框和镜头运动，粒子本身不需要三维自旋。示例 2D 视频仅展示算法，不替代机模确认视频。</p>
+<p>原截图与模型快照的哈希见 provenance/source-map.json；素材文件哈希见 MANIFEST.sha256。测试报告记录本包真实运行时间和环境，不将旧测试记录复制为新的测试结论。</p>
+<h2>4. 生产实现必须替换的部分</h2>
+<ul>
+<li>Canvas getImageData / 每块 2×纹理复制：演示可读性实现，生产应改工作线程分析 + GPU 原图 / 掩码。</li>
+<li>默认 1.5 间距和两个屏幕同时满量渲染：视觉参考，手机按预算与可见性调节。</li>
+<li>浏览器动画时钟：换成目标系统呈现节拍与会话连续时钟。</li>
+<li>相片和固定桌面素材：换成宿主真实图层 / 快照，带 contentRevision 和资源同步。</li>
+<li>全局中性色启发式底色：宿主能提供时直接传准确背景；多色背景需分层处理。</li>
+<li>GL_POINTS 固定 2×输出倍率：适配实际渲染尺度、硬件点尺寸能力；必要时实例化 quads。</li>
+</ul>
+<h2>5. 已验证 / 未验证</h2>
+<p>浏览器报告覆盖实际样例识别、完整卡片、逐像素重组、采样归属、背景、端点、双方向前沿、时间形变、GL 错误和固定输入复现。</p>
+<p>未验证：原生 C++ 编译与 SDK 接入、任何具体手机 GPU 的兼容性、120 Hz、HDR、跨应用截图权限、受保护内容、功耗、温控、系统合页传感器输入、原生 Surface 生命周期。它们必须按实施和验收文档继续完成。</p>
+<h2>6. 版本冻结</h2>
+<p>修改参数或算法时同时更新 shaders/*.glsl 与 shader-sources.js、设计规则、对照帧和测试报告。不得只修改视频或只改其中一份 shader。运行 <code>node tools/verify-package.cjs</code> 校验包内清单；任何后续内容修改都需要重新生成 MANIFEST。</p></section></main></html>

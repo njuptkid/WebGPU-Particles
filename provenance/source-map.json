@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "date": "2026-10-17",
+  "scope": [
+    "desktop-fragments",
+    "app-block-masked-fragments"
+  ],
+  "sourceFiles": [
+    {
+      "name": "particle-scene.js",
+      "sha256": "e685586c6f6af76d50ae3a6b1f20687511df62d371d2a1760c44abb6d295be23"
+    },
+    {
+      "name": "whole-icon-scene.js",
+      "sha256": "dc6a6faaf83272bd6b3d28df8b4b199cf03befaf3b049fd1408531e598b36c5f"
+    },
+    {
+      "name": "content-regions.js",
+      "sha256": "c10cc156e47f41a744311ebf79e4e1742702fee58219f75aed2b80f42f6c34f7"
+    },
+    {
+      "name": "app-slices.js",
+      "sha256": "959552ae0507e969cd072af6eebb78c679d0f356bbb7387c2786c1edbb231fa2"
+    },
+    {
+      "name": "desktop.js",
+      "sha256": "f5a9e8290381c6ab910ace4a6cae6e87e8fdbb9cf399e6fac71bc5b920036ed2"
+    },
+    {
+      "name": "app.js",
+      "sha256": "97a33750d184d2e91836ea15fed82f3b49f613a96bc6841a570e0ee6b35e86f7"
+    },
+    {
+      "name": "index.html",
+      "sha256": "96449f68ceba5d5acf25cfe4625d314474ef2c9d17d810c101064f07badb2fd5"
+    }
+  ],
+  "notes": [
+    "Excluded full-icon, full-card flight and hybrid progression code.",
+    "Clean renderer uses the same global particle field; app source UVs are repacked into one content texture rather than the original atlas. Seeds / edge filtering can differ, so pixel identity with the 3D prototype is not claimed.",
+    "Approved app video is the last explicitly replaced reference, not newer hybrid videos."
+  ]
+}
