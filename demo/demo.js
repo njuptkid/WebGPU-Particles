@@ -12,7 +12,7 @@
   }ready=true;rebuild();
  }
  function rebuild(){if(!ready)return;
-  for(const which of ['inner','outer']){flows[which]?.dispose();const m=models[$('scene').value+'-'+which];flows[which]=new ParticleRenderer({...m,sampleStep:Number($('quality').value)});$(which+'Info').textContent=flows[which].count.toLocaleString()+' 粒子'+(m.blocks?' / '+m.blocks.length+' 个完整内容单元':' / 仅采样壁纸上层');}
+  for(const which of ['inner','outer']){flows[which]?.dispose();const m=models[$('scene').value+'-'+which];flows[which]=new ParticleRenderer({...m,sampleStep:Number($('quality').value),precomputeNoise:$('precompute').checked?($('releaseCache').checked?'all':'particles'):false});const fx=flows[which];$(which+'Info').textContent=fx.count.toLocaleString()+' 粒子'+(m.blocks?' / '+m.blocks.length+' 个完整内容单元':' / 仅采样壁纸上层')+(fx.noiseCache?' / '+(fx.noiseCache.release?'粒子＋原图':'粒子')+'噪声缓存 '+(fx.noiseCache.bytes/1048576).toFixed(1)+' MiB':fx.noiseCacheStatus.requested?' / 缓存回退：'+fx.noiseCacheStatus.reason:' / 原算法');}
   $('status').textContent='已就绪 · '+($('scene').value==='app'?'背景底色常驻，大卡片不再切分，内容块原位碎化':'壁纸独立，上层元素逐渐碎化');draw(0);
  }
  function draw(fieldTime){if(!ready)return;
@@ -27,7 +27,7 @@
  function tick(now){if(playing){let t=Math.min(1,(now-start)/4000);$('angle').value=t<=.5?180*ease(t*2):180*(1-ease((t-.5)*2));if(t===1){playing=false;$('play').textContent='播放闭合 → 展开 → 闭合';}}draw(now/1000);requestAnimationFrame(tick);}
  $('play').onclick=()=>{shown=false;playing=!playing;start=performance.now();$('play').textContent=playing?'停止播放':'播放闭合 → 展开 → 闭合';};
  $('angle').oninput=()=>{playing=false;$('play').textContent='播放闭合 → 展开 → 闭合';};
- $('scene').onchange=()=>{shown=false;rebuild();};$('quality').onchange=rebuild;$('preview').onclick=()=>{shown=!shown;};
+ $('scene').onchange=()=>{shown=false;rebuild();};$('quality').onchange=rebuild;$('precompute').onchange=rebuild;$('releaseCache').onchange=rebuild;$('preview').onclick=()=>{shown=!shown;};
  window.HandoffDemo={models,flows,draw,rebuild,get ready(){return ready;}};
  setup().then(()=>requestAnimationFrame(tick)).catch(e=>{$('status').textContent=e.message;});
 })();

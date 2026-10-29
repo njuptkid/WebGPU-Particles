@@ -1,0 +1,237 @@
+{
+  "date": "2026-10-29T11:54:11.274Z",
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "hardwareConcurrency": 16
+  },
+  "checks": [
+    {
+      "name": "inner exact content unit count",
+      "ok": true,
+      "detail": 26
+    },
+    {
+      "name": "inner large cards not subdivided",
+      "ok": true
+    },
+    {
+      "name": "inner banners / covers retained",
+      "ok": true,
+      "detail": 8
+    },
+    {
+      "name": "inner masks reconstruct original screenshot",
+      "ok": true
+    },
+    {
+      "name": "inner every particle has a valid block",
+      "ok": true
+    },
+    {
+      "name": "inner all blocks sampled",
+      "ok": true
+    },
+    {
+      "name": "inner background excluded",
+      "ok": true,
+      "detail": {
+        "count": 353007
+      }
+    },
+    {
+      "name": "inner complete endpoint",
+      "ok": true
+    },
+    {
+      "name": "inner fixed opaque background",
+      "ok": true
+    },
+    {
+      "name": "inner field evolves",
+      "ok": true
+    },
+    {
+      "name": "inner fixed inputs reproduce",
+      "ok": true,
+      "detail": {
+        "maxRepeatDifference": 0
+      }
+    },
+    {
+      "name": "inner direction -1",
+      "ok": true,
+      "detail": {
+        "left": 0.674573537180773,
+        "right": 0.0038667759552982687
+      }
+    },
+    {
+      "name": "inner intact content stays in place -1",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "name": "inner direction 1",
+      "ok": true,
+      "detail": {
+        "left": 0.002098396569403748,
+        "right": 0.7120479591314133
+      }
+    },
+    {
+      "name": "inner intact content stays in place 1",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "name": "inner GPU error-free",
+      "ok": true
+    },
+    {
+      "name": "inner desktop source is transparent",
+      "ok": true
+    },
+    {
+      "name": "inner desktop preserves wallpaper",
+      "ok": true
+    },
+    {
+      "name": "outer exact content unit count",
+      "ok": true,
+      "detail": 12
+    },
+    {
+      "name": "outer large cards not subdivided",
+      "ok": true
+    },
+    {
+      "name": "outer banners / covers retained",
+      "ok": true,
+      "detail": 4
+    },
+    {
+      "name": "outer masks reconstruct original screenshot",
+      "ok": true
+    },
+    {
+      "name": "outer every particle has a valid block",
+      "ok": true
+    },
+    {
+      "name": "outer all blocks sampled",
+      "ok": true
+    },
+    {
+      "name": "outer background excluded",
+      "ok": true,
+      "detail": {
+        "count": 208234
+      }
+    },
+    {
+      "name": "outer complete endpoint",
+      "ok": true
+    },
+    {
+      "name": "outer fixed opaque background",
+      "ok": true
+    },
+    {
+      "name": "outer field evolves",
+      "ok": true
+    },
+    {
+      "name": "outer fixed inputs reproduce",
+      "ok": true,
+      "detail": {
+        "maxRepeatDifference": 0
+      }
+    },
+    {
+      "name": "outer direction -1",
+      "ok": true,
+      "detail": {
+        "left": 0.6505541527999136,
+        "right": 0.001099719453504501
+      }
+    },
+    {
+      "name": "outer intact content stays in place -1",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "name": "outer direction 1",
+      "ok": true,
+      "detail": {
+        "left": 0.0007775166149519113,
+        "right": 0.6217619435005236
+      }
+    },
+    {
+      "name": "outer intact content stays in place 1",
+      "ok": true,
+      "detail": 0
+    },
+    {
+      "name": "outer GPU error-free",
+      "ok": true
+    },
+    {
+      "name": "outer desktop source is transparent",
+      "ok": true
+    },
+    {
+      "name": "outer desktop preserves wallpaper",
+      "ok": true
+    }
+  ],
+  "metrics": [
+    {
+      "scene": "app",
+      "which": "inner",
+      "blocks": 26,
+      "particles": 353007,
+      "buildMs": {
+        "min": 136.5,
+        "median": 146.60000014305115,
+        "max": 290.09999990463257
+      },
+      "sampleAndUploadMs": 193.5,
+      "cpuSubmitAndFinishCallMs": {
+        "min": 0,
+        "median": 0,
+        "max": 0.09999990463256836
+      },
+      "note": "desktop Chrome; JS submission/finish-call wall time only; zero does NOT indicate GPU execution time; NOT phone frame pacing / capture latency"
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "particles": 166174
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "blocks": 12,
+      "particles": 208234,
+      "buildMs": {
+        "min": 71,
+        "median": 75.70000004768372,
+        "max": 101
+      },
+      "sampleAndUploadMs": 64.60000014305115,
+      "cpuSubmitAndFinishCallMs": {
+        "min": 0,
+        "median": 0,
+        "max": 0.09999990463256836
+      },
+      "note": "desktop Chrome; JS submission/finish-call wall time only; zero does NOT indicate GPU execution time; NOT phone frame pacing / capture latency"
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "particles": 78463
+    }
+  ]
+}

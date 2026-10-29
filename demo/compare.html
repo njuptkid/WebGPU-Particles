@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>粒子动效 · 算法实验对照</title>
+<link rel="icon" href="data:,">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#10151e;color:#edf2fa;font:14px/1.6 "Microsoft YaHei",sans-serif}main{max-width:1600px;margin:auto;padding:26px}h1{font-size:26px;margin:0 0 8px}p{color:#aebcce;margin:8px 0 16px}a{color:#9edbd5}.controls{display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap;margin:14px 0}label{display:inline-flex;align-items:center;gap:7px}button,select,input[type=number]{background:#263348;border:1px solid #52647e;border-radius:6px;color:#fff;padding:8px 10px}button{cursor:pointer}input[type=range]{width:240px}input[type=number]{width:86px}.screens{display:grid;grid-template-columns:1fr 1fr;gap:18px}figure{margin:0;background:#19191b;border:1px solid #3b4a60;border-radius:10px;overflow:hidden}figcaption{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#1b2534;padding:10px 14px;font-size:16px}small{font-size:12px;color:#b8c9dc}canvas{display:block;width:100%;height:auto;max-height:480px;object-fit:contain}.difference{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}.difference canvas{max-height:310px}.details{padding:12px 16px;background:#192231;border-radius:10px}.details p{margin:6px 0}.error{color:#ffb6a7}output{font-variant-numeric:tabular-nums}.note{font-size:12px}@media(max-width:800px){main{padding:16px}.screens,.difference{grid-template-columns:1fr}input[type=range]{width:180px}}
+</style>
+<main>
+ <h1>粒子动效 · 修复与算法对照</h1>
+ <p>同一份素材、粒子源点、开合角度与流场时间同步渲染。冻结画面可检查细节，差异图可放大微小变化。<a href="index.html">返回双屏演示</a></p>
+ <div class="controls">
+  <label>场景<select id="scene"><option value="app">应用内</option><option value="desktop">桌面</option></select></label>
+  <label>屏幕<select id="screen"><option value="inner">内屏</option><option value="outer">外屏</option></select></label>
+  <label>右侧版本<select id="mode"><optgroup label="问题修复"><option value="releasefix">消散编织纹修复（前后对照）</option></optgroup><optgroup label="组合算法实验"><option value="combined">组合优化实验（7 项）</option></optgroup><optgroup label="单项算法实验"><option value="noise2">动态噪声 4 次 → 2 次</option><option value="hashfast">动态噪声使用无 sin 的 hash</option><option value="uniforms">公共流场参数移至 uniform</option><option value="envelope">涡区 exp 改为多项式</option><option value="radial">圆点用距离平方塑形</option><option value="wave">空间正弦改为近似波形</option><option value="growth">饱和增长 exp 改为有理式</option><option value="original">原算法自对照</option></optgroup><optgroup label="已有预计算实验"><option value="particles">粒子固定噪声预计算</option><option value="all">粒子＋原图释放扰动预计算</option></optgroup></select></label>
+  <label>查看图层<select id="layer"><option value="full">完整动效</option><option value="particles">仅粒子</option><option value="base">仅原始内容消散</option></select></label>
+  <label>采样间距<select id="quality"><option value="1.5">1.5（基准）</option><option value="2.5">2.5</option><option value="4">4.0</option></select></label>
+ </div>
+ <div class="controls">
+  <button id="play" type="button">同步播放开合</button>
+  <label>角度<input id="angle" type="range" min="0" max="180" value="150" step=".1"><output id="angleValue">150.0°</output></label>
+  <label>流场时间<input id="fieldTime" type="number" min="0" step=".01" value="1"></label>
+  <label><input id="evolve" type="checkbox">流场持续演化</label>
+  <label><input id="reverse" type="checkbox" checked>外屏从左向右凝聚</label>
+ </div>
+ <p id="status" role="status">准备对照素材…</p>
+ <p id="experimentNote" class="note"></p>
+ <div class="screens">
+  <figure><figcaption><span id="originalLabel">修复前</span> <small>固定素材、源点和控制参数</small></figcaption><canvas id="original"></canvas></figure>
+  <figure><figcaption><span id="optimizedLabel">修复后</span> <small id="optimizedInfo"></small></figcaption><canvas id="optimized"></canvas></figure>
+ </div>
+ <div class="difference">
+  <figure><figcaption>像素差异图 <small>黑色表示相同，亮色表示有差异</small></figcaption><canvas id="difference"></canvas></figure>
+  <div class="details">
+   <div class="controls"><label>差异放大<input id="gain" type="range" min="1" max="64" value="16"><output id="gainValue">16×</output></label></div>
+   <p id="metrics">等待画面…</p>
+   <p class="note">统计在逻辑分辨率下比较 RGBA，不受放大倍率影响。播放时差异图约每 150 ms 更新；暂停后立即更新。</p>
+   <p class="note">分层视图用于检查内部结果；完整动效还包含背景、端点直出与末尾淡出。改变流场的实验不以逐像素相同为目标。</p>
+   <p class="note">流场时间默认冻结，两侧始终使用相同参数。单项实验分别修改一项；组合实验同时启用七项，均未叠加预计算。</p>
+   <button id="benchmark" type="button">测量当前实验 GPU 耗时</button>
+   <p id="benchmarkResult" role="status">可先播放比较形态，再暂停测量。GPU 查询不包含截图准备、差异图或 Canvas 2D 合成。</p>
+  </div>
+ </div>
+</main>
+<script src="../src/shader-sources.js"></script><script src="../src/content-regions.js"></script><script src="../src/app-block-extractor.js"></script><script src="../src/fold-clock.js"></script><script src="../src/particle-renderer.js"></script><script src="../src/shader-benchmark.js"></script><script src="compare.js"></script>
+</html>

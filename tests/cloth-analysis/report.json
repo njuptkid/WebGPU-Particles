@@ -1,0 +1,49 @@
+{
+  "angle": 110,
+  "fieldTime": 1,
+  "sampleStep": 1.5,
+  "scene": "app",
+  "screen": "inner",
+  "frames": [
+    {
+      "id": "original",
+      "label": "原始算法",
+      "particles": 353007
+    },
+    {
+      "id": "noRibbon",
+      "label": "关闭带状正弦扰动",
+      "particles": 353007
+    },
+    {
+      "id": "noRoll",
+      "label": "关闭双涡区扰动",
+      "particles": 353007
+    },
+    {
+      "id": "noBend",
+      "label": "关闭应用域扭曲",
+      "particles": 353007
+    },
+    {
+      "id": "noCoherentY",
+      "label": "关闭全部连续纵向场",
+      "particles": 353007
+    },
+    {
+      "id": "noFrontNoise",
+      "label": "关闭释放前沿低频噪声",
+      "particles": 353007
+    },
+    {
+      "id": "jitter",
+      "label": "采样点加微小固定抖动",
+      "particles": 353007
+    },
+    {
+      "id": "smallPoints",
+      "label": "粒子直径缩至 40%",
+      "particles": 353007
+    }
+  ]
+}

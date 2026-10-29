@@ -4,6 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node tools/serve.cjs",
-    "test": "node tests/clock.test.cjs"
+    "test": "node tests/clock.test.cjs",
+    "build:shaders": "node tools/build-shaders.cjs",
+    "test:browser": "node tools/run-browser-tests.cjs",
+    "benchmark:noise": "node tools/run-browser-tests.cjs --benchmark",
+    "test:experiments": "node tools/run-browser-tests.cjs --experiments",
+    "benchmark:experiments": "node tools/run-browser-tests.cjs --experiments --benchmark",
+    "benchmark:combined": "node tools/run-browser-tests.cjs --combined --benchmark"
   }
 }

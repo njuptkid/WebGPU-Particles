@@ -13,7 +13,7 @@
   check(which+' banners / covers retained',which==='inner'?cards.length===8:cards.length===4,cards.length);
   const rebuilt=make(w*2,h*2),g=rebuilt.getContext('2d');g.drawImage(m.background,0,0);g.drawImage(m.content,0,0);
   check(which+' masks reconstruct original screenshot',hash(rebuilt)===hash(m.source));
-  let t=performance.now();const fx=new ParticleRenderer({...m,fullSource:m.source,source:m.content,scene:'app'});const prepareMs=performance.now()-t;
+  let t=performance.now();const fx=new ParticleRenderer({...m,fullSource:m.source,source:m.content,scene:'app',precomputeNoise:'particles'});const prepareMs=performance.now()-t;
   check(which+' every particle has a valid block',fx.count===fx.blockIds.length&&fx.blockIds.every(id=>id<m.blocks.length));
   check(which+' all blocks sampled',new Set(fx.blockIds).size===m.blocks.length);
   check(which+' background excluded',fx.count<w*h/2.25*.94,{count:fx.count});
@@ -34,7 +34,7 @@
   for(const angle of [30,70,110,150]){const pose=FoldClock.pose(angle,which,true);fx.draw(ctx,w,h,{...pose,fieldTime:1});const small=make(Math.round(w*.6),Math.round(h*.6));small.getContext('2d').drawImage(c,0,0,small.width,small.height);frames.push({scene:'app',which,angle,data:small.toDataURL('image/jpeg',.90).split(',')[1]});}
   fx.dispose();
   const srcImage=await load('../demo/assets/desktop-'+which+'-content.png'),wallpaper=await load('../demo/assets/desktop-'+which+'-wallpaper.png'),source=make(w*2,h*2);source.getContext('2d').drawImage(srcImage,0,0);
-  const desktop=new ParticleRenderer({w,h,source,background:wallpaper});check(which+' desktop source is transparent',source.getContext('2d').getImageData(0,0,source.width,source.height).data.some((v,i)=>i%4===3&&v===0));
+  const desktop=new ParticleRenderer({w,h,source,background:wallpaper,precomputeNoise:'particles'});check(which+' desktop source is transparent',source.getContext('2d').getImageData(0,0,source.width,source.height).data.some((v,i)=>i%4===3&&v===0));
   desktop.draw(ctx,w,h,state(1));reference.getContext('2d').clearRect(0,0,w,h);reference.getContext('2d').drawImage(wallpaper,0,0,w,h);check(which+' desktop preserves wallpaper',hash(c)===hash(reference));
   metrics.push({scene:'desktop',which,particles:desktop.count});
   for(const angle of [30,70,110,150]){desktop.draw(ctx,w,h,{...FoldClock.pose(angle,which,true),fieldTime:1});const small=make(Math.round(w*.6),Math.round(h*.6));small.getContext('2d').drawImage(c,0,0,small.width,small.height);frames.push({scene:'desktop',which,angle,data:small.toDataURL('image/jpeg',.90).split(',')[1]});}

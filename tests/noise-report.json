@@ -1,0 +1,1852 @@
+{
+  "date": "2026-10-26T01:47:04.046Z",
+  "checks": [
+    {
+      "name": "desktop-outer cache enabled",
+      "ok": true,
+      "detail": {
+        "requested": "particles",
+        "enabled": true,
+        "prepareMs": 13.5
+      }
+    },
+    {
+      "name": "desktop-outer sample count unchanged",
+      "ok": true,
+      "detail": {
+        "count": 78463
+      }
+    },
+    {
+      "name": "desktop-outer visual base 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.005356243835278645,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.03169737040385775,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.023045462251356237,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0035944820606608583,
+        "max": 2,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.005719919584634774,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.031112149980820868,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.021882085148501287,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual base 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer visual both 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0038724296536796535,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer fixed inputs reproduce",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer dynamic field still evolves",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer experimental release cache enabled",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer experimental release visual base -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00015476019233930625,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer experimental release visual both -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.03177250294536687,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer experimental release visual base 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00017102820702504247,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer experimental release visual both 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.031203871616252946,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-outer experimental no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner cache enabled",
+      "ok": true,
+      "detail": {
+        "requested": "particles",
+        "enabled": true,
+        "prepareMs": 21.700000047683716
+      }
+    },
+    {
+      "name": "desktop-inner sample count unchanged",
+      "ok": true,
+      "detail": {
+        "count": 166174
+      }
+    },
+    {
+      "name": "desktop-inner visual base 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0043599075441532135,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.028041397660065984,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.03155040952232557,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.013036693572972205,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006548303056682768,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.03059471982101605,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.030938846444370678,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual base 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner visual both 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.013728334101117125,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner fixed inputs reproduce",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner dynamic field still evolves",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner experimental release cache enabled",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner experimental release visual base -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00018746485695510497,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner experimental release visual both -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.02814804409901701,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner experimental release visual base 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00014607651191306882,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner experimental release visual both 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.030685700083327123,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "desktop-inner experimental no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer cache enabled",
+      "ok": true,
+      "detail": {
+        "requested": "particles",
+        "enabled": true,
+        "prepareMs": 19.399999976158142
+      }
+    },
+    {
+      "name": "app-outer sample count unchanged",
+      "ok": true,
+      "detail": {
+        "count": 208234
+      }
+    },
+    {
+      "name": "app-outer visual base 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.015434278933092224,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.052124859581346925,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.021648018384569017,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0022295742232451093,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 4.2810564962463696e-7,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.015417154707107238,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.05708746027179572,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.026598739143240725,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual base 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer visual both 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0025813700408241548,
+        "max": 2,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer fixed inputs reproduce",
+      "ok": true
+    },
+    {
+      "name": "app-outer dynamic field still evolves",
+      "ok": true
+    },
+    {
+      "name": "app-outer experimental release cache enabled",
+      "ok": true
+    },
+    {
+      "name": "app-outer experimental release visual base -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00032311273905419476,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer experimental release visual both -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.05220994557920982,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer experimental release visual base 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0003174403391966683,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer experimental release visual both 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.057171047899884926,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-outer experimental no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner cache enabled",
+      "ok": true,
+      "detail": {
+        "requested": "particles",
+        "enabled": true,
+        "prepareMs": 16.200000047683716
+      }
+    },
+    {
+      "name": "app-inner sample count unchanged",
+      "ok": true,
+      "detail": {
+        "count": 353007
+      }
+    },
+    {
+      "name": "app-inner visual base 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 0.08 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 0.4 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.011647167216535354,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 0.73 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.05759563989133601,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 1.2 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.05572861270501521,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 1.64 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.019547154344865897,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 0.08 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 0.4 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.014248281801491758,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 0.73 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0631128862347657,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 1.2 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0668092041751631,
+        "max": 6,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual base 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner visual both 1.64 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.022011454515584884,
+        "max": 3,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner fixed inputs reproduce",
+      "ok": true
+    },
+    {
+      "name": "app-inner dynamic field still evolves",
+      "ok": true
+    },
+    {
+      "name": "app-inner experimental release cache enabled",
+      "ok": true
+    },
+    {
+      "name": "app-inner experimental release visual base -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00030411436139583093,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner experimental release visual both -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.057708531630434046,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner experimental release visual base 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00029432300099586076,
+        "max": 1,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner experimental release visual both 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.06322445481705292,
+        "max": 4,
+        "fractionOver8": 0
+      }
+    },
+    {
+      "name": "app-inner experimental no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner no GL errors",
+      "ok": true
+    },
+    {
+      "name": "unsupported cache falls back",
+      "ok": true
+    }
+  ],
+  "comparisons": [
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.005356243835278645,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.03169737040385775,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.023045462251356237,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.0035944820606608583,
+      "max": 2,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.005719919584634774,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.031112149980820868,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.021882085148501287,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.0038724296536796535,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "outer",
+      "mode": "particles",
+      "cacheBytes": 627704,
+      "prepareMs": 13.5
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.0043599075441532135,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.028041397660065984,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.03155040952232557,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.013036693572972205,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.006548303056682768,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.03059471982101605,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.030938846444370678,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.013728334101117125,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "desktop",
+      "which": "inner",
+      "mode": "particles",
+      "cacheBytes": 1329392,
+      "prepareMs": 21.700000047683716
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.015434278933092224,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.052124859581346925,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.021648018384569017,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.0022295742232451093,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "both",
+      "mean": 4.2810564962463696e-7,
+      "max": 1,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.015417154707107238,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.05708746027179572,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.026598739143240725,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.0025813700408241548,
+      "max": 2,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "outer",
+      "mode": "particles",
+      "cacheBytes": 1665872,
+      "prepareMs": 19.399999976158142
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.08,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.4,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.011647167216535354,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.73,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.05759563989133601,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.2,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.05572861270501521,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.64,
+      "direction": -1,
+      "pass": "both",
+      "mean": 0.019547154344865897,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.08,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.4,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.014248281801491758,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 0.73,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.0631128862347657,
+      "max": 4,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.2,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.0668092041751631,
+      "max": 6,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "base",
+      "mean": 0,
+      "max": 0,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "time": 1.64,
+      "direction": 1,
+      "pass": "both",
+      "mean": 0.022011454515584884,
+      "max": 3,
+      "fractionOver8": 0
+    },
+    {
+      "scene": "app",
+      "which": "inner",
+      "mode": "particles",
+      "cacheBytes": 2824056,
+      "prepareMs": 16.200000047683716
+    }
+  ],
+  "benchmarks": [],
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3070 (0x00002484) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  }
+}

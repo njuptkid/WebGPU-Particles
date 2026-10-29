@@ -1,0 +1,1191 @@
+{
+  "date": "2026-10-29T11:48:53.605Z",
+  "checks": [
+    {
+      "name": "app-inner precomputation enabled",
+      "ok": true
+    },
+    {
+      "name": "app-inner identical source samples",
+      "ok": true
+    },
+    {
+      "name": "app-inner cache particles 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner cache all 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner endpoint 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner cache particles 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner cache all 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner endpoint 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner cache particles 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0050188925622074235,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0050188925622074235,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.005471729749137937,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.005471729749137937,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.009908433314590376,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.009908433314590376,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.010657657627141609,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.010657657627141609,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.010077585681283915,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.010228531410260753,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.01094663507462181,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.011096522278150002,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0018289202701695672,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0019442995440719188,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0021420320978788846,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache all 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0022898022505097857,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-inner cache particles 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000004234101794581704,
+        "max": 1
+      }
+    },
+    {
+      "name": "app-inner cache all 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000004869217063768961,
+        "max": 1
+      }
+    },
+    {
+      "name": "app-inner cache particles 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000012490600294016029,
+        "max": 1
+      }
+    },
+    {
+      "name": "app-inner cache all 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000014819356281035966,
+        "max": 1
+      }
+    },
+    {
+      "name": "app-inner cache particles 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner cache all 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner endpoint 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner cache particles 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner cache all 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner endpoint 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-inner deterministic",
+      "ok": true
+    },
+    {
+      "name": "app-inner field still evolves",
+      "ok": true
+    },
+    {
+      "name": "app-inner GPU error-free false false",
+      "ok": true
+    },
+    {
+      "name": "app-inner GPU error-free true false",
+      "ok": true
+    },
+    {
+      "name": "app-inner GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "app-inner GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "app-outer precomputation enabled",
+      "ok": true
+    },
+    {
+      "name": "app-outer identical source samples",
+      "ok": true
+    },
+    {
+      "name": "app-outer cache particles 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer cache all 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer endpoint 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer cache particles 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer cache all 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer endpoint 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer cache particles 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.002481300345224396,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.002622575209600526,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0025348135514274756,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0026825100005479752,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.010205182475752096,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.010340035755383857,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.01045947723162913,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.010607601786399254,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.004346556660638939,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.004346128554989314,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00519506205819497,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00519506205819497,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000758175105485232,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000758175105485232,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000950394542166694,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000950394542166694,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00029239615869362703,
+        "max": 1
+      }
+    },
+    {
+      "name": "app-outer cache all 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00029239615869362703,
+        "max": 1
+      }
+    },
+    {
+      "name": "app-outer cache particles 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0003707394925749356,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache all 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0003707394925749356,
+        "max": 2
+      }
+    },
+    {
+      "name": "app-outer cache particles 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer cache all 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer endpoint 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer cache particles 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer cache all 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer endpoint 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "app-outer deterministic",
+      "ok": true
+    },
+    {
+      "name": "app-outer field still evolves",
+      "ok": true
+    },
+    {
+      "name": "app-outer GPU error-free false false",
+      "ok": true
+    },
+    {
+      "name": "app-outer GPU error-free true false",
+      "ok": true
+    },
+    {
+      "name": "app-outer GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "app-outer GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner precomputation enabled",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner identical source samples",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner cache particles 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner cache all 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner endpoint 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner cache all 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner endpoint 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.23083476163700536,
+        "max": 3
+      }
+    },
+    {
+      "name": "desktop-inner cache all 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.23083476163700536,
+        "max": 3
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0042633170969643185,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache all 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0042633170969643185,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006537453170834152,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache all 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006537453170834152,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0063481888206163494,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache all 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0063481888206163494,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.005965849428565622,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache all 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006111290825209503,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006335274810142876,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache all 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006492571691811586,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0008095602631240219,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache all 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0009177415639755845,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0011815261057780246,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache all 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.001343903909600233,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000001058525448645426,
+        "max": 1
+      }
+    },
+    {
+      "name": "desktop-inner cache all 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000001058525448645426,
+        "max": 1
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0000035989865253944487,
+        "max": 1
+      }
+    },
+    {
+      "name": "desktop-inner cache all 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000005292627243227131,
+        "max": 1
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner cache all 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner endpoint 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner cache particles 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner cache all 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner endpoint 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-inner deterministic",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner field still evolves",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner GPU error-free false false",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner GPU error-free true false",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer precomputation enabled",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer identical source samples",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer cache particles 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer cache all 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer endpoint 0 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer cache all 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer endpoint 0 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.18618742807825087,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 30 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.18627647405337278,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0010021953257712752,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 30 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0011550290426872705,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006201110334812867,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 70 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006304283796372404,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006494790810455367,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 70 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.006614660392350266,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00496987848649241,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 110 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00496987848649241,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00531321921749137,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 110 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00531321921749137,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0016092491369390104,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 150 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0016092491369390104,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0017226971340895392,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 150 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0017226971340895392,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0007389103512521234,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 170 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0007389103512521234,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000893884596416242,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache all 170 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000893884596416242,
+        "max": 2
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer cache all 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer endpoint 180 -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer cache particles 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer cache all 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer endpoint 180 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0
+      }
+    },
+    {
+      "name": "desktop-outer deterministic",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer field still evolves",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer GPU error-free false false",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer GPU error-free true false",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer GPU error-free false true",
+      "ok": true
+    },
+    {
+      "name": "default comparison is before/after release fix",
+      "ok": true
+    }
+  ],
+  "differences": [
+    {
+      "scene": "app",
+      "screen": "inner",
+      "angle": 150,
+      "mean": 3.6238072535244665,
+      "max": 225
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "angle": 150,
+      "mean": 0.9141806571592964,
+      "max": 208
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "angle": 150,
+      "mean": 1.1681821222673108,
+      "max": 216
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "angle": 150,
+      "mean": 0.7757963621294317,
+      "max": 147
+    }
+  ]
+}

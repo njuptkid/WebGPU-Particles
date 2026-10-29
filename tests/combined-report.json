@@ -1,0 +1,3495 @@
+{
+  "date": "2026-10-26T02:07:45.739Z",
+  "checks": [
+    {
+      "name": "app-inner-uniforms same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-uniforms original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-uniforms deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-uniforms evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-uniforms nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00042954962706031393,
+        "max": 85,
+        "alphaRatio": 1.0000004172715018
+      }
+    },
+    {
+      "name": "app-inner-uniforms deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-uniforms evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-uniforms nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0005857879832803788,
+        "max": 255,
+        "alphaRatio": 0.999999937787244
+      }
+    },
+    {
+      "name": "app-inner-uniforms complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-uniforms background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-uniforms no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner-noise2 same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-noise2 original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-noise2 deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-noise2 evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-noise2 nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 20.99378645561645,
+        "max": 255,
+        "alphaRatio": 1.0004104560671805
+      }
+    },
+    {
+      "name": "app-inner-noise2 deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-noise2 evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-noise2 nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 23.850679319291924,
+        "max": 255,
+        "alphaRatio": 0.9993480352029636
+      }
+    },
+    {
+      "name": "app-inner-noise2 complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-noise2 background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-noise2 no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner-hashfast same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-hashfast original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-hashfast deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-hashfast evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-hashfast nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 22.125455165942917,
+        "max": 255,
+        "alphaRatio": 1.005853929715567
+      }
+    },
+    {
+      "name": "app-inner-hashfast deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-hashfast evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-hashfast nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 25.227834053695187,
+        "max": 255,
+        "alphaRatio": 1.0011989144620643
+      }
+    },
+    {
+      "name": "app-inner-hashfast complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-hashfast background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-hashfast no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner-envelope same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-envelope original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-envelope deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-envelope evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-envelope nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 13.54392520713226,
+        "max": 255,
+        "alphaRatio": 0.9997415698499419
+      }
+    },
+    {
+      "name": "app-inner-envelope deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-envelope evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-envelope nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 13.409552175989594,
+        "max": 255,
+        "alphaRatio": 1.0004142374140794
+      }
+    },
+    {
+      "name": "app-inner-envelope complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-envelope background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-envelope no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner-radial same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-radial original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-radial deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-radial evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-radial nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 1.7300010669936523,
+        "max": 255,
+        "alphaRatio": 0.9440399553597384
+      }
+    },
+    {
+      "name": "app-inner-radial deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-radial evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-radial nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 1.746792244480425,
+        "max": 255,
+        "alphaRatio": 0.9524651991175245
+      }
+    },
+    {
+      "name": "app-inner-radial complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-radial background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-radial no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner-wave same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-wave original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-wave deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-wave evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-wave nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 5.6892596927058285,
+        "max": 255,
+        "alphaRatio": 1.0003090451832153
+      }
+    },
+    {
+      "name": "app-inner-wave deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-wave evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-wave nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 6.806874572355719,
+        "max": 255,
+        "alphaRatio": 1.00024583992633
+      }
+    },
+    {
+      "name": "app-inner-wave complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-wave background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-wave no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner-growth same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-growth original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-growth deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-growth evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-growth nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 7.768032192722765,
+        "max": 255,
+        "alphaRatio": 1.000628174427722
+      }
+    },
+    {
+      "name": "app-inner-growth deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-growth evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-growth nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 9.116127651394544,
+        "max": 255,
+        "alphaRatio": 1.0001375275182574
+      }
+    },
+    {
+      "name": "app-inner-growth complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-growth background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-growth no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-inner-combined same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-inner-combined original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-inner-combined deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-combined evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-combined nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 21.708593871730425,
+        "max": 255,
+        "alphaRatio": 0.9524589225415573
+      }
+    },
+    {
+      "name": "app-inner-combined deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-combined evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-inner-combined nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 24.418938756258,
+        "max": 255,
+        "alphaRatio": 0.9546310615598953
+      }
+    },
+    {
+      "name": "app-inner-combined complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-combined background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-inner-combined no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-uniforms same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-uniforms original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-uniforms deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-uniforms evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-uniforms nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.000571949147898515,
+        "max": 255,
+        "alphaRatio": 1.000000096650028
+      }
+    },
+    {
+      "name": "app-outer-uniforms deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-uniforms evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-uniforms nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00015112129431749685,
+        "max": 36,
+        "alphaRatio": 1.0000001464701787
+      }
+    },
+    {
+      "name": "app-outer-uniforms complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-uniforms background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-uniforms no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-noise2 same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-noise2 original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-noise2 deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-noise2 evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-noise2 nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 17.624310321798454,
+        "max": 255,
+        "alphaRatio": 1.0028938226472954
+      }
+    },
+    {
+      "name": "app-outer-noise2 deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-noise2 evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-noise2 nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 21.15426573031399,
+        "max": 255,
+        "alphaRatio": 0.9939678209900066
+      }
+    },
+    {
+      "name": "app-outer-noise2 complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-noise2 background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-noise2 no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-hashfast same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-hashfast original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-hashfast deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-hashfast evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-hashfast nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 18.721265976902846,
+        "max": 255,
+        "alphaRatio": 0.9941679681801047
+      }
+    },
+    {
+      "name": "app-outer-hashfast deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-hashfast evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-hashfast nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 22.755809393665405,
+        "max": 255,
+        "alphaRatio": 0.9956520815731483
+      }
+    },
+    {
+      "name": "app-outer-hashfast complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-hashfast background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-hashfast no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-envelope same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-envelope original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-envelope deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-envelope evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-envelope nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 9.725973854731766,
+        "max": 255,
+        "alphaRatio": 0.9999943942983829
+      }
+    },
+    {
+      "name": "app-outer-envelope deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-envelope evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-envelope nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 11.696012024631486,
+        "max": 255,
+        "alphaRatio": 0.9998475001324334
+      }
+    },
+    {
+      "name": "app-outer-envelope complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-envelope background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-envelope no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-radial same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-radial original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-radial deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-radial evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-radial nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 1.70001138761028,
+        "max": 255,
+        "alphaRatio": 0.9548373991342187
+      }
+    },
+    {
+      "name": "app-outer-radial deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-radial evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-radial nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 1.8745787440407693,
+        "max": 255,
+        "alphaRatio": 0.9486258534023924
+      }
+    },
+    {
+      "name": "app-outer-radial complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-radial background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-radial no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-wave same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-wave original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-wave deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-wave evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-wave nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 4.778657820291523,
+        "max": 255,
+        "alphaRatio": 1.0002660533642498
+      }
+    },
+    {
+      "name": "app-outer-wave deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-wave evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-wave nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 5.679988458271686,
+        "max": 255,
+        "alphaRatio": 1.000072673620257
+      }
+    },
+    {
+      "name": "app-outer-wave complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-wave background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-wave no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-growth same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-growth original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-growth deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-growth evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-growth nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 6.293931345553181,
+        "max": 255,
+        "alphaRatio": 1.0001736559375953
+      }
+    },
+    {
+      "name": "app-outer-growth deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-growth evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-growth nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 7.756293153049482,
+        "max": 255,
+        "alphaRatio": 1.0004871598138558
+      }
+    },
+    {
+      "name": "app-outer-growth complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-growth background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-growth no GL errors",
+      "ok": true
+    },
+    {
+      "name": "app-outer-combined same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "app-outer-combined original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "app-outer-combined deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-combined evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-combined nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 17.561903220724425,
+        "max": 255,
+        "alphaRatio": 0.9516761458597762
+      }
+    },
+    {
+      "name": "app-outer-combined deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-combined evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "app-outer-combined nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 22.24649681146912,
+        "max": 255,
+        "alphaRatio": 0.9484211369161729
+      }
+    },
+    {
+      "name": "app-outer-combined complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-combined background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "app-outer-combined no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-uniforms same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-uniforms original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-uniforms deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-uniforms evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-uniforms nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00037217754774373184,
+        "max": 127,
+        "alphaRatio": 1.000000031114358
+      }
+    },
+    {
+      "name": "desktop-inner-uniforms deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-uniforms evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-uniforms nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00045622446836617866,
+        "max": 85,
+        "alphaRatio": 0.9999995897266378
+      }
+    },
+    {
+      "name": "desktop-inner-uniforms complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-uniforms background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-uniforms no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-noise2 same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-noise2 original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-noise2 deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-noise2 evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-noise2 nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-noise2 app-only experiment is unchanged -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-noise2 deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-noise2 evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-noise2 nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-noise2 app-only experiment is unchanged 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-noise2 complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-noise2 background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-noise2 no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-hashfast same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-hashfast original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-hashfast deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-hashfast evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-hashfast nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-hashfast app-only experiment is unchanged -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-hashfast deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-hashfast evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-hashfast nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-hashfast app-only experiment is unchanged 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-hashfast complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-hashfast background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-hashfast no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-envelope same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-envelope original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-envelope deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-envelope evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-envelope nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 10.093544646062963,
+        "max": 255,
+        "alphaRatio": 0.9998014281676976
+      }
+    },
+    {
+      "name": "desktop-inner-envelope deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-envelope evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-envelope nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 11.570966933358624,
+        "max": 255,
+        "alphaRatio": 1.00029879622865
+      }
+    },
+    {
+      "name": "desktop-inner-envelope complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-envelope background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-envelope no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-radial same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-radial original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-radial deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-radial evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-radial nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 1.1023073314319394,
+        "max": 255,
+        "alphaRatio": 0.9424036830936683
+      }
+    },
+    {
+      "name": "desktop-inner-radial deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-radial evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-radial nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 1.1086430296522616,
+        "max": 255,
+        "alphaRatio": 0.9479872428428544
+      }
+    },
+    {
+      "name": "desktop-inner-radial complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-radial background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-radial no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-wave same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-wave original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-wave deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-wave evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-wave nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 4.036717283942254,
+        "max": 255,
+        "alphaRatio": 1.0000090542781572
+      }
+    },
+    {
+      "name": "desktop-inner-wave deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-wave evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-wave nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 5.350059446789196,
+        "max": 255,
+        "alphaRatio": 1.0000650576331505
+      }
+    },
+    {
+      "name": "desktop-inner-wave complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-wave background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-wave no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-growth same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-growth original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-growth deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-growth evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-growth nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 3.989284970293542,
+        "max": 255,
+        "alphaRatio": 1.0000860000853156
+      }
+    },
+    {
+      "name": "desktop-inner-growth deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-growth evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-growth nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 5.8306088299652465,
+        "max": 255,
+        "alphaRatio": 1.0001698531719552
+      }
+    },
+    {
+      "name": "desktop-inner-growth complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-growth background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-growth no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-combined same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-combined original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-combined deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-combined evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-combined nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 11.130585203677233,
+        "max": 255,
+        "alphaRatio": 0.9423951888739537
+      }
+    },
+    {
+      "name": "desktop-inner-combined deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-combined evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-inner-combined nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 13.38655676914322,
+        "max": 255,
+        "alphaRatio": 0.9485038356163581
+      }
+    },
+    {
+      "name": "desktop-inner-combined complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-combined background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-inner-combined no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-uniforms same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-uniforms original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-uniforms deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-uniforms evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-uniforms nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0.0001840854293385939,
+        "max": 51,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-uniforms deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-uniforms evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-uniforms nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0.00007791522823168393,
+        "max": 14,
+        "alphaRatio": 1.0000001528083617
+      }
+    },
+    {
+      "name": "desktop-outer-uniforms complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-uniforms background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-uniforms no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-noise2 same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-noise2 original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-noise2 deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-noise2 evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-noise2 nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-noise2 app-only experiment is unchanged -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-noise2 deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-noise2 evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-noise2 nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-noise2 app-only experiment is unchanged 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-noise2 complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-noise2 background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-noise2 no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-hashfast same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-hashfast original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-hashfast deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-hashfast evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-hashfast nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-hashfast app-only experiment is unchanged -1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-hashfast deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-hashfast evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-hashfast nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-hashfast app-only experiment is unchanged 1",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-hashfast complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-hashfast background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-hashfast no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-envelope same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-envelope original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-envelope deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-envelope evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-envelope nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 9.551786656118143,
+        "max": 255,
+        "alphaRatio": 0.9998867617314301
+      }
+    },
+    {
+      "name": "desktop-outer-envelope deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-envelope evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-envelope nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 10.088498856101705,
+        "max": 255,
+        "alphaRatio": 0.999440797800232
+      }
+    },
+    {
+      "name": "desktop-outer-envelope complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-envelope background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-envelope no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-radial same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-radial original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-radial deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-radial evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-radial nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 1.0664419968217436,
+        "max": 255,
+        "alphaRatio": 0.9384533327595384
+      }
+    },
+    {
+      "name": "desktop-outer-radial deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-radial evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-radial nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 1.16044714778892,
+        "max": 255,
+        "alphaRatio": 0.9236677154668574
+      }
+    },
+    {
+      "name": "desktop-outer-radial complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-radial background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-radial no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-wave same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-wave original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-wave deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-wave evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-wave nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 4.439945339470656,
+        "max": 255,
+        "alphaRatio": 1.000098802602342
+      }
+    },
+    {
+      "name": "desktop-outer-wave deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-wave evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-wave nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 4.91302391569401,
+        "max": 255,
+        "alphaRatio": 1.0001755004034523
+      }
+    },
+    {
+      "name": "desktop-outer-wave complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-wave background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-wave no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-growth same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-growth original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-growth deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-growth evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-growth nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 4.836005140692641,
+        "max": 255,
+        "alphaRatio": 0.9999838620146416
+      }
+    },
+    {
+      "name": "desktop-outer-growth deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-growth evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-growth nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 5.100453278261822,
+        "max": 255,
+        "alphaRatio": 1.0001205657974086
+      }
+    },
+    {
+      "name": "desktop-outer-growth complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-growth background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-growth no GL errors",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-combined same samples and no precomputation",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-combined original content pass unchanged",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-combined deterministic -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-combined evolving field -1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-combined nonempty coverage -1",
+      "ok": true,
+      "detail": {
+        "mean": 10.551856865444682,
+        "max": 255,
+        "alphaRatio": 0.9386975134156366
+      }
+    },
+    {
+      "name": "desktop-outer-combined deterministic 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-combined evolving field 1",
+      "ok": true
+    },
+    {
+      "name": "desktop-outer-combined nonempty coverage 1",
+      "ok": true,
+      "detail": {
+        "mean": 11.306121653926242,
+        "max": 255,
+        "alphaRatio": 0.9238083755638342
+      }
+    },
+    {
+      "name": "desktop-outer-combined complete endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-combined background endpoint",
+      "ok": true,
+      "detail": {
+        "mean": 0,
+        "max": 0,
+        "alphaRatio": 1
+      }
+    },
+    {
+      "name": "desktop-outer-combined no GL errors",
+      "ok": true
+    },
+    {
+      "name": "benchmark restores original renderer",
+      "ok": true
+    },
+    {
+      "name": "comparison page uniforms",
+      "ok": true
+    },
+    {
+      "name": "comparison page noise2",
+      "ok": true
+    },
+    {
+      "name": "comparison page hashfast",
+      "ok": true
+    },
+    {
+      "name": "comparison page envelope",
+      "ok": true
+    },
+    {
+      "name": "comparison page radial",
+      "ok": true
+    },
+    {
+      "name": "comparison page wave",
+      "ok": true
+    },
+    {
+      "name": "comparison page growth",
+      "ok": true
+    },
+    {
+      "name": "comparison page combined",
+      "ok": true
+    },
+    {
+      "name": "original self comparison",
+      "ok": true
+    },
+    {
+      "name": "combined GPU button restores controls and original shader",
+      "ok": true
+    }
+  ],
+  "visuals": [
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0.00042954962706031393,
+      "max": 85,
+      "alphaRatio": 1.0000004172715018
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0.0005857879832803788,
+      "max": 255,
+      "alphaRatio": 0.999999937787244
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 20.99378645561645,
+      "max": 255,
+      "alphaRatio": 1.0004104560671805
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 23.850679319291924,
+      "max": 255,
+      "alphaRatio": 0.9993480352029636
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 22.125455165942917,
+      "max": 255,
+      "alphaRatio": 1.005853929715567
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 25.227834053695187,
+      "max": 255,
+      "alphaRatio": 1.0011989144620643
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 13.54392520713226,
+      "max": 255,
+      "alphaRatio": 0.9997415698499419
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 13.409552175989594,
+      "max": 255,
+      "alphaRatio": 1.0004142374140794
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 1.7300010669936523,
+      "max": 255,
+      "alphaRatio": 0.9440399553597384
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 1.746792244480425,
+      "max": 255,
+      "alphaRatio": 0.9524651991175245
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 5.6892596927058285,
+      "max": 255,
+      "alphaRatio": 1.0003090451832153
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 6.806874572355719,
+      "max": 255,
+      "alphaRatio": 1.00024583992633
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 7.768032192722765,
+      "max": 255,
+      "alphaRatio": 1.000628174427722
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 9.116127651394544,
+      "max": 255,
+      "alphaRatio": 1.0001375275182574
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 21.708593871730425,
+      "max": 255,
+      "alphaRatio": 0.9524589225415573
+    },
+    {
+      "scene": "app",
+      "screen": "inner",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 24.418938756258,
+      "max": 255,
+      "alphaRatio": 0.9546310615598953
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0.000571949147898515,
+      "max": 255,
+      "alphaRatio": 1.000000096650028
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0.00015112129431749685,
+      "max": 36,
+      "alphaRatio": 1.0000001464701787
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 17.624310321798454,
+      "max": 255,
+      "alphaRatio": 1.0028938226472954
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 21.15426573031399,
+      "max": 255,
+      "alphaRatio": 0.9939678209900066
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 18.721265976902846,
+      "max": 255,
+      "alphaRatio": 0.9941679681801047
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 22.755809393665405,
+      "max": 255,
+      "alphaRatio": 0.9956520815731483
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 9.725973854731766,
+      "max": 255,
+      "alphaRatio": 0.9999943942983829
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 11.696012024631486,
+      "max": 255,
+      "alphaRatio": 0.9998475001324334
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 1.70001138761028,
+      "max": 255,
+      "alphaRatio": 0.9548373991342187
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 1.8745787440407693,
+      "max": 255,
+      "alphaRatio": 0.9486258534023924
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 4.778657820291523,
+      "max": 255,
+      "alphaRatio": 1.0002660533642498
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 5.679988458271686,
+      "max": 255,
+      "alphaRatio": 1.000072673620257
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 6.293931345553181,
+      "max": 255,
+      "alphaRatio": 1.0001736559375953
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 7.756293153049482,
+      "max": 255,
+      "alphaRatio": 1.0004871598138558
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 17.561903220724425,
+      "max": 255,
+      "alphaRatio": 0.9516761458597762
+    },
+    {
+      "scene": "app",
+      "screen": "outer",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 22.24649681146912,
+      "max": 255,
+      "alphaRatio": 0.9484211369161729
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0.00037217754774373184,
+      "max": 127,
+      "alphaRatio": 1.000000031114358
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0.00045622446836617866,
+      "max": 85,
+      "alphaRatio": 0.9999995897266378
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 10.093544646062963,
+      "max": 255,
+      "alphaRatio": 0.9998014281676976
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 11.570966933358624,
+      "max": 255,
+      "alphaRatio": 1.00029879622865
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 1.1023073314319394,
+      "max": 255,
+      "alphaRatio": 0.9424036830936683
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 1.1086430296522616,
+      "max": 255,
+      "alphaRatio": 0.9479872428428544
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 4.036717283942254,
+      "max": 255,
+      "alphaRatio": 1.0000090542781572
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 5.350059446789196,
+      "max": 255,
+      "alphaRatio": 1.0000650576331505
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 3.989284970293542,
+      "max": 255,
+      "alphaRatio": 1.0000860000853156
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 5.8306088299652465,
+      "max": 255,
+      "alphaRatio": 1.0001698531719552
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 11.130585203677233,
+      "max": 255,
+      "alphaRatio": 0.9423951888739537
+    },
+    {
+      "scene": "desktop",
+      "screen": "inner",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 13.38655676914322,
+      "max": 255,
+      "alphaRatio": 0.9485038356163581
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0.0001840854293385939,
+      "max": 51,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "uniforms",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0.00007791522823168393,
+      "max": 14,
+      "alphaRatio": 1.0000001528083617
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "noise2",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "hashfast",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 0,
+      "max": 0,
+      "alphaRatio": 1
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 9.551786656118143,
+      "max": 255,
+      "alphaRatio": 0.9998867617314301
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "envelope",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 10.088498856101705,
+      "max": 255,
+      "alphaRatio": 0.999440797800232
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 1.0664419968217436,
+      "max": 255,
+      "alphaRatio": 0.9384533327595384
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "radial",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 1.16044714778892,
+      "max": 255,
+      "alphaRatio": 0.9236677154668574
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 4.439945339470656,
+      "max": 255,
+      "alphaRatio": 1.000098802602342
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "wave",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 4.91302391569401,
+      "max": 255,
+      "alphaRatio": 1.0001755004034523
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 4.836005140692641,
+      "max": 255,
+      "alphaRatio": 0.9999838620146416
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "growth",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 5.100453278261822,
+      "max": 255,
+      "alphaRatio": 1.0001205657974086
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "mean": 10.551856865444682,
+      "max": 255,
+      "alphaRatio": 0.9386975134156366
+    },
+    {
+      "scene": "desktop",
+      "screen": "outer",
+      "variant": "combined",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "mean": 11.306121653926242,
+      "max": 255,
+      "alphaRatio": 0.9238083755638342
+    }
+  ],
+  "benchmarks": [
+    {
+      "available": true,
+      "variant": "original",
+      "pass": "particles",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 2.164992,
+        "p10Ms": 0.443904,
+        "p90Ms": 2.455296,
+        "minMs": 0.443904,
+        "maxMs": 2.455296,
+        "samples": [
+          1.637632,
+          2.324992,
+          1.600256,
+          2.294784,
+          2.244864,
+          2.164992,
+          2.455296,
+          0.44928,
+          0.443904
+        ]
+      },
+      "candidate": {
+        "p50Ms": 1.712384,
+        "p10Ms": 0.438272,
+        "p90Ms": 2.525696,
+        "minMs": 0.438272,
+        "maxMs": 2.525696,
+        "samples": [
+          1.712384,
+          1.774848,
+          1.768448,
+          2.525696,
+          1.629696,
+          1.785344,
+          0.648704,
+          0.438272,
+          0.444672
+        ]
+      },
+      "gpuTimeChangePercent": -20.90575854321863,
+      "speedup": 1.2643145462699954,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "original",
+      "pass": "both",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.621056,
+        "p10Ms": 0.531712,
+        "p90Ms": 0.827904,
+        "minMs": 0.531712,
+        "maxMs": 0.827904,
+        "samples": [
+          0.827904,
+          0.740608,
+          0.531712,
+          0.639744,
+          0.535552,
+          0.539392,
+          0.621056,
+          0.812288,
+          0.536064
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.535296,
+        "p10Ms": 0.52992,
+        "p90Ms": 0.834304,
+        "minMs": 0.52992,
+        "maxMs": 0.834304,
+        "samples": [
+          0.537856,
+          0.535296,
+          0.536064,
+          0.53504,
+          0.53248,
+          0.730368,
+          0.532736,
+          0.52992,
+          0.834304
+        ]
+      },
+      "gpuTimeChangePercent": -13.808738664468267,
+      "speedup": 1.1602104256336683,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "particles",
+      "time": 0.4,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.37632,
+        "p10Ms": 0.370432,
+        "p90Ms": 0.456704,
+        "minMs": 0.370432,
+        "maxMs": 0.456704,
+        "samples": [
+          0.434688,
+          0.435456,
+          0.438528,
+          0.370432,
+          0.37632,
+          0.373504,
+          0.456704,
+          0.371968,
+          0.37376
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.371712,
+        "p10Ms": 0.364032,
+        "p90Ms": 0.755968,
+        "minMs": 0.364032,
+        "maxMs": 0.755968,
+        "samples": [
+          0.755968,
+          0.435456,
+          0.371712,
+          0.36608,
+          0.364032,
+          0.669952,
+          0.364032,
+          0.369408,
+          0.372224
+        ]
+      },
+      "gpuTimeChangePercent": -1.224489795918371,
+      "speedup": 1.012396694214876,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "both",
+      "time": 0.4,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.445952,
+        "p10Ms": 0.433408,
+        "p90Ms": 0.68992,
+        "minMs": 0.433408,
+        "maxMs": 0.68992,
+        "samples": [
+          0.68992,
+          0.526592,
+          0.443904,
+          0.448768,
+          0.436736,
+          0.433408,
+          0.43904,
+          0.445952,
+          0.665088
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.443392,
+        "p10Ms": 0.434944,
+        "p90Ms": 0.563712,
+        "minMs": 0.434944,
+        "maxMs": 0.563712,
+        "samples": [
+          0.434944,
+          0.43672,
+          0.443392,
+          0.519424,
+          0.563712,
+          0.523264,
+          0.44416,
+          0.441344,
+          0.441088
+        ]
+      },
+      "gpuTimeChangePercent": -0.574052812858783,
+      "speedup": 1.0057736720554273,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "particles",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.377856,
+        "p10Ms": 0.375808,
+        "p90Ms": 0.525056,
+        "minMs": 0.375808,
+        "maxMs": 0.525056,
+        "samples": [
+          0.376064,
+          0.377856,
+          0.379904,
+          0.376576,
+          0.457728,
+          0.37888,
+          0.375808,
+          0.525056,
+          0.377088
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.38016,
+        "p10Ms": 0.376576,
+        "p90Ms": 0.537856,
+        "minMs": 0.376576,
+        "maxMs": 0.537856,
+        "samples": [
+          0.38272,
+          0.537856,
+          0.378112,
+          0.3776,
+          0.376576,
+          0.378624,
+          0.38016,
+          0.380928,
+          0.383488
+        ]
+      },
+      "gpuTimeChangePercent": 0.6097560975609762,
+      "speedup": 0.993939393939394,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "both",
+      "time": 0.73,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.450048,
+        "p10Ms": 0.4416,
+        "p90Ms": 0.611072,
+        "minMs": 0.4416,
+        "maxMs": 0.611072,
+        "samples": [
+          0.456448,
+          0.611072,
+          0.4416,
+          0.451584,
+          0.446464,
+          0.447232,
+          0.450048,
+          0.448768,
+          0.452608
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.454144,
+        "p10Ms": 0.451584,
+        "p90Ms": 0.615168,
+        "minMs": 0.451584,
+        "maxMs": 0.615168,
+        "samples": [
+          0.453376,
+          0.45312,
+          0.451584,
+          0.456448,
+          0.534272,
+          0.454144,
+          0.615168,
+          0.461312,
+          0.452352
+        ]
+      },
+      "gpuTimeChangePercent": 0.9101251422070522,
+      "speedup": 0.9909808342728298,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "particles",
+      "time": 1.2,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.311552,
+        "p10Ms": 0.308992,
+        "p90Ms": 0.453888,
+        "minMs": 0.308992,
+        "maxMs": 0.453888,
+        "samples": [
+          0.311552,
+          0.312064,
+          0.310528,
+          0.308992,
+          0.308992,
+          0.313856,
+          0.453888,
+          0.31232,
+          0.311552
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.308992,
+        "p10Ms": 0.305152,
+        "p90Ms": 0.55424,
+        "minMs": 0.305152,
+        "maxMs": 0.55424,
+        "samples": [
+          0.308224,
+          0.308992,
+          0.30976,
+          0.307968,
+          0.309744,
+          0.30976,
+          0.55424,
+          0.305152,
+          0.305664
+        ]
+      },
+      "gpuTimeChangePercent": -0.8216926869350938,
+      "speedup": 1.008285004142502,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "both",
+      "time": 1.2,
+      "direction": -1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.387328,
+        "p10Ms": 0.385016,
+        "p90Ms": 0.631296,
+        "minMs": 0.385016,
+        "maxMs": 0.631296,
+        "samples": [
+          0.521216,
+          0.631296,
+          0.386816,
+          0.385792,
+          0.386048,
+          0.477696,
+          0.389632,
+          0.385016,
+          0.387328
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.384,
+        "p10Ms": 0.380416,
+        "p90Ms": 0.547584,
+        "minMs": 0.380416,
+        "maxMs": 0.547584,
+        "samples": [
+          0.380416,
+          0.382976,
+          0.384,
+          0.384,
+          0.384768,
+          0.547584,
+          0.384256,
+          0.38272,
+          0.38272
+        ]
+      },
+      "gpuTimeChangePercent": -0.8592200925313986,
+      "speedup": 1.0086666666666666,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "particles",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.369904,
+        "p10Ms": 0.361472,
+        "p90Ms": 0.487168,
+        "minMs": 0.361472,
+        "maxMs": 0.487168,
+        "samples": [
+          0.361472,
+          0.36736,
+          0.375296,
+          0.369408,
+          0.487168,
+          0.369904,
+          0.370688,
+          0.369408,
+          0.372224
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.369664,
+        "p10Ms": 0.366592,
+        "p90Ms": 0.566784,
+        "minMs": 0.366592,
+        "maxMs": 0.566784,
+        "samples": [
+          0.371968,
+          0.566784,
+          0.453888,
+          0.368896,
+          0.367104,
+          0.369664,
+          0.366592,
+          0.369152,
+          0.44928
+        ]
+      },
+      "gpuTimeChangePercent": -0.06488169903543506,
+      "speedup": 1.0006492382271468,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    },
+    {
+      "available": true,
+      "variant": "combined",
+      "pass": "both",
+      "time": 0.73,
+      "direction": 1,
+      "fieldTime": 1,
+      "particles": 353007,
+      "batch": 4,
+      "original": {
+        "p50Ms": 0.447488,
+        "p10Ms": 0.441856,
+        "p90Ms": 0.64384,
+        "minMs": 0.441856,
+        "maxMs": 0.64384,
+        "samples": [
+          0.442624,
+          0.525056,
+          0.447488,
+          0.447744,
+          0.446976,
+          0.64384,
+          0.448256,
+          0.441856,
+          0.443392
+        ]
+      },
+      "candidate": {
+        "p50Ms": 0.445952,
+        "p10Ms": 0.439296,
+        "p90Ms": 0.679928,
+        "minMs": 0.439296,
+        "maxMs": 0.679928,
+        "samples": [
+          0.448512,
+          0.445952,
+          0.439296,
+          0.441856,
+          0.600304,
+          0.439808,
+          0.442624,
+          0.679928,
+          0.45056
+        ]
+      },
+      "gpuTimeChangePercent": -0.3432494279176135,
+      "speedup": 1.0034443168771527,
+      "unstable": true,
+      "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+    }
+  ],
+  "environment": {
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+    "renderer": "ANGLE (NVIDIA, NVIDIA GeForce RTX 3070 (0x00002484) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+  },
+  "experiments": {
+    "uniforms": {
+      "label": "公共流场参数移至 uniform",
+      "description": "每帧在 CPU 计算 8 个公共三角函数项，粒子空间波形保持原公式。",
+      "features": [
+        "uniforms"
+      ]
+    },
+    "noise2": {
+      "label": "动态噪声 4 次 → 2 次",
+      "description": "移除嵌套 warp，保留两个尺度的值噪声；流场形状会改变。",
+      "features": [
+        "noise2"
+      ]
+    },
+    "hashfast": {
+      "label": "动态噪声使用无 sin 的 hash",
+      "description": "只更换动态 bend 内的随机映射，保持释放阈值、粒子属性和噪声层数。",
+      "features": [
+        "hashfast"
+      ]
+    },
+    "envelope": {
+      "label": "涡区 exp 改为多项式",
+      "description": "以 max(0,1-z/4) 的四次方替代指数包络，涡区衰减形状会改变。",
+      "features": [
+        "envelope"
+      ]
+    },
+    "radial": {
+      "label": "圆点用距离平方塑形",
+      "description": "去掉圆点片元的 length，柔边和整体覆盖感会改变。",
+      "features": [
+        "radial"
+      ]
+    },
+    "wave": {
+      "label": "空间正弦改为近似波形",
+      "description": "仅替换 4 个空间波形，保留随机 hash 和全局相位中的三角函数。",
+      "features": [
+        "wave"
+      ]
+    },
+    "growth": {
+      "label": "饱和增长 exp 改为有理式",
+      "description": "替换 1-exp(-x)，含倒数运算，不保证更快。",
+      "features": [
+        "growth"
+      ]
+    },
+    "combined": {
+      "label": "组合优化实验（7 项）",
+      "description": "同时启用公共 uniform、两层动态噪声、无 sin 的动态 hash、多项式涡区、距离平方圆点、近似空间波形和有理式增长；不叠加预计算，释放前沿保持原算法。",
+      "features": [
+        "uniforms",
+        "noise2",
+        "hashfast",
+        "envelope",
+        "radial",
+        "wave",
+        "growth"
+      ]
+    }
+  },
+  "uiBenchmark": {
+    "available": true,
+    "variant": "combined",
+    "pass": "both",
+    "time": 0.7898558907103569,
+    "direction": -1,
+    "fieldTime": 1,
+    "particles": 353007,
+    "batch": 4,
+    "original": {
+      "p50Ms": 0.865792,
+      "p10Ms": 0.758016,
+      "p90Ms": 1.060352,
+      "minMs": 0.758016,
+      "maxMs": 1.060352,
+      "samples": [
+        0.97536,
+        0.865792,
+        0.89856,
+        0.7616,
+        0.978432,
+        0.761856,
+        0.76288,
+        1.060352,
+        0.758016
+      ]
+    },
+    "candidate": {
+      "p50Ms": 0.780288,
+      "p10Ms": 0.775168,
+      "p90Ms": 1.140736,
+      "minMs": 0.775168,
+      "maxMs": 1.140736,
+      "samples": [
+        0.775168,
+        0.780032,
+        0.783616,
+        1.140736,
+        0.780288,
+        0.778752,
+        0.989696,
+        0.78208,
+        0.779008
+      ]
+    },
+    "gpuTimeChangePercent": -9.875813128326438,
+    "speedup": 1.1095800524934383,
+    "unstable": true,
+    "method": "same context, alternating A/B order, GPU query, four draws/query by default; excludes CPU preparation and Canvas2D"
+  }
+}
